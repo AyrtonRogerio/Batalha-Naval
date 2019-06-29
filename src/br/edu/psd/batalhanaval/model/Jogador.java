@@ -29,7 +29,6 @@ public class Jogador {
 		this.jogadas = jogadas;
 	}
 	
-	
 	/**
 	 * @return the nome
 	 */

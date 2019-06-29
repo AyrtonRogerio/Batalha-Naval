@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.edu.psd.batalhanaval.model;
+package br.edu.psd.batalhanaval.model.socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,92 +12,100 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 /**
  * @author ayrton
  *
  */
-public class Servidor extends Thread implements Runnable {
+public class Servidor extends Thread{
 
 	private ServerSocket serverSocket;
 	private int porta;
 	public String nomeServidor;
-	private BufferedReader entrada;
-	private PrintWriter saida;
 	private String resp;
-	private List<Cliente> clientes;
-	
+	private ArrayList<Cliente> clientes;
 	/**
 	 * @param serverSocket
 	 * @param porta
 	 * @param nomeServidor
 	 * @throws IOException 
 	 */
-	public Servidor(ServerSocket serverSocket, int porta, String nomeServidor) throws IOException {
+	public Servidor(int porta, String nomeServidor) throws IOException {
 		super();
 		this.serverSocket = new ServerSocket(porta);
 		this.porta = porta;
 		this.nomeServidor = nomeServidor;
+		clientes = new ArrayList<Cliente>();
 	}
-	
 	public Socket ouvirPorta() throws IOException {
 		 Socket socket = serverSocket.accept();
 		 return socket;
 	}
-	
-
-	public void recebeMensagem(Socket socket) {
-		
-		clientes = new ArrayList<Cliente>();
-		
-		
+	@Override
+	/**
+	 * Recebe os clientes.
+	 * */
+	public void run() {
+		Socket socket = null;
+		try {
+			while((socket = ouvirPorta()) != null) {
+				criarCanalComunicacaoCliente(socket);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Cria o canal de recepÁ„o de mensagens dos clientes entre servidor e cliente.
+	 * */
+	public void criarCanalComunicacaoCliente(Socket socket) {//Canal de comunicaÁ„o entre o cliente e o server.
 		new Thread(() -> {
-			
 			try {
-				
-				entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				saida = new PrintWriter(socket.getOutputStream(), true);
-				
-				
+				clientes.add(new Cliente(socket));
+				BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				PrintWriter saida = new PrintWriter(socket.getOutputStream(), true);
 				while ((resp = entrada.readLine()) != null ) {
-					
+					System.out.println("Ah");
 					/**
 					 * Mostrar vit√≥rias 
-					 */
-					if(resp.substring(0, 2).equals("V:")) {
-						
-					}
-					
-					/**
-					 * Mostrar clientes conectados
-					 */
-					if(resp.substring(0, 2).equals("C:")) {
-						
-					}
-					
-					/**
-					 * Indicar os tiros errados
-					 */
-					if(resp.substring(0, 2).equals("E:")) {
-						
-					}
-					
-					
-					/**
-					 * Mostrar tiros acertados
-					 */
-					if(resp.substring(0, 2).equals("A:")) {
-						
-					}
+//					 */
+//					if(resp.substring(0, 2).equals("V:")) {
+//						
+//					}
+//					
+//					/**
+//					 * Mostrar clientes conectados
+//					 */
+//					if(resp.substring(0, 2).equals("C:")) {
+//						
+//					}
+//					
+//					/**
+//					 * Indicar os tiros errados
+//					 */
+//					if(resp.substring(0, 2).equals("E:")) {
+//						
+//					}
+//					
+//					
+//					/**
+//					 * Mostrar tiros acertados
+//					 */
+//					if(resp.substring(0, 2).equals("A:")) {
+//						
+//					}
 					
 					
 				}
 				
 				
 			} catch (Exception e) {
-				// TODO: handle exception
+				e.printStackTrace();
 			}
 			
-		});
+		}).start();
 		
 	}
 
@@ -143,6 +151,6 @@ public class Servidor extends Thread implements Runnable {
 		this.nomeServidor = nomeServidor;
 	}
 
-	
+
 	
 }
