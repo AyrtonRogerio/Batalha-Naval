@@ -4,34 +4,104 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import br.edu.psd.batalhanaval.model.socket.Cliente;
 import br.edu.psd.batalhanaval.view.Tela;
 import br.edu.psd.batalhanaval.view.TelaCliente;
 import br.edu.psd.batalhanaval.view.TelaCriarMapa;
 
-public class ControllerTelaCliente implements ActionListener{
+public class ControllerTelaCliente implements ActionListener {
 	TelaCliente telaCliente;
 	TelaCriarMapa telaCriarMapa;
 	Tela t;
-	public ControllerTelaCliente(TelaCliente cliente,Tela t,TelaCriarMapa telaCriarMapa) {
+
+	public ControllerTelaCliente(TelaCliente cliente, Tela t, TelaCriarMapa telaCriarMapa) {
 		this.telaCliente = cliente;
-		this.t=t;
+		this.t = t;
 		this.telaCriarMapa = telaCriarMapa;
+
 		this.telaCliente.getBtnJogar().addActionListener(this);
+		this.telaCliente.getBtnVoltar().addActionListener(this);
+		this.telaCliente.getRdBtnJogarOff().addActionListener(this);
+		this.telaCliente.getRdBtnJogarOn().addActionListener(this);
+
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(this.telaCliente.getBtnJogar()==e.getSource()) {
+
+		if (e.getSource() == this.telaCliente.getRdBtnJogarOff()) {
+
+			if (this.telaCliente.getRdBtnJogarOff().isSelected()) {
+
+				this.telaCliente.getTxtFieldIpServidor().setEditable(false);
+				this.telaCliente.getTxtFieldPorta().setEditable(false);
+				this.telaCliente.getRdBtnJogarOn().setSelected(false);
+				this.telaCliente.getRdBtnJogarOff().setSelected(true);
+
+			}
+
+		}
+
+		if (e.getSource() == this.telaCliente.getRdBtnJogarOn()) {
+
+			if (this.telaCliente.getRdBtnJogarOn().isSelected()) {
+
+				this.telaCliente.getTxtFieldIpServidor().setEditable(true);
+				this.telaCliente.getTxtFieldPorta().setEditable(true);
+				this.telaCliente.getRdBtnJogarOn().setSelected(true);
+				this.telaCliente.getRdBtnJogarOff().setSelected(false);
+
+			}
+
+		}
+
+		if (this.telaCliente.getBtnJogar() == e.getSource()) {
 			try {
-				Cliente c = new Cliente();
-				t.setVisible(false);
-				telaCriarMapa.setVisible(true);
+
+				if (this.telaCliente.getRdBtnJogarOn().isSelected()) {
+
+					if (!(this.telaCliente.getTxtFieldIpServidor().getText().trim().isEmpty()
+							|| this.telaCliente.getTxtFieldNome().getText().trim().isEmpty()
+							|| this.telaCliente.getTxtFieldPorta().getText().trim().isEmpty())) {
+
+						Cliente c = new Cliente(Integer.parseInt(this.telaCliente.getTxtFieldPorta().getText().trim()),
+								this.telaCliente.getTxtFieldIpServidor().getText().trim());
+						t.setVisible(false);
+						telaCriarMapa.setVisible(true);
+					} else {
+						JOptionPane.showMessageDialog(null, "Pro favor, preencha os campos para poder jogar Online.",
+								"ATENÇÃO!", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+
+				if (this.telaCliente.getRdBtnJogarOff().isSelected()) {
+
+					if (!(this.telaCliente.getTxtFieldNome().getText().trim().isEmpty())) {
+
+						Cliente c = new Cliente();
+						t.setVisible(false);
+						telaCriarMapa.setVisible(true);
+					} else {
+						JOptionPane.showMessageDialog(null, "Pro favor, informe o seu nome para poder jogar.",
+								"ATENÇÃO!", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
+
 		}
-		
+
+		if (e.getSource() == this.telaCliente.getBtnVoltar()) {
+
+			this.telaCliente.setVisible(false);
+			t.getTelaEscolha().setVisible(true);
+
+		}
+
 	}
 }

@@ -36,7 +36,7 @@ public class TelaEscolha extends JPanel {
 	public TelaEscolha() {
 		
 		JLabel lblEscolhaComoVoc = new JLabel("Escolha como voc\u00EA deseja iniciar a aplica\u00E7\u00E3o!");
-		lblEscolhaComoVoc.setFont(new Font("Dialog", Font.BOLD, 20));
+		lblEscolhaComoVoc.setFont(new Font("Dialog", Font.BOLD, 15));
 		
 		btnServidor = new JButton("Servidor");
 		

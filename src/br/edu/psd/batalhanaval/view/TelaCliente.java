@@ -19,11 +19,13 @@ import javax.swing.JRadioButton;
  *
  */
 public class TelaCliente extends JPanel {
+	
 	private JTextField txtFieldNome;
 	private JTextField txtFieldIpServidor;
 	private JTextField txtFieldPorta;
 	private JRadioButton rdBtnJogarOn, rdBtnJogarOff;
 	private JButton btnJogar,btnVoltar;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -32,16 +34,16 @@ public class TelaCliente extends JPanel {
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setBounds(-57, 23, 243, 27);
 		lblNome.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNome.setFont(new Font("Dialog", Font.BOLD, 25));
+		lblNome.setFont(new Font("Dialog", Font.BOLD, 15));
 		
 		JLabel lblIpDoServidor = new JLabel("IP do servidor:");
 		lblIpDoServidor.setBounds(10, 61, 243, 33);
-		lblIpDoServidor.setFont(new Font("Dialog", Font.BOLD, 25));
+		lblIpDoServidor.setFont(new Font("Dialog", Font.BOLD, 15));
 		
 		JLabel lblPorta = new JLabel("Porta:");
 		lblPorta.setBounds(115, 105, 71, 33);
 		lblPorta.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblPorta.setFont(new Font("Dialog", Font.BOLD, 25));
+		lblPorta.setFont(new Font("Dialog", Font.BOLD, 15));
 		
 		txtFieldNome = new JTextField();
 		txtFieldNome.setBounds(189, 21, 216, 35);
@@ -111,6 +113,48 @@ public class TelaCliente extends JPanel {
 	}
 	public JButton getBtnVoltar() {
 		return btnVoltar;
+	}
+	/**
+	 * @param txtFieldNome the txtFieldNome to set
+	 */
+	public void setTxtFieldNome(JTextField txtFieldNome) {
+		this.txtFieldNome = txtFieldNome;
+	}
+	/**
+	 * @param txtFieldIpServidor the txtFieldIpServidor to set
+	 */
+	public void setTxtFieldIpServidor(JTextField txtFieldIpServidor) {
+		this.txtFieldIpServidor = txtFieldIpServidor;
+	}
+	/**
+	 * @param txtFieldPorta the txtFieldPorta to set
+	 */
+	public void setTxtFieldPorta(JTextField txtFieldPorta) {
+		this.txtFieldPorta = txtFieldPorta;
+	}
+	/**
+	 * @param rdBtnJogarOn the rdBtnJogarOn to set
+	 */
+	public void setRdBtnJogarOn(JRadioButton rdBtnJogarOn) {
+		this.rdBtnJogarOn = rdBtnJogarOn;
+	}
+	/**
+	 * @param rdBtnJogarOff the rdBtnJogarOff to set
+	 */
+	public void setRdBtnJogarOff(JRadioButton rdBtnJogarOff) {
+		this.rdBtnJogarOff = rdBtnJogarOff;
+	}
+	/**
+	 * @param btnJogar the btnJogar to set
+	 */
+	public void setBtnJogar(JButton btnJogar) {
+		this.btnJogar = btnJogar;
+	}
+	/**
+	 * @param btnVoltar the btnVoltar to set
+	 */
+	public void setBtnVoltar(JButton btnVoltar) {
+		this.btnVoltar = btnVoltar;
 	}
 	
 	

@@ -20,8 +20,9 @@ import javax.swing.border.TitledBorder;
 
 import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
 import br.edu.psd.batalhanaval.Util.SocketUtil;
+import br.edu.psd.batalhanaval.Util.Enum.TipoEmbarcacaoUtil;
 
-public class TelaCriarMapa extends JFrame implements ActionListener{//Vou colocar o evento aqui, pq não tem o botao de entrar nessa tela pronto, quando for criado eu modifico e trago o respeito ao mvc.
+public class TelaCriarMapa extends JFrame implements ActionListener{//Vou colocar o evento aqui, pq nï¿½o tem o botao de entrar nessa tela pronto, quando for criado eu modifico e trago o respeito ao mvc.
 	private GridLayout mapaGrid;
 	private  Map<String,JButton>coordenadasmap = new HashMap<String,JButton>();
 	private JPanel panelEmbarcacoes;
@@ -258,7 +259,7 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 						this.panelMapa.add(botao);
 					}
 				}
-				else {//Se não for primeira ou ultima linha
+				else {//Se nï¿½o for primeira ou ultima linha
 					if(i==0 && j==0 || i==16 && j==16 || i==0 && j==16 || i==16 && j==0) {//Captura as extremidades.
 						botao = new JButton(" ");
 						botao.setName(i + "," + j);
@@ -278,7 +279,7 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 						this.panelMapa.add(botao);
 					}else {//Miolo do mapa
 						botao = new JButton(" ");
-						botao.setName("[POS]");//Vai conter o COD da embarcação.
+						botao.setName("[POS]");//Vai conter o COD da embarcaï¿½ï¿½o.
 						botao.setToolTipText(i + "," + j);//Vai conter a coordenada.
 						botao.setBackground(Color.cyan);
 						botao.setBorder(new LineBorder(Color.BLACK,1,false));
@@ -381,15 +382,15 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 		JButton button = ((JButton)(e.getSource()));
 		System.out.println(button.getName());
 		System.out.println(button.getToolTipText());	
-		if(this.selecionarEncButton.getBackground()==Color.BLUE) {//então esta selecionado.
+		if(this.selecionarEncButton.getBackground()==Color.BLUE) {//entï¿½o esta selecionado.
 			System.out.println("Entrou");
-			if(EmbarcacoesUtil.getEncouracadosPosicionados()>=EmbarcacoesUtil.NUMEMCOURACADO) {//Olha se já chegou no limite de embarcações.
-				JOptionPane.showMessageDialog(null," Não eh possivel posicionar mais Encouraçados.");
+			if(EmbarcacoesUtil.getEncouracadosPosicionados()>=EmbarcacoesUtil.NUMEMCOURACADO) {//Olha se jï¿½ chegou no limite de embarcaï¿½ï¿½es.
+				JOptionPane.showMessageDialog(null," Nï¿½o eh possivel posicionar mais Encouraï¿½ados.");
 				this.selecionarEncButton.setBackground(Color.red);
 				return;
 			}else {
 				if(!button.getName().equalsIgnoreCase("[POS]")) {
-					JOptionPane.showMessageDialog(null," Não eh possivel posicionar navio!");
+					JOptionPane.showMessageDialog(null," Nï¿½o eh possivel posicionar navio!");
 					return;
 				}else {
 					this.inserirEmbarcacao(button, "ENCOURACADO");
@@ -397,60 +398,60 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 			}
 			//Mesma coisa pros outros.
 		}
-		else if(this.selecionarCruzButton.getBackground()==Color.BLUE) {//então esta selecionado.
+		else if(this.selecionarCruzButton.getBackground()==Color.BLUE) {//entï¿½o esta selecionado.
 			System.out.println("Entrou CRUZ");
-			if(EmbarcacoesUtil.getCruzadoresPosicionados()>=EmbarcacoesUtil.NUMCRUZADORES) {//Olha se já chegou no limite de embarcações.
-				JOptionPane.showMessageDialog(null," Não eh possivel posicionar mais CRUZA.");
+			if(EmbarcacoesUtil.getCruzadoresPosicionados()>=EmbarcacoesUtil.NUMCRUZADORES) {//Olha se jï¿½ chegou no limite de embarcaï¿½ï¿½es.
+				JOptionPane.showMessageDialog(null," Nï¿½o eh possivel posicionar mais CRUZA.");
 				this.selecionarCruzButton.setBackground(Color.red);
 				return;
 			}else {
 				if(!button.getName().equalsIgnoreCase("[POS]")) {
-					JOptionPane.showMessageDialog(null," Não eh possivel posicionar navio!");
+					JOptionPane.showMessageDialog(null," Nï¿½o eh possivel posicionar navio!");
 					return;
 				}else {
 					this.inserirEmbarcacao(button, "CRUZADORES");
 				}
 			}
 		}
-		else if(this.selecionarHidroButton.getBackground()==Color.BLUE) {//então esta selecionado.
+		else if(this.selecionarHidroButton.getBackground()==Color.BLUE) {//entï¿½o esta selecionado.
 			System.out.println("Entrou HIDRO");
-			if(EmbarcacoesUtil.getHidroAvPosicionados()>=EmbarcacoesUtil.NUMHIDROAV) {//Olha se já chegou no limite de embarcações.
-				JOptionPane.showMessageDialog(null," Não eh possivel posicionar mais HIDRO.");
+			if(EmbarcacoesUtil.getHidroAvPosicionados()>=EmbarcacoesUtil.NUMHIDROAV) {//Olha se jï¿½ chegou no limite de embarcaï¿½ï¿½es.
+				JOptionPane.showMessageDialog(null," Nï¿½o eh possivel posicionar mais HIDRO.");
 				this.selecionarHidroButton.setBackground(Color.red);
 				return;
 			}else {
 				if(!button.getName().equalsIgnoreCase("[POS]")) {
-					JOptionPane.showMessageDialog(null," Não eh possivel posicionar navio!");
+					JOptionPane.showMessageDialog(null," Nï¿½o eh possivel posicionar navio!");
 					return;
 				}else {
 					this.inserirEmbarcacao(button, "HIDROAVIAO");
 				}
 			}
 		}
-		else if(this.selecionarPortaAvButton.getBackground()==Color.BLUE) {//então esta selecionado.
+		else if(this.selecionarPortaAvButton.getBackground()==Color.BLUE) {//entï¿½o esta selecionado.
 			System.out.println("Entrou PA");
-			if(EmbarcacoesUtil.getPortaAvPosicionados()>=EmbarcacoesUtil.NUMPORTAAV) {//Olha se já chegou no limite de embarcações.
-				JOptionPane.showMessageDialog(null," Não eh possivel posicionar mais PA.");
+			if(EmbarcacoesUtil.getPortaAvPosicionados()>=EmbarcacoesUtil.NUMPORTAAV) {//Olha se jï¿½ chegou no limite de embarcaï¿½ï¿½es.
+				JOptionPane.showMessageDialog(null," Nï¿½o eh possivel posicionar mais PA.");
 				this.selecionarPortaAvButton.setBackground(Color.red);
 				return;
 			}else {
 				if(!button.getName().equalsIgnoreCase("[POS]")) {
-					JOptionPane.showMessageDialog(null," Não eh possivel posicionar navio!");
+					JOptionPane.showMessageDialog(null," Nï¿½o eh possivel posicionar navio!");
 					return;
 				}else {
 					this.inserirEmbarcacao(button, "PORTAAVIOES");
 				}
 			}
 		}
-		else if(this.selecionarSubButton.getBackground()==Color.BLUE) {//então esta selecionado.
+		else if(this.selecionarSubButton.getBackground()==Color.BLUE) {//entï¿½o esta selecionado.
 			System.out.println("Entrou SUB");
-			if(EmbarcacoesUtil.getSubimarinosPosicionados()>=EmbarcacoesUtil.NUMSUBMARINO) {//Olha se já chegou no limite de embarcações.
-				JOptionPane.showMessageDialog(null," Não eh possivel posicionar mais SUB.");
+			if(EmbarcacoesUtil.getSubimarinosPosicionados()>=EmbarcacoesUtil.NUMSUBMARINO) {//Olha se jï¿½ chegou no limite de embarcaï¿½ï¿½es.
+				JOptionPane.showMessageDialog(null," Nï¿½o eh possivel posicionar mais SUB.");
 				this.selecionarSubButton.setBackground(Color.red);
 				return;
 			}else {
 				if(!button.getName().equalsIgnoreCase("[POS]")) {
-					JOptionPane.showMessageDialog(null," Não eh possivel posicionar navio!");
+					JOptionPane.showMessageDialog(null," Nï¿½o eh possivel posicionar navio!");
 					return;
 				}else {
 					this.inserirEmbarcacao(button, "SUBMARINO");
@@ -458,16 +459,16 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 			}
 		}
 	}
-	private void inserirEmbarcacao(JButton b,String navio) {//Lembrando que o user escolhe apenas a primeira posicao e o  rresto é preenchida automaticamente
+	private void inserirEmbarcacao(JButton b,String navio) {//Lembrando que o user escolhe apenas a primeira posicao e o  rresto ï¿½ preenchida automaticamente
 		String s[] = b.getToolTipText().split(",");
 		int x = Integer.parseInt(s[0]);
 		int y = Integer.parseInt(s[1]);
 		try {
-			if(navio.equals("ENCOURACADO")) {//se possivel transformar num enum esse nome.
+			if(navio.equals(TipoEmbarcacaoUtil.ENCOURACADO.getValor())) {//se possivel transformar num enum esse nome.
 
 				if(!coordenadasmap.get(x+","+y).getName().equals("[POS]") || !coordenadasmap.get(x+","+(y+1)).getName().equals("[POS]")||
 						!coordenadasmap.get(x+","+(y+2)).getName().equals("[POS]")|| !coordenadasmap.get(x+","+(y+3)).getName().equals("[POS]")) {
-					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio não eh possivel inserilo nesta Posição");
+					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio nï¿½o eh possivel inserilo nesta Posiï¿½ï¿½o");
 					return;
 				}else {
 					coordenadasmap.get(x+","+y).setName("ENC");
@@ -489,10 +490,10 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					}
 				}
 			}
-			else if(navio.equals("PORTAAVIOES")) {//se possivel transformar num enum esse nome.
+			else if(navio.equals(TipoEmbarcacaoUtil.PORTAAVIAO.getValor())) {//se possivel transformar num enum esse nome.
 				if(!coordenadasmap.get(x+","+y).getName().equals("[POS]") || !coordenadasmap.get(x+","+(y+1)).getName().equals("[POS]")||
 						!coordenadasmap.get(x+","+(y+2)).getName().equals("[POS]")|| !coordenadasmap.get(x+","+(y+3)).getName().equals("[POS]") || !coordenadasmap.get(x+","+(y+4)).getName().equals("[POS]")) {
-					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio não eh possivel inserilo nesta Posição");
+					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio nï¿½o eh possivel inserilo nesta Posiï¿½ï¿½o");
 					return;
 				}else {
 					coordenadasmap.get(x+","+y).setName("PA");
@@ -518,9 +519,9 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					}
 				}
 			}
-			else if(navio.equals("CRUZADORES")) {//se possivel transformar num enum esse nome.
+			else if(navio.equals(TipoEmbarcacaoUtil.CRUZADORES.getValor())) {//se possivel transformar num enum esse nome.
 				if(!coordenadasmap.get(x+","+y).getName().equals("[POS]") || !coordenadasmap.get(x+","+(y+1)).getName().equals("[POS]")) {
-					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio não eh possivel inserilo nesta Posição");
+					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio nï¿½o eh possivel inserilo nesta Posiï¿½ï¿½o");
 					return;
 				}else {
 					coordenadasmap.get(x+","+y).setName("CRUZ");
@@ -537,9 +538,9 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					}
 				}
 			}
-			if(navio.equals("HIDROAVIAO")) {//se possivel transformar num enum esse nome.
+			if(navio.equals(TipoEmbarcacaoUtil.HIDROAVIAO.getValor())) {//se possivel transformar num enum esse nome.
 				if(!coordenadasmap.get(x+","+y).getName().equals("[POS]") || !coordenadasmap.get((x+1)+","+(y-1)).getName().equals("[POS]") ||  !coordenadasmap.get((x+1)+","+(y+1)).getName().equals("[POS]")) {
-					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio não eh possivel inserilo nesta Posição");
+					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio nï¿½o eh possivel inserilo nesta Posiï¿½ï¿½o");
 					return;
 				}else {
 					coordenadasmap.get(x+","+y).setName("HIDRO");
@@ -559,9 +560,9 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					}
 				}
 			}
-			else if(navio.equals("SUBMARINO")) {//se possivel transformar num enum esse nome.
+			else if(navio.equals(TipoEmbarcacaoUtil.SUBMARINO.getValor())) {//se possivel transformar num enum esse nome.
 				if(!coordenadasmap.get(x+","+y).getName().equals("[POS]")) {
-					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio não eh possivel inserilo nesta Posição");
+					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio nï¿½o eh possivel inserilo nesta Posiï¿½ï¿½o");
 					return;
 				}
 				else {
@@ -578,18 +579,18 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 			}
 		}catch(Exception e1) {
 			e1.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Não eh possivel inserir navio!");
+			JOptionPane.showMessageDialog(null, "Nï¿½o eh possivel inserir navio!");
 		}
 	}
 	
 	
 	
-	public static void main(String[] args) {
-		JFrame f = new JFrame();
-		f.setSize(400, 400);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.getContentPane().add(new TelaCriarMapa());
-		f.setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		JFrame f = new JFrame();
+//		f.setSize(400, 400);
+//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		f.getContentPane().add(new TelaCriarMapa());
+//		f.setVisible(true);
+//	}
 
 }

@@ -28,12 +28,13 @@ public class Cliente implements Runnable{
 	private Socket socket;
 	private BufferedReader bufferDeEntrada;//Caixa de entrada!
 	private PrintStream escritorDeBuffer;//Escreve na caixa de entrada
-	private ArrayList<ServerSocket>servidores=new ArrayList<>();//p-2-p
+//	private ArrayList<ServerSocket>servidores=new ArrayList<>();//p-2-p
 	private int portaServerExterno = 9000;
 	private String ipServerExterno = "localhost";
 	private String nome;
 	private Jogador jogador;
 	private String resp;
+	private String msg;
 
 	public Cliente() throws UnknownHostException, IOException {
 		this.socket = new Socket(this.ipServerExterno,this.portaServerExterno);
@@ -58,22 +59,28 @@ public class Cliente implements Runnable{
 		try {
 			this.bufferDeEntrada = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 			this.escritorDeBuffer = new PrintStream(this.socket.getOutputStream());
+	
 		} catch (IOException e) {
+		
 			e.printStackTrace();
-			System.out.println("Não iniciou o Buffer!");
+			System.out.println("Nï¿½o iniciou o Buffer!");
 			System.exit(0);
 		} 
 	}
 	public void run() {
 		this.criarCanalComunicacaoServer();
 	}
-	public void criarCanalComunicacaoServer (){//Canal de comunicação entre o cliente e o server.
+	
+	
+	public void criarCanalComunicacaoServer (){//Canal de comunicaï¿½ï¿½o entre o cliente e o server.
 		BufferedReader entrada;
 		try {
 			entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			resp = "";
 			while ((resp = entrada.readLine()) != null ) {
 
+				
+				
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -81,29 +88,51 @@ public class Cliente implements Runnable{
 		}			
 	}
 
+	
+	public void enviaMensagem(String mensagem) {
+		this.msg = mensagem;
+		escritorDeBuffer.println(this.msg);
+	}
+	
+	
+	public void sair() throws IOException {
+		
+		bufferDeEntrada.close();
+		escritorDeBuffer.close();
+		socket.close();
+		
+	}
+	
+	
+	public String escutaMensagem() throws IOException {
+		return resp = bufferDeEntrada.readLine();
+	}
 
-
-
-
-
-
+	
 	public Socket getSocket() {
 		return socket;
 	}
+	
+	
+	
 	public int getPortaServerExterno() {
 		this.portaServerExterno = socket.getPort();
 		return this.portaServerExterno;
 	}
+
 	public void setPortaServerExterno(int portaServerExterno) {
 		this.portaServerExterno = portaServerExterno;
 	}
+	
 	public String getIpServerExterno() {
 		ipServerExterno = socket.getInetAddress().getHostName();
 		return ipServerExterno;
 	}
+	
 	public void setIpServerExterno(String ipServerExterno) {
 		this.ipServerExterno = ipServerExterno;
 	}
+	
 	public BufferedReader getBufferDeEntrada() {
 		return bufferDeEntrada;
 	}

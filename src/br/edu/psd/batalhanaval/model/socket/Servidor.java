@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
 import br.edu.psd.batalhanaval.view.TelaServidor;
 
 
@@ -44,7 +45,7 @@ public class Servidor extends Thread{
 	}
 	public Socket ouvirPorta() throws IOException {
 		 Socket socket = serverSocket.accept();
-		 telaServidor.getTextArea().append("<Ouve uma requisiÁ„o> \r\n");
+		 telaServidor.getTextArea().append("<Ouve uma requisiÔøΩÔøΩo> \r\n");
 		 telaServidor.getTextArea().append("Dados do socket: "+ socket.toString() + "\r\n\n");
 		 telaServidor.getTextArea().requestFocusInWindow();
 		 return socket;
@@ -65,44 +66,64 @@ public class Servidor extends Thread{
 		}
 	}
 	/**
-	 * Cria o canal de recepÁ„o de mensagens dos clientes entre servidor e cliente.
+	 * Cria o canal de recepÔøΩÔøΩo de mensagens dos clientes entre servidor e cliente.
 	 * */
-	public void criarCanalComunicacaoCliente(Socket socket) {//Canal de comunicaÁ„o entre o cliente e o server.
+	public void criarCanalComunicacaoCliente(Socket socket) {//Canal de comunicaÔøΩÔøΩo entre o cliente e o server.
 		new Thread(() -> {
 			try {
 				clientes.add(new Cliente(socket));
 				BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				PrintWriter saida = new PrintWriter(socket.getOutputStream(), true);
+				
 				while ((resp = entrada.readLine()) != null ) {
+					
+					String protocolo = resp.substring(0, 3);
+					String mensagem = resp.substring(3);
+					
 					System.out.println("Ah");
-					/**
-					 * Mostrar vit√≥rias 
-//					 */
-//					if(resp.substring(0, 2).equals("V:")) {
-//						
-//					}
-//					
-//					/**
-//					 * Mostrar clientes conectados
-//					 */
-//					if(resp.substring(0, 2).equals("C:")) {
-//						
-//					}
-//					
-//					/**
-//					 * Indicar os tiros errados
-//					 */
-//					if(resp.substring(0, 2).equals("E:")) {
-//						
-//					}
-//					
-//					
-//					/**
-//					 * Mostrar tiros acertados
-//					 */
-//					if(resp.substring(0, 2).equals("A:")) {
-//						
-//					}
+					
+					switch (protocolo) {
+					
+					case ProtocoloUtil.LISTA_USER_ONLINE:
+						System.out.println("Entrou switch");
+						for(Cliente cli: clientes) {
+							saida.println(ProtocoloUtil.LISTA_USER_ONLINE + cli.getNome());
+						}
+						break;
+
+					case ProtocoloUtil.USER_WIN:
+						
+						saida.println(ProtocoloUtil.USER_WIN);
+						break;
+					
+					case ProtocoloUtil.USER_LOSE:
+						
+						saida.println(ProtocoloUtil.USER_LOSE);
+						break;					
+
+					case ProtocoloUtil.TIRO_ACERTO:
+						
+						saida.println(ProtocoloUtil.TIRO_ACERTO);
+						break;
+						
+					case ProtocoloUtil.TIRO_ERRO:
+						
+						saida.println(ProtocoloUtil.TIRO_ERRO);
+						break;
+						
+					case ProtocoloUtil.USER_SAIU:
+						
+						saida.println(ProtocoloUtil.USER_SAIU);
+						break;
+						
+					case ProtocoloUtil.CONECTADO:
+						
+						saida.println(ProtocoloUtil.CONECTADO);
+						break;
+					
+					default:
+						break;
+					}
 					
 					
 				}
