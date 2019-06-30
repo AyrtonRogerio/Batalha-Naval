@@ -22,108 +22,96 @@ public class TelaCliente extends JPanel {
 	private JTextField txtFieldNome;
 	private JTextField txtFieldIpServidor;
 	private JTextField txtFieldPorta;
-
+	private JRadioButton rdBtnJogarOn, rdBtnJogarOff;
+	private JButton btnJogar,btnVoltar;
 	/**
 	 * Create the panel.
 	 */
 	public TelaCliente() {
 		
 		JLabel lblNome = new JLabel("Nome:");
+		lblNome.setBounds(-57, 23, 243, 27);
 		lblNome.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNome.setFont(new Font("Dialog", Font.BOLD, 25));
 		
 		JLabel lblIpDoServidor = new JLabel("IP do servidor:");
+		lblIpDoServidor.setBounds(10, 61, 243, 33);
 		lblIpDoServidor.setFont(new Font("Dialog", Font.BOLD, 25));
 		
 		JLabel lblPorta = new JLabel("Porta:");
+		lblPorta.setBounds(115, 105, 71, 33);
 		lblPorta.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblPorta.setFont(new Font("Dialog", Font.BOLD, 25));
 		
 		txtFieldNome = new JTextField();
+		txtFieldNome.setBounds(189, 21, 216, 35);
 		txtFieldNome.setToolTipText("Insira seu nome ou apelido para jogar");
 		txtFieldNome.setFont(new Font("Dialog", Font.PLAIN, 20));
 		txtFieldNome.setColumns(10);
 		
 		txtFieldIpServidor = new JTextField();
+		txtFieldIpServidor.setBounds(189, 61, 216, 39);
 		txtFieldIpServidor.setToolTipText("Insira o IP do servidor para conexão");
 		txtFieldIpServidor.setFont(new Font("Dialog", Font.PLAIN, 20));
 		txtFieldIpServidor.setColumns(10);
 		
 		txtFieldPorta = new JTextField();
+		txtFieldPorta.setBounds(189, 105, 215, 37);
 		txtFieldPorta.setFont(new Font("Dialog", Font.PLAIN, 20));
 		txtFieldPorta.setColumns(10);
 		
-		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar = new JButton("Voltar");
+		btnVoltar.setBounds(115, 189, 88, 33);
 		btnVoltar.setToolTipText("Voltar ao modo de escolha");
 		btnVoltar.setFont(new Font("Dialog", Font.BOLD, 15));
 		
-		JButton btnJogar = new JButton("Jogar");
+		btnJogar = new JButton("Jogar");
+		btnJogar.setBounds(239, 189, 121, 33);
 		btnJogar.setToolTipText("Iniciar o jogo");
 		btnJogar.setFont(new Font("Dialog", Font.BOLD, 15));
 		
-		JRadioButton rdBtnJogarOff = new JRadioButton("Jogar offline");
+		rdBtnJogarOff = new JRadioButton("Jogar offline");
+		rdBtnJogarOff.setBounds(159, 149, 131, 33);
 		rdBtnJogarOff.setFont(new Font("Dialog", Font.BOLD, 15));
 		
-		JRadioButton rdBtnJogarOn = new JRadioButton("Jogar online");
+		rdBtnJogarOn = new JRadioButton("Jogar online");
+		rdBtnJogarOn.setBounds(289, 149, 155, 29);
 		rdBtnJogarOn.setSelected(true);
 		rdBtnJogarOn.setFont(new Font("Dialog", Font.BOLD, 15));
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(171)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblNome, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(lblIpDoServidor, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblPorta, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(txtFieldNome, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtFieldPorta, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtFieldIpServidor, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnVoltar, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-								.addComponent(rdBtnJogarOff, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(18)
-									.addComponent(rdBtnJogarOn, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnJogar, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)))))
-					.addContainerGap(214, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(182)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtFieldNome, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNome, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblIpDoServidor)
-						.addComponent(txtFieldIpServidor, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblPorta)
-						.addComponent(txtFieldPorta, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
-					.addGap(11)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(rdBtnJogarOff, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnVoltar, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnJogar, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)))
-						.addComponent(rdBtnJogarOn))
-					.addContainerGap(141, Short.MAX_VALUE))
-		);
-		setLayout(groupLayout);
+		setLayout(null);
+		add(lblNome);
+		add(lblIpDoServidor);
+		add(lblPorta);
+		add(txtFieldNome);
+		add(txtFieldPorta);
+		add(txtFieldIpServidor);
+		add(btnVoltar);
+		add(rdBtnJogarOff);
+		add(rdBtnJogarOn);
+		add(btnJogar);
 
 	}
+	public JTextField getTxtFieldNome() {
+		return txtFieldNome;
+	}
+	public JTextField getTxtFieldIpServidor() {
+		return txtFieldIpServidor;
+	}
+	public JTextField getTxtFieldPorta() {
+		return txtFieldPorta;
+	}
+	public JRadioButton getRdBtnJogarOn() {
+		return rdBtnJogarOn;
+	}
+	public JRadioButton getRdBtnJogarOff() {
+		return rdBtnJogarOff;
+	}
+	public JButton getBtnJogar() {
+		return btnJogar;
+	}
+	public JButton getBtnVoltar() {
+		return btnVoltar;
+	}
+	
+	
 }

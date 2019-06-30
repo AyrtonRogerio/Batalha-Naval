@@ -26,35 +26,42 @@ import java.awt.Font;
  *
  */
 public class TelaEscolha extends JPanel {
-
+	private JButton btnServidor;
+	private JButton btnJogador;
+	private TelaServidor telaServidor;
+	private TelaCliente telaCliente;
 	/**
 	 * Create the panel.
 	 */
 	public TelaEscolha() {
 		
-		JLabel lblEscolhaComoVoc = new JLabel("Escolha como você deseja iniciar a aplicação!");
-		lblEscolhaComoVoc.setFont(new Font("Dialog", Font.BOLD, 25));
+		JLabel lblEscolhaComoVoc = new JLabel("Escolha como voc\u00EA deseja iniciar a aplica\u00E7\u00E3o!");
+		lblEscolhaComoVoc.setFont(new Font("Dialog", Font.BOLD, 20));
 		
-		JButton btnServidor = new JButton("Servidor");
+		btnServidor = new JButton("Servidor");
 		
-		JButton btnJogador = new JButton("Jogador");
+		btnJogador = new JButton("Jogador");
+		telaCliente = new TelaCliente();
+		telaCliente.setVisible(false);
+		telaServidor = new TelaServidor();
+		telaServidor.setVisible(false);
 		btnJogador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(87)
-					.addComponent(lblEscolhaComoVoc)
-					.addContainerGap(97, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap(291, Short.MAX_VALUE)
+					.addContainerGap(315, Short.MAX_VALUE)
 					.addComponent(btnServidor)
-					.addGap(18)
+					.addGap(27)
 					.addComponent(btnJogador, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-					.addGap(289))
+					.addGap(115))
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblEscolhaComoVoc)
+					.addContainerGap(77, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -63,11 +70,26 @@ public class TelaEscolha extends JPanel {
 					.addComponent(lblEscolhaComoVoc, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnServidor)
-						.addComponent(btnJogador))
-					.addContainerGap(373, Short.MAX_VALUE))
+						.addComponent(btnJogador)
+						.addComponent(btnServidor))
+					.addContainerGap(125, Short.MAX_VALUE))
 		);
 		setLayout(groupLayout);
 
 	}
+	public JButton getBtnServidor() {
+		return btnServidor;
+	}
+	public JButton getBtnJogador() {
+		return btnJogador;
+	}
+	public TelaServidor getTelaServidor() {
+		return telaServidor;
+	}
+	public TelaCliente getTelaCliente() {
+		return telaCliente;
+	}
+	
+	
+	
 }

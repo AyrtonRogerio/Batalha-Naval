@@ -12,83 +12,77 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.JTextArea;
+import java.awt.SystemColor;
 
 /**
  * @author ayrton
  *
  */
 public class TelaServidor extends JPanel {
-	private JTextField txtFieldIpServidor;
-	private JTextField txtFieldPorta;
 
 	private JButton btnVoltar;
 	private JButton btnCriar;
+	private JTextArea textArea;
 	/**
 	 * Create the panel.
 	 */
 	public TelaServidor() {
+		setBackground(SystemColor.activeCaptionBorder);
 		
-		JLabel lblIpDoServidor = new JLabel("IP do servidor:");
-		lblIpDoServidor.setFont(new Font("Dialog", Font.BOLD, 25));
-		
-		JLabel lblPorta = new JLabel("Porta:");
-		lblPorta.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblPorta.setFont(new Font("Dialog", Font.BOLD, 25));
-		
-		txtFieldIpServidor = new JTextField();
-		txtFieldIpServidor.setFont(new Font("Dialog", Font.PLAIN, 20));
-		txtFieldIpServidor.setToolTipText("IP do servidor");
-		txtFieldIpServidor.setColumns(10);
-		
-		txtFieldPorta = new JTextField();
-		txtFieldPorta.setFont(new Font("Dialog", Font.PLAIN, 20));
-		txtFieldPorta.setToolTipText("Porta do servidor");
-		txtFieldPorta.setColumns(10);
-		
-		 btnVoltar = new JButton("Voltar");
+		btnVoltar = new JButton("Voltar");
+		btnVoltar.setBounds(180, 327, 87, 35);
 		btnVoltar.setFont(new Font("Dialog", Font.BOLD, 15));
 		btnVoltar.setToolTipText("Voltar a escolha");
 		
 		btnCriar = new JButton("Criar");
+		btnCriar.setBounds(277, 327, 104, 35);
 		btnCriar.setFont(new Font("Dialog", Font.BOLD, 15));
 		btnCriar.setToolTipText("Criar o servidor");
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(180)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(lblPorta, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(lblIpDoServidor, Alignment.LEADING))
-						.addComponent(btnVoltar, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btnCriar, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 125, GroupLayout.PREFERRED_SIZE))
-						.addComponent(txtFieldPorta, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-						.addComponent(txtFieldIpServidor, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
-					.addGap(180))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(203)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(txtFieldIpServidor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblIpDoServidor))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(txtFieldPorta, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblPorta, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-					.addGap(35)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(btnVoltar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnCriar, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(203, Short.MAX_VALUE))
-		);
-		setLayout(groupLayout);
+		setLayout(null);
+		add(btnVoltar);
+		add(btnCriar);
+		
+		textArea = new JTextArea();
+		textArea.setBounds(10, 108, 430, 181);
+		add(textArea);
+		
+		JLabel lblServidor = new JLabel("Servidor");
+		lblServidor.setHorizontalAlignment(SwingConstants.CENTER);
+		lblServidor.setFont(new Font("Showcard Gothic", Font.PLAIN, 20));
+		lblServidor.setBounds(-10, 11, 450, 25);
+		add(lblServidor);
+		
+		JLabel lblIp = new JLabel("IP:");
+		lblIp.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblIp.setBounds(10, 62, 46, 14);
+		add(lblIp);
+		
+		JLabel lblPorta = new JLabel("Porta:");
+		lblPorta.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblPorta.setBounds(10, 83, 46, 14);
+		add(lblPorta);
+		
+		JLabel lblLocalhost = new JLabel("localhost");
+		lblLocalhost.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblLocalhost.setBounds(37, 62, 126, 14);
+		add(lblLocalhost);
+		
+		JLabel label = new JLabel("9000");
+		label.setFont(new Font("Tahoma", Font.BOLD, 11));
+		label.setBounds(47, 83, 46, 14);
+		add(label);
 
 	}
+	public JButton getBtnVoltar() {
+		return btnVoltar;
+	}
+	public JButton getBtnCriar() {
+		return btnCriar;
+	}
+	public JTextArea getTextArea() {
+		return textArea;
+	}
+	
+	
 }

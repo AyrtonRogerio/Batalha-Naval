@@ -21,7 +21,7 @@ import javax.swing.border.TitledBorder;
 import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
 import br.edu.psd.batalhanaval.Util.SocketUtil;
 
-public class TelaCriarMapa extends JPanel implements ActionListener{//Vou colocar o evento aqui, pq não tem o botao de entrar nessa tela pronto, quando for criado eu modifico e trago o respeito ao mvc.
+public class TelaCriarMapa extends JFrame implements ActionListener{//Vou colocar o evento aqui, pq não tem o botao de entrar nessa tela pronto, quando for criado eu modifico e trago o respeito ao mvc.
 	private GridLayout mapaGrid;
 	private  Map<String,JButton>coordenadasmap = new HashMap<String,JButton>();
 	private JPanel panelEmbarcacoes;
@@ -40,6 +40,9 @@ public class TelaCriarMapa extends JPanel implements ActionListener{//Vou coloca
 
 		setLayout(new BorderLayout(0, 0));
 		this.setBackground(Color.white);
+		setSize(800,700);
+		setLocationRelativeTo(null);
+		
 		panelEmbarcacoes = new JPanel();
 		panelEmbarcacoes.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 2), "EMBARCACOES", TitledBorder.LEADING, TitledBorder.TOP, new Font(Font.SANS_SERIF,Font.BOLD,14), new Color(0, 0, 0)));
 		panelEmbarcacoes.setBackground(Color.WHITE);
@@ -560,7 +563,8 @@ public class TelaCriarMapa extends JPanel implements ActionListener{//Vou coloca
 				if(!coordenadasmap.get(x+","+y).getName().equals("[POS]")) {
 					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio não eh possivel inserilo nesta Posição");
 					return;
-				}else {
+				}
+				else {
 					coordenadasmap.get(x+","+y).setName("SUB");
 					coordenadasmap.get(x+","+y).setBackground(Color.DARK_GRAY);
 					
@@ -577,6 +581,9 @@ public class TelaCriarMapa extends JPanel implements ActionListener{//Vou coloca
 			JOptionPane.showMessageDialog(null, "Não eh possivel inserir navio!");
 		}
 	}
+	
+	
+	
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
 		f.setSize(400, 400);

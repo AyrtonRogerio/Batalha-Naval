@@ -6,6 +6,7 @@ public class EmbarcacoesUtil {
 	public static int NUMPORTAAV = 1;
 	public static int NUMHIDROAV = 5;
 	public static int NUMSUBMARINO = 4;
+	
 	private static int encouracadosPosicionados = 0;
 	private static int cruzadoresPosicionados = 0;
 	private static int portaAvPosicionados = 0;

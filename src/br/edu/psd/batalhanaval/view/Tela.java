@@ -1,50 +1,55 @@
-/**
- * 
- */
 package br.edu.psd.batalhanaval.view;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.CardLayout;
 
-/**
- * @author ayrton
- *
- */
 public class Tela extends JFrame {
 
 	private JPanel contentPane;
-
+	private TelaEscolha telaEscolha ;
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Tela frame = new Tela();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the frame.
 	 */
 	public Tela() {
+		telaEscolha=new TelaEscolha();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 550);
+		setBounds(100, 100, 480, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(null);
 		setContentPane(contentPane);
-		contentPane.setLayout(new CardLayout(0, 0));
+		telaEscolha.setBounds(0, 0, 480, 300);
+		getContentPane().add(telaEscolha);
+		telaEscolha.getTelaServidor().setBounds(0, 0, 480, 300);
+		getContentPane().add(telaEscolha.getTelaServidor());
+		telaEscolha.getTelaCliente().setBounds(0, 0, 480, 300);
+		getContentPane().add(telaEscolha.getTelaCliente());
+		
+		setVisible(true);
 	}
+
+
+	public JPanel getContentPane() {
+		return contentPane;
+	}
+
+
+
+
+	public TelaEscolha getTelaEscolha() {
+		return telaEscolha;
+	}
+	
+	
 
 }

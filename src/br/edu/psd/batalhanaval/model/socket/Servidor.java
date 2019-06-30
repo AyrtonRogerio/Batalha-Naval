@@ -12,6 +12,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.psd.batalhanaval.view.TelaServidor;
+
 
 
 /**
@@ -25,21 +27,26 @@ public class Servidor extends Thread{
 	public String nomeServidor;
 	private String resp;
 	private ArrayList<Cliente> clientes;
+	private TelaServidor telaServidor;
 	/**
 	 * @param serverSocket
 	 * @param porta
 	 * @param nomeServidor
 	 * @throws IOException 
 	 */
-	public Servidor(int porta, String nomeServidor) throws IOException {
+	public Servidor(int porta, String nomeServidor,TelaServidor servidor) throws IOException {
 		super();
 		this.serverSocket = new ServerSocket(porta);
 		this.porta = porta;
 		this.nomeServidor = nomeServidor;
 		clientes = new ArrayList<Cliente>();
+		telaServidor = servidor;
 	}
 	public Socket ouvirPorta() throws IOException {
 		 Socket socket = serverSocket.accept();
+		 telaServidor.getTextArea().append("<Ouve uma requisição> \r\n");
+		 telaServidor.getTextArea().append("Dados do socket: "+ socket.toString() + "\r\n\n");
+		 telaServidor.getTextArea().requestFocusInWindow();
 		 return socket;
 	}
 	@Override
