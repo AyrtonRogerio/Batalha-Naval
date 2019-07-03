@@ -29,6 +29,7 @@ public class Servidor extends Thread{
 	private String resp;
 	private ArrayList<Cliente> clientes;
 	private TelaServidor telaServidor;
+	
 	/**
 	 * @param serverSocket
 	 * @param porta
@@ -42,7 +43,9 @@ public class Servidor extends Thread{
 		this.nomeServidor = nomeServidor;
 		clientes = new ArrayList<Cliente>();
 		telaServidor = servidor;
+		
 	}
+	
 	public Socket ouvirPorta() throws IOException {
 		 Socket socket = serverSocket.accept();
 		 telaServidor.getTextArea().append("<Ouve uma requisi��o> \r\n");
@@ -50,6 +53,7 @@ public class Servidor extends Thread{
 		 telaServidor.getTextArea().requestFocusInWindow();
 		 return socket;
 	}
+	
 	@Override
 	/**
 	 * Recebe os clientes.

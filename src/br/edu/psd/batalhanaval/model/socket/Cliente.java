@@ -40,6 +40,10 @@ public class Cliente implements Runnable{
 		this.socket = new Socket(this.ipServerExterno,this.portaServerExterno);
 		this.iniciarBufferPrint();
 	}
+	
+	public Cliente(String nome) {
+		this.nome = nome;
+	}
 
 	public Cliente(int portaServerExterno, String ipServerExterno) throws UnknownHostException, IOException {
 		super();

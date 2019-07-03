@@ -10,21 +10,28 @@ import br.edu.psd.batalhanaval.model.socket.Cliente;
 import br.edu.psd.batalhanaval.view.Tela;
 import br.edu.psd.batalhanaval.view.TelaCliente;
 import br.edu.psd.batalhanaval.view.TelaCriarMapa;
+import br.edu.psd.batalhanaval.view.TelaEscolherOponente;
 
 public class ControllerTelaCliente implements ActionListener {
 	TelaCliente telaCliente;
 	TelaCriarMapa telaCriarMapa;
+	TelaEscolherOponente telaEscolherOponente;
 	Tela t;
 
-	public ControllerTelaCliente(TelaCliente cliente, Tela t, TelaCriarMapa telaCriarMapa) {
+	public ControllerTelaCliente(TelaCliente cliente, Tela t, TelaCriarMapa telaCriarMapa, 
+			TelaEscolherOponente telaEscolherOponente) {
+		
 		this.telaCliente = cliente;
 		this.t = t;
 		this.telaCriarMapa = telaCriarMapa;
-
+		this.telaEscolherOponente = telaEscolherOponente;
+		
 		this.telaCliente.getBtnJogar().addActionListener(this);
 		this.telaCliente.getBtnVoltar().addActionListener(this);
 		this.telaCliente.getRdBtnJogarOff().addActionListener(this);
 		this.telaCliente.getRdBtnJogarOn().addActionListener(this);
+		
+		
 
 	}
 
@@ -69,7 +76,9 @@ public class ControllerTelaCliente implements ActionListener {
 						Cliente c = new Cliente(Integer.parseInt(this.telaCliente.getTxtFieldPorta().getText().trim()),
 								this.telaCliente.getTxtFieldIpServidor().getText().trim());
 						t.setVisible(false);
-						telaCriarMapa.setVisible(true);
+		
+						telaEscolherOponente.setVisible(true);
+						telaCriarMapa.setVisible(false);
 					} else {
 						JOptionPane.showMessageDialog(null, "Pro favor, preencha os campos para poder jogar Online.",
 								"ATENÇÃO!", JOptionPane.INFORMATION_MESSAGE);
@@ -80,7 +89,7 @@ public class ControllerTelaCliente implements ActionListener {
 
 					if (!(this.telaCliente.getTxtFieldNome().getText().trim().isEmpty())) {
 
-						Cliente c = new Cliente();
+						Cliente c = new Cliente(this.telaCliente.getTxtFieldNome().getText().trim());
 						t.setVisible(false);
 						telaCriarMapa.setVisible(true);
 					} else {

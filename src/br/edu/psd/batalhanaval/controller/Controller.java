@@ -21,13 +21,19 @@ import br.edu.psd.batalhanaval.view.TelaEscolha;
  *
  */
 public class Controller implements ActionListener{
-	private Tela f;
-	private TelaEscolha telaEscolha;
+	
+	protected Tela f;
+	protected TelaEscolha telaEscolha;
+	
+	
 	public Controller(TelaEscolha telaEscolha,Tela f) {
+		
 		this.f=f;
 		this.telaEscolha = telaEscolha;
+		
 		this.telaEscolha.getBtnServidor().addActionListener(this);
 		this.telaEscolha.getBtnJogador().addActionListener(this);
+		
 	}
 
 	@Override

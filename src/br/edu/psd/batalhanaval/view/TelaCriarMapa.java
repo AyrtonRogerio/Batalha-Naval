@@ -37,9 +37,15 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 	private JButton selecionarHidroButton ;
 	private JLabel quantSubLabel;
 	private JButton selecionarSubButton;
+	private JButton btnJogar;
+	
+	private TelaJogo telaJogo;
+	
+	private JPanel panelJogo;
+	
 	public TelaCriarMapa() {
 
-		setLayout(new BorderLayout(0, 0));
+		getContentPane().setLayout(new BorderLayout(0, 0));
 		this.setBackground(Color.white);
 		setSize(800,700);
 		setLocationRelativeTo(null);
@@ -47,12 +53,12 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 		panelEmbarcacoes = new JPanel();
 		panelEmbarcacoes.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 2), "EMBARCACOES", TitledBorder.LEADING, TitledBorder.TOP, new Font(Font.SANS_SERIF,Font.BOLD,14), new Color(0, 0, 0)));
 		panelEmbarcacoes.setBackground(Color.WHITE);
-		add(panelEmbarcacoes, BorderLayout.SOUTH);
+		getContentPane().add(panelEmbarcacoes, BorderLayout.SOUTH);
 		panelEmbarcacoes.setLayout(null);
 
 		panelMapa = new JPanel();
 		panelMapa.setBackground(Color.white);
-		add(panelMapa, BorderLayout.CENTER);
+		getContentPane().add(panelMapa, BorderLayout.CENTER);
 
 		panelMapa.setLayout(mapaGrid = new GridLayout(17, 17, 0, 0));
 		montarMapaVazio();
@@ -233,6 +239,72 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 		selecionarSubButton.setBackground(Color.BLACK);
 		selecionarSubButton.setBounds(442, 38, 68, 49);
 		panelEmbarcacoes.add(selecionarSubButton);
+		
+		btnJogar = new JButton("Jogar");
+		btnJogar.setBounds(394, 141, 116, 25);
+		panelEmbarcacoes.add(btnJogar);
+		
+		panelJogo = new JPanel();
+		panelJogo.setSize(800, 700);
+		panelJogo.setVisible(false);
+		getContentPane().add(panelJogo, BorderLayout.NORTH);
+		panelJogo.setLayout(null);
+	}
+
+	/**
+	 * @return the panelEmbarcacoes
+	 */
+	public JPanel getPanelEmbarcacoes() {
+		return panelEmbarcacoes;
+	}
+
+	/**
+	 * @param panelEmbarcacoes the panelEmbarcacoes to set
+	 */
+	public void setPanelEmbarcacoes(JPanel panelEmbarcacoes) {
+		this.panelEmbarcacoes = panelEmbarcacoes;
+	}
+
+	/**
+	 * @return the panelMapa
+	 */
+	public JPanel getPanelMapa() {
+		return panelMapa;
+	}
+
+	/**
+	 * @param panelMapa the panelMapa to set
+	 */
+	public void setPanelMapa(JPanel panelMapa) {
+		this.panelMapa = panelMapa;
+	}
+
+	/**
+	 * @return the telaJogo
+	 */
+	public TelaJogo getTelaJogo() {
+		return telaJogo;
+	}
+
+	/**
+	 * @param telaJogo the telaJogo to set
+	 */
+	public void setTelaJogo(TelaJogo telaJogo) {
+		this.telaJogo = telaJogo;
+	}
+
+	/**
+	 * @return the panelJogo
+	 */
+	public JPanel getPanelJogo() {
+		return panelJogo;
+	}
+
+	/**
+	 * @param panelJogo the panelJogo to set
+	 */
+	public void setPanelJogo(JPanel panelJogo) {
+		this.panelJogo = panelJogo;
 	}
 
 	private void montarMapaVazio() {
@@ -320,6 +392,20 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 
 	public void setSelecionarEncButton(JButton selecionarEncButton) {
 		this.selecionarEncButton = selecionarEncButton;
+	}
+
+	/**
+	 * @return the btnJogar
+	 */
+	public JButton getBtnJogar() {
+		return btnJogar;
+	}
+
+	/**
+	 * @param btnJogar the btnJogar to set
+	 */
+	public void setBtnJogar(JButton btnJogar) {
+		this.btnJogar = btnJogar;
 	}
 
 	public JButton getSelecionarCruzButton() {
@@ -459,6 +545,8 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 			}
 		}
 	}
+	
+	
 	private void inserirEmbarcacao(JButton b,String navio) {//Lembrando que o user escolhe apenas a primeira posicao e o  rresto � preenchida automaticamente
 		String s[] = b.getToolTipText().split(",");
 		int x = Integer.parseInt(s[0]);
@@ -582,15 +670,4 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 			JOptionPane.showMessageDialog(null, "N�o eh possivel inserir navio!");
 		}
 	}
-	
-	
-	
-//	public static void main(String[] args) {
-//		JFrame f = new JFrame();
-//		f.setSize(400, 400);
-//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		f.getContentPane().add(new TelaCriarMapa());
-//		f.setVisible(true);
-//	}
-
 }

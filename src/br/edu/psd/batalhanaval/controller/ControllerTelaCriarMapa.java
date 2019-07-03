@@ -7,17 +7,29 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import br.edu.psd.batalhanaval.view.TelaCriarMapa;
+import br.edu.psd.batalhanaval.view.TelaJogo;
 
 public class ControllerTelaCriarMapa implements ActionListener{
+	
 	private TelaCriarMapa telaCMapa;
-	public ControllerTelaCriarMapa(TelaCriarMapa telaCMapa) {
+	private TelaJogo telaJogo;
+	
+	public ControllerTelaCriarMapa(TelaCriarMapa telaCMapa, TelaJogo telaJogo) {
+		
 		this.telaCMapa=telaCMapa;
+		this.telaJogo = telaJogo;
+	
+		
+		
 		this.telaCMapa.getSelecionarCruzButton().addActionListener(this);
 		this.telaCMapa.getSelecionarEncButton().addActionListener(this);
 		this.telaCMapa.getSelecionarHidroButton().addActionListener(this);
 		this.telaCMapa.getSelecionarPortaAvButton().addActionListener(this);
 		this.telaCMapa.getSelecionarSubButton().addActionListener(this);
+		this.telaCMapa.getBtnJogar().addActionListener(this);
+		
 	}
+	
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		if(this.telaCMapa.getSelecionarCruzButton().getBackground()==Color.BLUE)
@@ -59,6 +71,20 @@ public class ControllerTelaCriarMapa implements ActionListener{
 				this.telaCMapa.getSelecionarSubButton().setBackground(Color.BLUE);
 			}
 		}
+		
+		if(evt.getSource() == this.telaCMapa.getBtnJogar()) {
+			
+			this.telaCMapa.getPanelEmbarcacoes().setVisible(false);
+			this.telaCMapa.getPanelMapa().setVisible(false);
+			this.telaCMapa.setTelaJogo(telaJogo);
+			this.telaCMapa.getTelaJogo().setVisible(true);
+			this.telaCMapa.getTelaJogo().getPanel().setVisible(true);
+			this.telaCMapa.getPanelJogo().setVisible(true);
+			
+			
+		}
+		
+		
 	}
 	private void mudarcor(JButton b) {
 		
