@@ -6,33 +6,29 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import br.edu.psd.batalhanaval.Util.SocketUtil;
 import br.edu.psd.batalhanaval.model.socket.Cliente;
+import br.edu.psd.batalhanaval.view.PanelCliente;
 import br.edu.psd.batalhanaval.view.Tela;
-import br.edu.psd.batalhanaval.view.TelaCliente;
 import br.edu.psd.batalhanaval.view.TelaCriarMapa;
 import br.edu.psd.batalhanaval.view.TelaEscolherOponente;
 
 public class ControllerTelaCliente implements ActionListener {
-	TelaCliente telaCliente;
+	PanelCliente telaCliente;
 	TelaCriarMapa telaCriarMapa;
 	TelaEscolherOponente telaEscolherOponente;
-	Tela t;
+	Tela telaEscolhaClienteOrServer;
 
-	public ControllerTelaCliente(TelaCliente cliente, Tela t, TelaCriarMapa telaCriarMapa, 
+	public ControllerTelaCliente(PanelCliente cliente, Tela t, TelaCriarMapa telaCriarMapa, 
 			TelaEscolherOponente telaEscolherOponente) {
-		
 		this.telaCliente = cliente;
-		this.t = t;
+		this.telaEscolhaClienteOrServer = t;
 		this.telaCriarMapa = telaCriarMapa;
 		this.telaEscolherOponente = telaEscolherOponente;
-		
 		this.telaCliente.getBtnJogar().addActionListener(this);
 		this.telaCliente.getBtnVoltar().addActionListener(this);
 		this.telaCliente.getRdBtnJogarOff().addActionListener(this);
 		this.telaCliente.getRdBtnJogarOn().addActionListener(this);
-		
-		
-
 	}
 
 	@Override
@@ -41,7 +37,6 @@ public class ControllerTelaCliente implements ActionListener {
 		if (e.getSource() == this.telaCliente.getRdBtnJogarOff()) {
 
 			if (this.telaCliente.getRdBtnJogarOff().isSelected()) {
-
 				this.telaCliente.getTxtFieldIpServidor().setEditable(false);
 				this.telaCliente.getTxtFieldPorta().setEditable(false);
 				this.telaCliente.getRdBtnJogarOn().setSelected(false);
@@ -68,15 +63,16 @@ public class ControllerTelaCliente implements ActionListener {
 			try {
 
 				if (this.telaCliente.getRdBtnJogarOn().isSelected()) {
-
+					SocketUtil.offiline = false;
 					if (!(this.telaCliente.getTxtFieldIpServidor().getText().trim().isEmpty()
 							|| this.telaCliente.getTxtFieldNome().getText().trim().isEmpty()
 							|| this.telaCliente.getTxtFieldPorta().getText().trim().isEmpty())) {
 
 						Cliente c = new Cliente(Integer.parseInt(this.telaCliente.getTxtFieldPorta().getText().trim()),
-								this.telaCliente.getTxtFieldIpServidor().getText().trim());
-						t.setVisible(false);
-		
+						this.telaCliente.getTxtFieldIpServidor().getText().trim());
+						SocketUtil.setClienteCorrente(c);
+						telaEscolhaClienteOrServer.setVisible(false);
+						new Thread(c).start();
 						telaEscolherOponente.setVisible(true);
 						telaCriarMapa.setVisible(false);
 					} else {
@@ -86,11 +82,12 @@ public class ControllerTelaCliente implements ActionListener {
 				}
 
 				if (this.telaCliente.getRdBtnJogarOff().isSelected()) {
-
+					SocketUtil.offiline = true;
 					if (!(this.telaCliente.getTxtFieldNome().getText().trim().isEmpty())) {
-
 						Cliente c = new Cliente(this.telaCliente.getTxtFieldNome().getText().trim());
-						t.setVisible(false);
+						SocketUtil.setClienteCorrente(c);
+						//new Thread(c).start();
+						telaEscolhaClienteOrServer.setVisible(false);
 						telaCriarMapa.setVisible(true);
 					} else {
 						JOptionPane.showMessageDialog(null, "Pro favor, informe o seu nome para poder jogar.",
@@ -108,7 +105,7 @@ public class ControllerTelaCliente implements ActionListener {
 		if (e.getSource() == this.telaCliente.getBtnVoltar()) {
 
 			this.telaCliente.setVisible(false);
-			t.getTelaEscolha().setVisible(true);
+			telaEscolhaClienteOrServer.getTelaEscolha().setVisible(true);
 
 		}
 

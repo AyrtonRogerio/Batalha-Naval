@@ -18,7 +18,7 @@ import javax.swing.JRadioButton;
  * @author ayrton
  *
  */
-public class TelaCliente extends JPanel {
+public class PanelCliente extends JPanel {
 	
 	private JTextField txtFieldNome;
 	private JTextField txtFieldIpServidor;
@@ -29,7 +29,7 @@ public class TelaCliente extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public TelaCliente() {
+	public PanelCliente() {
 		
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setBounds(-57, 23, 243, 27);

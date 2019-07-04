@@ -25,15 +25,15 @@ import java.awt.Font;
  * @author ayrton
  *
  */
-public class TelaEscolha extends JPanel {
+public class PanelEscolha extends JPanel {
 	private JButton btnServidor;
 	private JButton btnJogador;
 	private TelaServidor telaServidor;
-	private TelaCliente telaCliente;
+	private PanelCliente telaCliente;
 	/**
 	 * Create the panel.
 	 */
-	public TelaEscolha() {
+	public PanelEscolha() {
 		
 		JLabel lblEscolhaComoVoc = new JLabel("Escolha como voc\u00EA deseja iniciar a aplica\u00E7\u00E3o!");
 		lblEscolhaComoVoc.setFont(new Font("Dialog", Font.BOLD, 15));
@@ -41,7 +41,7 @@ public class TelaEscolha extends JPanel {
 		btnServidor = new JButton("Servidor");
 		
 		btnJogador = new JButton("Jogador");
-		telaCliente = new TelaCliente();
+		telaCliente = new PanelCliente();
 		telaCliente.setVisible(false);
 		telaServidor = new TelaServidor();
 		telaServidor.setVisible(false);
@@ -86,7 +86,7 @@ public class TelaEscolha extends JPanel {
 	public TelaServidor getTelaServidor() {
 		return telaServidor;
 	}
-	public TelaCliente getTelaCliente() {
+	public PanelCliente getTelaCliente() {
 		return telaCliente;
 	}
 	

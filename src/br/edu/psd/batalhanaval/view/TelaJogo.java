@@ -3,35 +3,38 @@
  */
 package br.edu.psd.batalhanaval.view;
 
-import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.Dimension;
-import java.awt.Color;
-import javax.swing.JTextField;
 import javax.swing.JButton;
-import java.awt.FlowLayout;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import br.edu.psd.batalhanaval.Util.SocketUtil;
+import br.edu.psd.batalhanaval.Util.Enum.CodigoButtonEnum;
 
 /**
  * @author ayrton
  *
  */
-public class TelaJogo extends JPanel {
+public class TelaJogo extends JFrame {
 
 	private JPanel panel, panelMapJogador, panelMapAdversario, panelEmbarcacoes;
 
 	private JButton panelMapaJogador;
 	
-	private  Map<String,JButton>coordenadasmap = new HashMap<String,JButton>();
+	private  Map<String,JButton>coordenadasmapCliente = new HashMap<String,JButton>();
+	private  Map<String,JButton>coordenadasmapAdversario = new HashMap<String,JButton>();
 	
 	private GridLayout mapaJogadorGrid, mapaAdversarioGrid;
 	
@@ -61,15 +64,17 @@ public class TelaJogo extends JPanel {
 	 * Create the panel.
 	 */
 	public TelaJogo() {
+		
 		setBackground(Color.BLACK);
-		setSize(new Dimension(800, 700));
-		setLayout(null);
+		setSize(800,700);
+		setLocationRelativeTo(null);
 
 		panel = new JPanel();
 		panel.setSize(new Dimension(1024, 800));
 		panel.setBounds(0, 0, 800, 700);
 		panel.setLayout(null);
-		add(panel);
+		getContentPane().add(panel);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		criarPanelMapJogador();
 
 		panel.add(panelMapJogador);
@@ -82,7 +87,7 @@ public class TelaJogo extends JPanel {
 		lblSeuJogo.setBounds(124, 12, 131, 32);
 		panel.add(lblSeuJogo);
 
-		lblJogoAdversario = new JLabel("Jogo do Adversário");
+		lblJogoAdversario = new JLabel("Adversario");
 		lblJogoAdversario.setFont(new Font("Dialog", Font.BOLD, 25));
 		lblJogoAdversario.setBounds(459, 6, 251, 32);
 		panel.add(lblJogoAdversario);
@@ -110,11 +115,13 @@ public class TelaJogo extends JPanel {
 		panel.add(lblCoordX);
 
 		txtFieldX1 = new JTextField();
+		txtFieldX1.setToolTipText("X");
 		txtFieldX1.setBounds(303, 591, 46, 19);
 		panel.add(txtFieldX1);
 		txtFieldX1.setColumns(10);
 
 		txtFieldY1 = new JTextField();
+		txtFieldY1.setToolTipText("Y");
 		txtFieldY1.setColumns(10);
 		txtFieldY1.setBounds(303, 617, 46, 19);
 		panel.add(txtFieldY1);
@@ -124,21 +131,25 @@ public class TelaJogo extends JPanel {
 		panel.add(lblY);
 
 		txtFieldY2 = new JTextField();
+		txtFieldY2.setToolTipText("Y");
 		txtFieldY2.setColumns(10);
 		txtFieldY2.setBounds(374, 617, 46, 19);
 		panel.add(txtFieldY2);
 
 		txtFieldX2 = new JTextField();
+		txtFieldX2.setToolTipText("X");
 		txtFieldX2.setColumns(10);
 		txtFieldX2.setBounds(374, 591, 46, 19);
 		panel.add(txtFieldX2);
 
 		txtFieldX3 = new JTextField();
+		txtFieldX3.setToolTipText("X");
 		txtFieldX3.setColumns(10);
 		txtFieldX3.setBounds(442, 591, 46, 19);
 		panel.add(txtFieldX3);
 
 		txtFieldY3 = new JTextField();
+		txtFieldY3.setToolTipText("Y");
 		txtFieldY3.setColumns(10);
 		txtFieldY3.setBounds(442, 617, 46, 19);
 		panel.add(txtFieldY3);
@@ -170,12 +181,13 @@ public class TelaJogo extends JPanel {
 		lblPontos.setBounds(540, 578, 111, 25);
 		panel.add(lblPontos);
 
-		panel.setVisible(false);
+		//panel.setVisible(false);
+		this.setVisible(false);
 		
 	}
 
 	/**
-	 * Cria o panel do jogador
+	 * Cria o panel do jogador vazio
 	 */
 	public void criarPanelMapJogador() {
 
@@ -183,8 +195,8 @@ public class TelaJogo extends JPanel {
 		panelMapJogador.setBounds(35, 50, 300, 300);
 		panelMapJogador.setLayout(mapaJogadorGrid = new GridLayout(17, 17,0,0));
 
-		montarMapaVazio(panelMapJogador);
-		panelMapaJogador.setVisible(false);
+		montarMapaVazio(panelMapJogador,coordenadasmapCliente);
+		//panelMapaJogador.setVisible(true);
 
 
 
@@ -192,45 +204,44 @@ public class TelaJogo extends JPanel {
 
 
 	/**
-	 * Cria o panel do adversário
+	 * Cria o panel do adversário vazio
 	 */
-	public void criarPanelMapAdversario() {
+	
+	public void criarPanelMapAdversario() {//Cria o mapa vazio!
 
 		panelMapAdversario = new JPanel();
 		panelMapAdversario.setBounds(435, 50, 300, 300);
 		panelMapAdversario.setLayout( mapaAdversarioGrid = new GridLayout(17, 17,0,0));
-
-		montarMapaVazio(panelMapAdversario);
-		panelMapAdversario.setVisible(false);
-
+		montarMapaVazio(panelMapAdversario,coordenadasmapAdversario);
+		//panelMapAdversario.setVisible(false);
 	}
 
 	/**
 	 * Montar o mapa vazio
 	 * @param panel
 	 */
-	private void montarMapaVazio(JPanel panel) {
+	private void montarMapaVazio(JPanel panel1, Map<String,JButton>coordenadasmap) {
 		JButton botao = null;
 		for(int i = 0; i < 17; i++)
 			for(int j = 0; j < 17; j++){
 				if(i == 0 || i==16) { //Se primeira ou ultima linha
 					if(j==0 || j==16) {//Extremidades
 						botao = new JButton(" ");
-						botao.setName("[V]");
+						botao.setName(CodigoButtonEnum.VAZIO.getDescricao());//V de Vazio
 						botao.setToolTipText(i + "," + j);
 						botao.setBackground(Color.white);
 						botao.setOpaque(false);
 						botao.setBorder(null);
-						panel.add(botao);
+						panel1.add(botao);
 					}
 					else {
 						botao = new JButton(j+"");
-						botao.setName("[NUM]");
+						botao.setName(CodigoButtonEnum.NUMERO.getDescricao());//num de numero!
 						botao.setToolTipText(i + "," + j);
 						botao.setBackground(Color.white);
 						botao.setOpaque(false);
 						botao.setBorder(null);
-						panel.add(botao);
+						panel1.add(botao);
 					}
 				}
 				else {//Se n�o for primeira ou ultima linha
@@ -241,7 +252,7 @@ public class TelaJogo extends JPanel {
 						botao.setBackground(Color.white);
 						botao.setOpaque(false);
 						botao.setBorder(null);
-						panel.add(botao);
+						panel1.add(botao);
 					}
 					else if(j==0 || j==16) {//Bordas Laterais
 						botao = new JButton(SocketUtil.converterNumeroEmLetra(i));
@@ -250,21 +261,20 @@ public class TelaJogo extends JPanel {
 						botao.setBorder(null);
 						botao.setBackground(Color.white);
 						botao.setOpaque(false);
-						panel.add(botao);
+						panel1.add(botao);
 					}else {//Miolo do mapa
 						botao = new JButton(" ");
-						botao.setName("[POS]");//Vai conter o COD da embarca��o.
+						botao.setName(CodigoButtonEnum.POSICAO.getDescricao());//Vai conter o COD da embarca��o.
 						botao.setToolTipText(i + "," + j);//Vai conter a coordenada.
 						botao.setBackground(Color.cyan);
 						botao.setBorder(new LineBorder(Color.BLACK,1,false));
-//						botao.addActionListener(this);
+						//botao.addActionListener(this);
 						coordenadasmap.put(i + "," + j, botao);
-						panel.add(botao);
+						panel1.add(botao);
 					}
 				}
 			} 
 	}
-
 	/**
 	 * @return the panel
 	 */
@@ -338,15 +348,15 @@ public class TelaJogo extends JPanel {
 	/**
 	 * @return the coordenadasmap
 	 */
-	public Map<String, JButton> getCoordenadasmap() {
-		return coordenadasmap;
+	public Map<String, JButton> getCoordenadasmapCliente() {
+		return coordenadasmapCliente;
 	}
 
 	/**
 	 * @param coordenadasmap the coordenadasmap to set
 	 */
-	public void setCoordenadasmap(Map<String, JButton> coordenadasmap) {
-		this.coordenadasmap = coordenadasmap;
+	public void setCoordenadasmapCliente(Map<String, JButton> coordenadasmap) {
+		this.coordenadasmapCliente = coordenadasmap;
 	}
 
 	/**
@@ -418,4 +428,62 @@ public class TelaJogo extends JPanel {
 	public void setPanelJogador(JPanel panelJogador) {
 		this.panelJogador = panelJogador;
 	}
+
+	public Map<String, JButton> getCoordenadasmapAdversario() {
+		return coordenadasmapAdversario;
+	}
+
+	public void setCoordenadasmapAdversario(Map<String, JButton> coordenadasmapAdversario) {
+		this.coordenadasmapAdversario = coordenadasmapAdversario;
+	}
+
+	public JLabel getLblSeuJogo() {
+		return lblSeuJogo;
+	}
+
+	public JLabel getLblJogoAdversario() {
+		return lblJogoAdversario;
+	}
+
+	public JLabel getLblTiro1() {
+		return lblTiro1;
+	}
+
+	public JLabel getLblTiro2() {
+		return lblTiro2;
+	}
+
+	public JLabel getLblTiro3() {
+		return lblTiro3;
+	}
+
+	public JLabel getLblCoordX() {
+		return lblCoordX;
+	}
+
+	public JTextField getTxtFieldX1() {
+		return txtFieldX1;
+	}
+
+	public JTextField getTxtFieldY1() {
+		return txtFieldY1;
+	}
+
+	public JTextField getTxtFieldY2() {
+		return txtFieldY2;
+	}
+
+	public JTextField getTxtFieldX2() {
+		return txtFieldX2;
+	}
+
+	public JTextField getTxtFieldX3() {
+		return txtFieldX3;
+	}
+
+	public JTextField getTxtFieldY3() {
+		return txtFieldY3;
+	}
+	
+	
 }

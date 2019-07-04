@@ -4,10 +4,15 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
-import br.edu.psd.batalhanaval.view.TelaCriarMapa;
+import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
+import br.edu.psd.batalhanaval.Util.SocketUtil;
+import br.edu.psd.batalhanaval.model.Jogador;
+import br.edu.psd.batalhanaval.model.MontadorDeMapa;
+import br.edu.psd.batalhanaval.model.socket.Cliente;
 import br.edu.psd.batalhanaval.view.TelaJogo;
+import br.edu.psd.batalhanaval.view.TelaCriarMapa;
 
 public class ControllerTelaCriarMapa implements ActionListener{
 	
@@ -19,19 +24,17 @@ public class ControllerTelaCriarMapa implements ActionListener{
 		this.telaCMapa=telaCMapa;
 		this.telaJogo = telaJogo;
 	
-		
-		
 		this.telaCMapa.getSelecionarCruzButton().addActionListener(this);
 		this.telaCMapa.getSelecionarEncButton().addActionListener(this);
 		this.telaCMapa.getSelecionarHidroButton().addActionListener(this);
 		this.telaCMapa.getSelecionarPortaAvButton().addActionListener(this);
 		this.telaCMapa.getSelecionarSubButton().addActionListener(this);
-		this.telaCMapa.getBtnJogar().addActionListener(this);
+		this.telaCMapa.getBtnJogar().addActionListener(evt -> jogar());
 		
 	}
-	
 	@Override
 	public void actionPerformed(ActionEvent evt) {
+		
 		if(this.telaCMapa.getSelecionarCruzButton().getBackground()==Color.BLUE)
 			this.telaCMapa.getSelecionarCruzButton().setBackground(Color.BLACK);
 		
@@ -83,10 +86,34 @@ public class ControllerTelaCriarMapa implements ActionListener{
 			
 			
 		}
-		
-		
 	}
-	private void mudarcor(JButton b) {
-		
+	private void jogar() {
+		if(EmbarcacoesUtil.getCruzadoresPosicionados()<=0)
+			JOptionPane.showMessageDialog(null,"Existem Embarcacoes que ainda precisam ser posicionadas!!!");
+		else if(EmbarcacoesUtil.getEncouracadosPosicionados()<=0)
+			JOptionPane.showMessageDialog(null,"Existem Embarcacoes que ainda precisam ser posicionadas!!!");
+		else if(EmbarcacoesUtil.getHidroAvPosicionados()<=0)
+			JOptionPane.showMessageDialog(null,"Existem Embarcacoes que ainda precisam ser posicionadas!!!");
+		else if(EmbarcacoesUtil.getPortaAvPosicionados()<=0)
+			JOptionPane.showMessageDialog(null,"Existem Embarcacoes que ainda precisam ser posicionadas!!!");
+		else if(EmbarcacoesUtil.getSubimarinosPosicionados()<=0)
+			JOptionPane.showMessageDialog(null,"Existem Embarcacoes que ainda precisam ser posicionadas!!!");
+		else {
+			Cliente cliente = SocketUtil.getClienteCorrente();
+			MontadorDeMapa.montarMapaMeuJogoAtual(telaCMapa.getCoordenadasmap(),cliente.getJogador().getCoordenadasMeuJogoAtual());
+			//Precisa verificar se o jogo é offiline.
+			if(SocketUtil.offiline) {
+				cliente.getJogador().setEmJogo(true);
+				SocketUtil.setComputador(new Jogador());
+				SocketUtil.getComputador().setNome("Computador");
+				MontadorDeMapa.montarMapaComputador(SocketUtil.getComputador().getCoordenadasMeuJogoAtual());
+				SocketUtil.getClienteCorrente().getJogador().setEmJogo(true);
+				SocketUtil.getClienteCorrente().getJogador().setSuaVez(true);
+				this.telaCMapa.setVisible(false);
+				this.telaJogo.setVisible(true);
+			}else {
+				//Montar mapa adiversario online!
+			}	
+		}
 	}
 }

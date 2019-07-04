@@ -11,7 +11,7 @@ import javax.swing.border.EmptyBorder;
 public class Tela extends JFrame {
 
 	private JPanel contentPane;
-	private TelaEscolha telaEscolha ;
+	private PanelEscolha telaEscolha ;
 	/**
 	 * Launch the application.
 	 */
@@ -21,7 +21,7 @@ public class Tela extends JFrame {
 	 * Create the frame.
 	 */
 	public Tela() {
-		telaEscolha=new TelaEscolha();
+		telaEscolha=new PanelEscolha();
 		
 		setSize(480, 300);
 		setLocationRelativeTo(null);
@@ -36,7 +36,6 @@ public class Tela extends JFrame {
 		getContentPane().add(telaEscolha.getTelaServidor());
 		telaEscolha.getTelaCliente().setBounds(0, 0, 480, 300);
 		getContentPane().add(telaEscolha.getTelaCliente());
-		
 		setVisible(true);
 	}
 
@@ -48,7 +47,7 @@ public class Tela extends JFrame {
 
 
 
-	public TelaEscolha getTelaEscolha() {
+	public PanelEscolha getTelaEscolha() {
 		return telaEscolha;
 	}
 	

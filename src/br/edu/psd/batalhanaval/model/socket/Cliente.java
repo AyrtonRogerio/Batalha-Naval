@@ -35,21 +35,21 @@ public class Cliente implements Runnable{
 	private Jogador jogador;
 	private String resp;
 	private String msg;
+	
+
 
 	public Cliente() throws UnknownHostException, IOException {
 		this.socket = new Socket(this.ipServerExterno,this.portaServerExterno);
+		this.jogador = new Jogador();
 		this.iniciarBufferPrint();
 	}
 	
-	public Cliente(String nome) {
-		this.nome = nome;
-	}
-
 	public Cliente(int portaServerExterno, String ipServerExterno) throws UnknownHostException, IOException {
 		super();
 		this.portaServerExterno = portaServerExterno;
 		this.ipServerExterno = ipServerExterno;
 		this.socket = new Socket(this.ipServerExterno,this.portaServerExterno);
+		this.jogador = new Jogador();
 		this.iniciarBufferPrint();
 	}
 
@@ -57,8 +57,14 @@ public class Cliente implements Runnable{
 		this.socket = socket;
 		this.ipServerExterno = socket.getInetAddress().getHostName();//ipdoserver
 		this.portaServerExterno = socket.getPort();
+		this.jogador = new Jogador();
 		this.iniciarBufferPrint();
 	}
+	public Cliente(String nome) {
+		this.nome = nome;
+		this.jogador = new Jogador();
+	}
+
 	private void iniciarBufferPrint() {
 		try {
 			this.bufferDeEntrada = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
@@ -79,7 +85,7 @@ public class Cliente implements Runnable{
 	public void criarCanalComunicacaoServer (){//Canal de comunica��o entre o cliente e o server.
 		BufferedReader entrada;
 		try {
-			entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			entrada = this.bufferDeEntrada;
 			resp = "";
 			while ((resp = entrada.readLine()) != null ) {
 
@@ -100,7 +106,6 @@ public class Cliente implements Runnable{
 	
 	
 	public void sair() throws IOException {
-		
 		bufferDeEntrada.close();
 		escritorDeBuffer.close();
 		socket.close();
@@ -162,6 +167,30 @@ public class Cliente implements Runnable{
 
 	public void setResp(String resp) {
 		this.resp = resp;
+	}
+
+	public Jogador getJogador() {
+		return jogador;
+	}
+
+	public void setJogador(Jogador jogador) {
+		this.jogador = jogador;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public void setSocket(Socket socket) {
+		this.socket = socket;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 }

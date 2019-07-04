@@ -22,5 +22,4 @@ public class ProtocoloUtil {
 	public static final String TIRO_ERRO = "TER"; // tiro errado
 	public static final String TIRO_ACERTO = "TAC"; //tiro certo
 	
-	
 }

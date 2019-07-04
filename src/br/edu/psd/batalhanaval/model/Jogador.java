@@ -3,6 +3,15 @@
  */
 package br.edu.psd.batalhanaval.model;
 
+import java.awt.Component;
+import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JButton;
+
+import br.edu.psd.batalhanaval.Util.Enum.CodigoButtonEnum;
+
 /**
  * @author ayrton
  *
@@ -10,11 +19,11 @@ package br.edu.psd.batalhanaval.model;
 public class Jogador {
 
 	private String nome;
-	private boolean suaVez;
+	private boolean suaVez = false;
+	private boolean emJogo;
 	private String acertos;
 	private int jogadas[] = new int[3] ;
-	
-	
+	private Map<String,String>coordenadasMeuJogoAtual = new HashMap<String,String>();
 	/**
 	 * @param nome
 	 * @param suaVez
@@ -29,6 +38,11 @@ public class Jogador {
 		this.jogadas = jogadas;
 	}
 	
+	public Jogador() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * @return the nome
 	 */
@@ -77,7 +91,23 @@ public class Jogador {
 	public void setJogadas(int[] jogadas) {
 		this.jogadas = jogadas;
 	}
+
+	public Map<String, String> getCoordenadasMeuJogoAtual() {
+		return coordenadasMeuJogoAtual;
+	}
+
+	public void setCoordenadasMeuJogoAtual(Map<String, String> coordenadasMeuJogoAtual) {
+		this.coordenadasMeuJogoAtual = coordenadasMeuJogoAtual;
+	}
 	
-	
-	
+	public boolean isEmJogo() {
+		return emJogo;
+	}
+
+	public void setEmJogo(boolean emJogo) {
+		this.emJogo = emJogo;
+	}
+
+
+	 
 }

@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import br.edu.psd.batalhanaval.model.socket.Cliente;
 import br.edu.psd.batalhanaval.model.socket.Servidor;
 import br.edu.psd.batalhanaval.view.Tela;
-import br.edu.psd.batalhanaval.view.TelaEscolha;
+import br.edu.psd.batalhanaval.view.PanelEscolha;
 
 /**
  * @author ayrton
@@ -23,10 +23,10 @@ import br.edu.psd.batalhanaval.view.TelaEscolha;
 public class Controller implements ActionListener{
 	
 	protected Tela f;
-	protected TelaEscolha telaEscolha;
+	protected PanelEscolha telaEscolha;//escolhaServerOrCliente
 	
 	
-	public Controller(TelaEscolha telaEscolha,Tela f) {
+	public Controller(PanelEscolha telaEscolha,Tela f) {
 		
 		this.f=f;
 		this.telaEscolha = telaEscolha;
@@ -53,7 +53,7 @@ public class Controller implements ActionListener{
 			}
 		} 
 		if(e.getSource() == telaEscolha.getBtnJogador()){
-			
+
 			f.getTelaEscolha().setVisible(false);
 			f.getTelaEscolha().getTelaCliente().setVisible(true);
 			
