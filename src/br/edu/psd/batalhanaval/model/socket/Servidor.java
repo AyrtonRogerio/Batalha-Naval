@@ -64,8 +64,9 @@ public class Servidor extends Thread{
 		Socket socket = null;
 		try {
 			while((socket = ouvirPorta()) != null) {
-				//System.out.println("rrrrrrrr");
+				System.out.println("rrrrrrrr");
 				criarCanalComunicacaoCliente(socket);
+				System.out.println("dps do canal de comu do serv");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -79,10 +80,14 @@ public class Servidor extends Thread{
 		new Thread(() -> {
 			try {
 				
+				System.out.println("canal serv");
 				resp="";
 				BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				System.out.println("dps do buff read do serv");
 				PrintWriter saida = new PrintWriter(socket.getOutputStream(), true);
+				System.out.println("dps do print read serv");
 				System.out.println( entrada.readLine());
+				System.out.println(" to string entrada " + entrada.toString());
 				while ((resp = entrada.readLine()) != null ) {
 					
 //					String protocolo = resp.substring(0, 3);
@@ -125,7 +130,7 @@ public class Servidor extends Thread{
 						for(Cliente c:clientes) {
 							
 							if(cont!=(clientes.size()-1)) {
-								c.getEscritorDeBuffer().write(resp.getBytes());
+								c.getEscritorDeBuffer().println(resp.getBytes());
 							}
 							cont++;
 						}
@@ -143,7 +148,7 @@ public class Servidor extends Thread{
 	public void enviarParaDestino(String msg) throws IOException {
 		for(Cliente c: clientes) {
 			if(c.getNome().equals(clientes.get(ProtocoloUtil.splitDestino(msg)).getNome())) {
-				c.getEscritorDeBuffer().write(msg.getBytes());
+				c.getEscritorDeBuffer().println(msg.getBytes());
 			}
 		}
 	}

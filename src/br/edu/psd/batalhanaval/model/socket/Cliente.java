@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -33,7 +34,7 @@ public class Cliente implements Runnable{
 
 	private Socket socket;
 	private BufferedReader bufferDeEntrada;//Caixa de entrada!
-	private PrintStream escritorDeBuffer;//Escreve na caixa de entrada
+	private PrintWriter escritorDeBuffer;//Escreve na caixa de entrada
 //	private ArrayList<ServerSocket>servidores=new ArrayList<>();//p-2-p
 	private int portaServerExterno = 9000;
 	private String ipServerExterno = "localhost";
@@ -77,8 +78,8 @@ public class Cliente implements Runnable{
 	private void iniciarBufferPrint() {
 		try {
 			
-			this.escritorDeBuffer = new PrintStream(this.socket.getOutputStream());
-			this.escritorDeBuffer.write(this.nome.getBytes());
+			this.escritorDeBuffer = new PrintWriter(this.socket.getOutputStream(), true);
+			this.escritorDeBuffer.println(this.nome.getBytes());
 		} catch (IOException e) {
 		
 			e.printStackTrace();
@@ -108,9 +109,9 @@ public class Cliente implements Runnable{
 				if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
 					// se aceitar
 					if(JOptionPane.showConfirmDialog(null, "jogador "+this.escritorDeBuffer.getClass().getName()+" esta lhe desafiando aceita?")==0) {
-						escritorDeBuffer.write(ProtocoloUtil.ACEITAR.getBytes());
-					}else {//se não
-						escritorDeBuffer.write(ProtocoloUtil.RECUSAR.getBytes());
+						escritorDeBuffer.println(ProtocoloUtil.ACEITAR.getBytes() );
+					}else {//se nï¿½o
+						escritorDeBuffer.println(ProtocoloUtil.RECUSAR.getBytes());
 					}
 
 				}else if(resp.contains(ProtocoloUtil.ACEITAR)) {
@@ -186,11 +187,11 @@ public class Cliente implements Runnable{
 		this.bufferDeEntrada = bufferDeEntrada;
 	}
 
-	public PrintStream getEscritorDeBuffer() {
+	public PrintWriter getEscritorDeBuffer() {
 		return escritorDeBuffer;
 	}
 
-	public void setEscritorDeBuffer(PrintStream escritorDeBuffer) {
+	public void setEscritorDeBuffer(PrintWriter escritorDeBuffer) {
 		this.escritorDeBuffer = escritorDeBuffer;
 	}
 	public String getNome() {

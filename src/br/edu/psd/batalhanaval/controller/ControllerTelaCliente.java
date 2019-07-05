@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
 import br.edu.psd.batalhanaval.Util.SocketUtil;
 import br.edu.psd.batalhanaval.model.socket.Cliente;
 import br.edu.psd.batalhanaval.view.PanelCliente;
@@ -72,6 +73,7 @@ public class ControllerTelaCliente implements ActionListener {
 						this.telaCliente.getTxtFieldIpServidor().getText().trim(),this.telaCliente.getTxtFieldNome().getText().trim(),telaEscolherOponente);
 						SocketUtil.setClienteCorrente(c);
 						telaEscolhaClienteOrServer.setVisible(false);
+						c.enviaMensagem(ProtocoloUtil.LISTA_USER_ONLINE);
 						new Thread(c).start();
 						telaEscolherOponente.setVisible(true);
 						telaCriarMapa.setVisible(false);

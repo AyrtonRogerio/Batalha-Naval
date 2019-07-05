@@ -103,7 +103,7 @@ public class ControllerTelaCriarMapa implements ActionListener{
 		else {
 			Cliente cliente = SocketUtil.getClienteCorrente();
 			MontadorDeMapa.montarMapaMeuJogoAtual(telaCMapa.getCoordenadasmap(),cliente.getJogador().getCoordenadasMeuJogoAtual());
-			//Precisa verificar se o jogo é offiline.
+			//Precisa verificar se o jogo ï¿½ offiline.
 			if(SocketUtil.offiline) {
 				cliente.getJogador().setEmJogo(true);
 				SocketUtil.setComputador(new Jogador());
@@ -115,14 +115,14 @@ public class ControllerTelaCriarMapa implements ActionListener{
 				this.telaJogo.setVisible(true);
 			}else {
 				try {
-					cliente.getEscritorDeBuffer().write(SocketUtil.informar.getBytes());
+					cliente.getEscritorDeBuffer().println(SocketUtil.informar.getBytes());
 					while(cliente.getStatusDeJogo().equals(ProtocoloUtil.ESPERARANDO)) {
 						if(cliente.getStatusDeJogo().equals(ProtocoloUtil.INICIAR)) {
 							
 							this.telaJogo.setVisible(true);
 						}
 					}
-				} catch (IOException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
