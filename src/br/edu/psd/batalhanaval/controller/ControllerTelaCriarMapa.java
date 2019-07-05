@@ -3,10 +3,12 @@ package br.edu.psd.batalhanaval.controller;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
 import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
+import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
 import br.edu.psd.batalhanaval.Util.SocketUtil;
 import br.edu.psd.batalhanaval.model.Jogador;
 import br.edu.psd.batalhanaval.model.MontadorDeMapa;
@@ -112,6 +114,18 @@ public class ControllerTelaCriarMapa implements ActionListener{
 				this.telaCMapa.setVisible(false);
 				this.telaJogo.setVisible(true);
 			}else {
+				try {
+					cliente.getEscritorDeBuffer().write(SocketUtil.informar.getBytes());
+					while(cliente.getStatusDeJogo().equals(ProtocoloUtil.ESPERARANDO)) {
+						if(cliente.getStatusDeJogo().equals(ProtocoloUtil.INICIAR)) {
+							
+							this.telaJogo.setVisible(true);
+						}
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				//Montar mapa adiversario online!
 			}	
 		}

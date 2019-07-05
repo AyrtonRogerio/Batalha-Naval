@@ -7,6 +7,7 @@ public class SocketUtil {
 	private static Cliente clienteCorrente;
 	private static Jogador computador;
 	public static boolean offiline = false;
+	public static String informar = "Jogador Adversario já terminou de montar o mapa!!";
 	public static String converterNumeroEmLetra(int num) {
 		String letra = "";
 		if (num == 1)

@@ -13,7 +13,13 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
+import br.edu.psd.batalhanaval.Util.ClienteUtil;
+import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
 import br.edu.psd.batalhanaval.model.Jogador;
+import br.edu.psd.batalhanaval.model.TableModel;
+import br.edu.psd.batalhanaval.view.TelaEscolherOponente;
 
 /**
  * @author ayrton
@@ -35,8 +41,9 @@ public class Cliente implements Runnable{
 	private Jogador jogador;
 	private String resp;
 	private String msg;
-	
-
+	private String status;//para verificar se o usuario ja esta em uma partida
+	private String statusDeJogo;// para saber se o jogador terminou de montar o mapa
+	private TableModel jogadores;
 
 	public Cliente() throws UnknownHostException, IOException {
 		this.socket = new Socket(this.ipServerExterno,this.portaServerExterno);
@@ -44,12 +51,14 @@ public class Cliente implements Runnable{
 		this.iniciarBufferPrint();
 	}
 	
-	public Cliente(int portaServerExterno, String ipServerExterno) throws UnknownHostException, IOException {
+	public Cliente(int portaServerExterno, String ipServerExterno,String nome,TelaEscolherOponente telaEscolherOponente) throws UnknownHostException, IOException {
 		super();
 		this.portaServerExterno = portaServerExterno;
 		this.ipServerExterno = ipServerExterno;
 		this.socket = new Socket(this.ipServerExterno,this.portaServerExterno);
 		this.jogador = new Jogador();
+		this.nome = nome;
+		jogadores = (TableModel)telaEscolherOponente.getTable().getModel();
 		this.iniciarBufferPrint();
 	}
 
@@ -58,7 +67,7 @@ public class Cliente implements Runnable{
 		this.ipServerExterno = socket.getInetAddress().getHostName();//ipdoserver
 		this.portaServerExterno = socket.getPort();
 		this.jogador = new Jogador();
-		this.iniciarBufferPrint();
+		//this.iniciarBufferPrint();
 	}
 	public Cliente(String nome) {
 		this.nome = nome;
@@ -67,9 +76,9 @@ public class Cliente implements Runnable{
 
 	private void iniciarBufferPrint() {
 		try {
-			this.bufferDeEntrada = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+			
 			this.escritorDeBuffer = new PrintStream(this.socket.getOutputStream());
-	
+			this.escritorDeBuffer.write(this.nome.getBytes());
 		} catch (IOException e) {
 		
 			e.printStackTrace();
@@ -78,17 +87,44 @@ public class Cliente implements Runnable{
 		} 
 	}
 	public void run() {
-		this.criarCanalComunicacaoServer();
+		try {
+			this.criarCanalComunicacaoServer();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
-	public void criarCanalComunicacaoServer (){//Canal de comunicaï¿½ï¿½o entre o cliente e o server.
+	public void criarCanalComunicacaoServer () throws IOException{//Canal de comunicaï¿½ï¿½o entre o cliente e o server.
+		System.out.println("opa");
+		this.bufferDeEntrada = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 		BufferedReader entrada;
 		try {
 			entrada = this.bufferDeEntrada;
 			resp = "";
 			while ((resp = entrada.readLine()) != null ) {
+				System.out.println(resp);
+				if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
+					// se aceitar
+					if(JOptionPane.showConfirmDialog(null, "jogador "+this.escritorDeBuffer.getClass().getName()+" esta lhe desafiando aceita?")==0) {
+						escritorDeBuffer.write(ProtocoloUtil.ACEITAR.getBytes());
+					}else {//se não
+						escritorDeBuffer.write(ProtocoloUtil.RECUSAR.getBytes());
+					}
 
+				}else if(resp.contains(ProtocoloUtil.ACEITAR)) {
+					this.setStatus(ClienteUtil.JOGANDO);
+				}else if(resp.contains(ProtocoloUtil.RECUSAR)) {
+					this.setStatus(ClienteUtil.DISPONIVEL);
+				}else if(resp.contains(ProtocoloUtil.INICIAR)) {
+					this.setStatusDeJogo(ProtocoloUtil.INICIAR);
+					//falta passar as cordenadas
+				}else {
+					Cliente c = new Cliente(resp);
+					c.setStatus(ClienteUtil.DISPONIVEL);
+					jogadores.addValor(c);
+				}
 				
 				
 			}
@@ -193,4 +229,21 @@ public class Cliente implements Runnable{
 		this.nome = nome;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getStatusDeJogo() {
+		return statusDeJogo;
+	}
+
+	public void setStatusDeJogo(String statusDeJogo) {
+		this.statusDeJogo = statusDeJogo;
+	}
+
+	
 }

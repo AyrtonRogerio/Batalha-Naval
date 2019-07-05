@@ -69,7 +69,7 @@ public class ControllerTelaCliente implements ActionListener {
 							|| this.telaCliente.getTxtFieldPorta().getText().trim().isEmpty())) {
 
 						Cliente c = new Cliente(Integer.parseInt(this.telaCliente.getTxtFieldPorta().getText().trim()),
-						this.telaCliente.getTxtFieldIpServidor().getText().trim());
+						this.telaCliente.getTxtFieldIpServidor().getText().trim(),this.telaCliente.getTxtFieldNome().getText().trim(),telaEscolherOponente);
 						SocketUtil.setClienteCorrente(c);
 						telaEscolhaClienteOrServer.setVisible(false);
 						new Thread(c).start();

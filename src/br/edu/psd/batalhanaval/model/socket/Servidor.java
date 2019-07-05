@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
+import br.edu.psd.batalhanaval.model.TableModel;
+import br.edu.psd.batalhanaval.view.TelaEscolherOponente;
 import br.edu.psd.batalhanaval.view.TelaServidor;
 
 
@@ -29,7 +31,7 @@ public class Servidor extends Thread{
 	private String resp;
 	private ArrayList<Cliente> clientes;
 	private TelaServidor telaServidor;
-	
+
 	/**
 	 * @param serverSocket
 	 * @param porta
@@ -62,6 +64,7 @@ public class Servidor extends Thread{
 		Socket socket = null;
 		try {
 			while((socket = ouvirPorta()) != null) {
+				//System.out.println("rrrrrrrr");
 				criarCanalComunicacaoCliente(socket);
 			}
 		} catch (IOException e) {
@@ -75,63 +78,59 @@ public class Servidor extends Thread{
 	public void criarCanalComunicacaoCliente(Socket socket) {//Canal de comunica��o entre o cliente e o server.
 		new Thread(() -> {
 			try {
-				clientes.add(new Cliente(socket));
+				
+				resp="";
 				BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				PrintWriter saida = new PrintWriter(socket.getOutputStream(), true);
-				
+				System.out.println( entrada.readLine());
 				while ((resp = entrada.readLine()) != null ) {
 					
-					String protocolo = resp.substring(0, 3);
-					String mensagem = resp.substring(3);
+//					String protocolo = resp.substring(0, 3);
+//					String mensagem = resp.substring(3);
 					
 					System.out.println("Ah");
-					
-					switch (protocolo) {
-					
-					case ProtocoloUtil.LISTA_USER_ONLINE:
+		
+					if(resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {
 						System.out.println("Entrou switch");
 						for(Cliente cli: clientes) {
 							saida.println(ProtocoloUtil.LISTA_USER_ONLINE + cli.getNome());
 						}
 						break;
-
-					case ProtocoloUtil.USER_WIN:
-						
+					}else if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
+						enviarParaDestino(resp);
+						break;
+					}else if(resp.contains(ProtocoloUtil.USER_WIN)) {
 						saida.println(ProtocoloUtil.USER_WIN);
 						break;
-					
-					case ProtocoloUtil.USER_LOSE:
-						
+					}else if(resp.contains(ProtocoloUtil.USER_LOSE)) {
 						saida.println(ProtocoloUtil.USER_LOSE);
 						break;					
 
-					case ProtocoloUtil.TIRO_ACERTO:
-						
+					}else if(resp.contains(ProtocoloUtil.TIRO_ACERTO)) {
 						saida.println(ProtocoloUtil.TIRO_ACERTO);
 						break;
-						
-					case ProtocoloUtil.TIRO_ERRO:
-						
+					}else if(resp.contains(ProtocoloUtil.TIRO_ERRO)) {
 						saida.println(ProtocoloUtil.TIRO_ERRO);
 						break;
-						
-					case ProtocoloUtil.USER_SAIU:
-						
+					}else if(resp.contains(ProtocoloUtil.USER_SAIU)) {
 						saida.println(ProtocoloUtil.USER_SAIU);
 						break;
-						
-					case ProtocoloUtil.CONECTADO:
-						
+					}else if(resp.contains(ProtocoloUtil.CONECTADO)){
 						saida.println(ProtocoloUtil.CONECTADO);
 						break;
-					
-					default:
-						break;
+					}else {
+						clientes.add(new Cliente(socket));
+						clientes.get(clientes.size()-1).setNome(resp);
+						int cont = 0;
+						for(Cliente c:clientes) {
+							
+							if(cont!=(clientes.size()-1)) {
+								c.getEscritorDeBuffer().write(resp.getBytes());
+							}
+							cont++;
+						}
 					}
-					
-					
 				}
-				
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -139,6 +138,14 @@ public class Servidor extends Thread{
 			
 		}).start();
 		
+	}
+	//enviar msg para a pessoa que quer desafiar
+	public void enviarParaDestino(String msg) throws IOException {
+		for(Cliente c: clientes) {
+			if(c.getNome().equals(clientes.get(ProtocoloUtil.splitDestino(msg)).getNome())) {
+				c.getEscritorDeBuffer().write(msg.getBytes());
+			}
+		}
 	}
 
 	/**
