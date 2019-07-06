@@ -23,6 +23,8 @@ public class App {
 	 */
 	public static void main(String[] args) {
 		//Teste tela de inser��o de Navio.
+
+		System.out.println();
 		Tela tela = new Tela();
 		TelaCriarMapa telaCriarMapa = new TelaCriarMapa();
 		TelaEscolherOponente telaEscolherOponente = new TelaEscolherOponente();

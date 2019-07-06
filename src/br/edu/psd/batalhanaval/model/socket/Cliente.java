@@ -59,6 +59,7 @@ public class Cliente implements Runnable{
 		this.socket = new Socket(this.ipServerExterno,this.portaServerExterno);
 		this.jogador = new Jogador();
 		this.nome = nome;
+		this.jogador.setNome(nome);
 		jogadores = (TableModel)telaEscolherOponente.getTable().getModel();
 		this.iniciarBufferPrint();
 	}

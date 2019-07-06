@@ -70,7 +70,7 @@ public class ControllerTelaCliente implements ActionListener {
 							|| this.telaCliente.getTxtFieldPorta().getText().trim().isEmpty())) {
 
 						Cliente c = new Cliente(Integer.parseInt(this.telaCliente.getTxtFieldPorta().getText().trim()),
-						this.telaCliente.getTxtFieldIpServidor().getText().trim(),this.telaCliente.getTxtFieldNome().getText().trim(),telaEscolherOponente);
+						this.telaCliente.getTxtFieldIpServidor().getText().trim(), this.telaCliente.getTxtFieldNome().getText().trim(),telaEscolherOponente);
 						SocketUtil.setClienteCorrente(c);
 						telaEscolhaClienteOrServer.setVisible(false);
 						c.enviaMensagem(ProtocoloUtil.LISTA_USER_ONLINE);
@@ -90,6 +90,7 @@ public class ControllerTelaCliente implements ActionListener {
 						SocketUtil.setClienteCorrente(c);
 						//new Thread(c).start();
 						telaEscolhaClienteOrServer.setVisible(false);
+						this.telaCriarMapa.resetarLabelsNavios();
 						telaCriarMapa.setVisible(true);
 					} else {
 						JOptionPane.showMessageDialog(null, "Pro favor, informe o seu nome para poder jogar.",

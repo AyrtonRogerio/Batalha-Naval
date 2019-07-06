@@ -10,7 +10,9 @@ import java.util.Map;
 
 import javax.swing.JButton;
 
+import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
 import br.edu.psd.batalhanaval.Util.Enum.CodigoButtonEnum;
+import br.edu.psd.batalhanaval.Util.Enum.TipoEmbarcacaoEnum;
 
 /**
  * @author ayrton
@@ -21,8 +23,7 @@ public class Jogador {
 	private String nome;
 	private boolean suaVez = false;
 	private boolean emJogo;
-	private String acertos;
-	private int jogadas[] = new int[3] ;
+	private String acertos="";
 	private Map<String,String>coordenadasMeuJogoAtual = new HashMap<String,String>();
 	/**
 	 * @param nome
@@ -30,14 +31,8 @@ public class Jogador {
 	 * @param acertos
 	 * @param jogadas
 	 */
-	public Jogador(String nome, boolean suaVez, String acertos, int[] jogadas) {
-		super();
-		this.nome = nome;
-		this.suaVez = suaVez;
-		this.acertos = acertos;
-		this.jogadas = jogadas;
-	}
-	
+
+
 	public Jogador() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -82,16 +77,10 @@ public class Jogador {
 	/**
 	 * @return the jogadas
 	 */
-	public int[] getJogadas() {
-		return jogadas;
-	}
+
 	/**
 	 * @param jogadas the jogadas to set
 	 */
-	public void setJogadas(int[] jogadas) {
-		this.jogadas = jogadas;
-	}
-
 	public Map<String, String> getCoordenadasMeuJogoAtual() {
 		return coordenadasMeuJogoAtual;
 	}
@@ -99,7 +88,7 @@ public class Jogador {
 	public void setCoordenadasMeuJogoAtual(Map<String, String> coordenadasMeuJogoAtual) {
 		this.coordenadasMeuJogoAtual = coordenadasMeuJogoAtual;
 	}
-	
+
 	public boolean isEmJogo() {
 		return emJogo;
 	}
@@ -108,6 +97,29 @@ public class Jogador {
 		this.emJogo = emJogo;
 	}
 
-
-	 
+	public int embarcacoesAfundadas(String navio) {
+		if(navio.equalsIgnoreCase(TipoEmbarcacaoEnum.CRUZADORES.getValor()))
+			return acertos.split(TipoEmbarcacaoEnum.CRUZADORES.getValor()).length - 1< 0? 0:acertos.split(TipoEmbarcacaoEnum.CRUZADORES.getValor()).length - 1;
+		if(navio.equalsIgnoreCase(TipoEmbarcacaoEnum.ENCOURACADO.getValor()))
+			return acertos.split(TipoEmbarcacaoEnum.ENCOURACADO.getValor()).length - 1< 0? 0:acertos.split(TipoEmbarcacaoEnum.ENCOURACADO.getValor()).length - 1;
+		if(navio.equalsIgnoreCase(TipoEmbarcacaoEnum.HIDROAVIAO.getValor()))
+			return acertos.split(TipoEmbarcacaoEnum.HIDROAVIAO.getValor()).length - 1< 0? 0:acertos.split(TipoEmbarcacaoEnum.HIDROAVIAO.getValor()).length - 1;
+		if(navio.equalsIgnoreCase(TipoEmbarcacaoEnum.PORTAAVIAO.getValor()))
+			return acertos.split(TipoEmbarcacaoEnum.PORTAAVIAO.getValor()).length - 1< 0? 0:acertos.split(TipoEmbarcacaoEnum.PORTAAVIAO.getValor()).length - 1;
+		if(navio.equalsIgnoreCase(TipoEmbarcacaoEnum.SUBMARINO.getValor()))
+			return acertos.split(TipoEmbarcacaoEnum.SUBMARINO.getValor()).length - 1< 0? 0:acertos.split(TipoEmbarcacaoEnum.SUBMARINO.getValor()).length - 1;
+		return 0;
+	}
+	public boolean verificarSeGanhei() {
+		if(acertos.split(";").length-1>=EmbarcacoesUtil.NUMCRUZADORES+EmbarcacoesUtil.NUMEMCOURACADO+EmbarcacoesUtil.NUMHIDROAV+
+			EmbarcacoesUtil.NUMPORTAAV+EmbarcacoesUtil.NUMSUBMARINO)
+			return true;
+		return false;
+	}
+	public void resetarCaracteristicas() {
+		coordenadasMeuJogoAtual .clear();
+		this.acertos="";
+		this.emJogo=false;
+		this.suaVez=false;
+	}
 }

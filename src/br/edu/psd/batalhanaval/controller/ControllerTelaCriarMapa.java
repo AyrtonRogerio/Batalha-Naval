@@ -111,7 +111,9 @@ public class ControllerTelaCriarMapa implements ActionListener{
 				MontadorDeMapa.montarMapaComputador(SocketUtil.getComputador().getCoordenadasMeuJogoAtual());
 				SocketUtil.getClienteCorrente().getJogador().setEmJogo(true);
 				SocketUtil.getClienteCorrente().getJogador().setSuaVez(true);
+				EmbarcacoesUtil.limparPosicionamentos();
 				this.telaCMapa.setVisible(false);
+				this.telaJogo.limparTela();
 				this.telaJogo.setVisible(true);
 			}else {
 				try {

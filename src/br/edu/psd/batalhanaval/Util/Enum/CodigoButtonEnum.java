@@ -2,7 +2,7 @@ package br.edu.psd.batalhanaval.Util.Enum;
 
 public enum CodigoButtonEnum {
 	
-	NUMERO("[NUM]"), VAZIO("[V]"), POSICAO("[POS]"), TIROAGUA("[TIROA]");
+	NUMERO("[NUM]"), VAZIO("[V]"), POSICAO("[POS]"), TIROAGUA("[TIROA]"),AFUNDAR("[AFUNDADO]"),ATIVO("[ATIVO]");
 	private String descricao;
 	private CodigoButtonEnum(String descricao) {
 		this.descricao = descricao;

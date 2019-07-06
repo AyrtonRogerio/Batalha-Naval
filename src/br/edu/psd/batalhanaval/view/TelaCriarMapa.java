@@ -22,7 +22,7 @@ import javax.swing.border.TitledBorder;
 import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
 import br.edu.psd.batalhanaval.Util.SocketUtil;
 import br.edu.psd.batalhanaval.Util.Enum.CodigoButtonEnum;
-import br.edu.psd.batalhanaval.Util.Enum.TipoEmbarcacaoUtil;
+import br.edu.psd.batalhanaval.Util.Enum.TipoEmbarcacaoEnum;
 
 public class TelaCriarMapa extends JFrame implements ActionListener{//Vou colocar o evento aqui, pq n�o tem o botao de entrar nessa tela pronto, quando for criado eu modifico e trago o respeito ao mvc.
 	private GridLayout mapaGrid;
@@ -490,7 +490,7 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					JOptionPane.showMessageDialog(null," N�o eh possivel posicionar navio!");
 					return;
 				}else {
-					this.inserirEmbarcacao(button,TipoEmbarcacaoUtil.ENCOURACADO.getValor());
+					this.inserirEmbarcacao(button,TipoEmbarcacaoEnum.ENCOURACADO.getValor());
 				}
 			}
 			//Mesma coisa pros outros.
@@ -506,7 +506,7 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					JOptionPane.showMessageDialog(null," N�o eh possivel posicionar navio!");
 					return;
 				}else {
-					this.inserirEmbarcacao(button, TipoEmbarcacaoUtil.CRUZADORES.getValor());
+					this.inserirEmbarcacao(button, TipoEmbarcacaoEnum.CRUZADORES.getValor());
 				}
 			}
 		}
@@ -521,7 +521,7 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					JOptionPane.showMessageDialog(null," N�o eh possivel posicionar navio!");
 					return;
 				}else {
-					this.inserirEmbarcacao(button, TipoEmbarcacaoUtil.HIDROAVIAO.getValor());
+					this.inserirEmbarcacao(button, TipoEmbarcacaoEnum.HIDROAVIAO.getValor());
 				}
 			}
 		}
@@ -536,7 +536,7 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					JOptionPane.showMessageDialog(null," N�o eh possivel posicionar navio!");
 					return;
 				}else {
-					this.inserirEmbarcacao(button, TipoEmbarcacaoUtil.PORTAAVIAO.getValor());
+					this.inserirEmbarcacao(button, TipoEmbarcacaoEnum.PORTAAVIAO.getValor());
 				}
 			}
 		}
@@ -551,7 +551,7 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					JOptionPane.showMessageDialog(null," N�o eh possivel posicionar navio!");
 					return;
 				}else {
-					this.inserirEmbarcacao(button, TipoEmbarcacaoUtil.SUBMARINO.getValor());
+					this.inserirEmbarcacao(button, TipoEmbarcacaoEnum.SUBMARINO.getValor());
 				}
 			}
 		}
@@ -563,23 +563,23 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 		int x = Integer.parseInt(s[0]);
 		int y = Integer.parseInt(s[1]);
 		try {
-			if(navio.equals(TipoEmbarcacaoUtil.ENCOURACADO.getValor())) {//se possivel transformar num enum esse nome.
+			if(navio.equals(TipoEmbarcacaoEnum.ENCOURACADO.getValor())) {//se possivel transformar num enum esse nome.
 
 				if(!coordenadasmap.get(x+","+y).getName().equals(CodigoButtonEnum.POSICAO.getDescricao()) || !coordenadasmap.get(x+","+(y+1)).getName().equals(CodigoButtonEnum.POSICAO.getDescricao())||
 						!coordenadasmap.get(x+","+(y+2)).getName().equals(CodigoButtonEnum.POSICAO.getDescricao())|| !coordenadasmap.get(x+","+(y+3)).getName().equals(CodigoButtonEnum.POSICAO.getDescricao())) {
 					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio n�o eh possivel inserilo nesta Posi��o");
 					return;
 				}else {
-					coordenadasmap.get(x+","+y).setName(TipoEmbarcacaoUtil.ENCOURACADO.getValor()+";"+(EmbarcacoesUtil.getEncouracadosPosicionados()+1)+";P1");
+					coordenadasmap.get(x+","+y).setName(TipoEmbarcacaoEnum.ENCOURACADO.getValor()+";"+(EmbarcacoesUtil.getEncouracadosPosicionados()+1)+";P1");
 					coordenadasmap.get(x+","+y).setBackground(Color.BLACK);
 
-					coordenadasmap.get(x+","+(y+1)).setName(TipoEmbarcacaoUtil.ENCOURACADO.getValor()+";"+(EmbarcacoesUtil.getEncouracadosPosicionados()+1)+";P2");
+					coordenadasmap.get(x+","+(y+1)).setName(TipoEmbarcacaoEnum.ENCOURACADO.getValor()+";"+(EmbarcacoesUtil.getEncouracadosPosicionados()+1)+";P2");
 					coordenadasmap.get(x+","+(y+1)).setBackground(Color.BLACK);
 
-					coordenadasmap.get(x+","+(y+2)).setName(TipoEmbarcacaoUtil.ENCOURACADO.getValor()+";"+(EmbarcacoesUtil.getEncouracadosPosicionados()+1)+";P3");
+					coordenadasmap.get(x+","+(y+2)).setName(TipoEmbarcacaoEnum.ENCOURACADO.getValor()+";"+(EmbarcacoesUtil.getEncouracadosPosicionados()+1)+";P3");
 					coordenadasmap.get(x+","+(y+2)).setBackground(Color.BLACK);
 
-					coordenadasmap.get(x+","+(y+3)).setName(TipoEmbarcacaoUtil.ENCOURACADO.getValor()+";"+(EmbarcacoesUtil.getEncouracadosPosicionados()+1)+";P4");
+					coordenadasmap.get(x+","+(y+3)).setName(TipoEmbarcacaoEnum.ENCOURACADO.getValor()+";"+(EmbarcacoesUtil.getEncouracadosPosicionados()+1)+";P4");
 					coordenadasmap.get(x+","+(y+3)).setBackground(Color.BLACK);
 					
 					EmbarcacoesUtil.setEncouracadosPosicionados(EmbarcacoesUtil.getEncouracadosPosicionados()+1);
@@ -590,25 +590,25 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					}
 				}
 			}
-			else if(navio.equals(TipoEmbarcacaoUtil.PORTAAVIAO.getValor())) {//se possivel transformar num enum esse nome.
+			else if(navio.equals(TipoEmbarcacaoEnum.PORTAAVIAO.getValor())) {//se possivel transformar num enum esse nome.
 				if(!coordenadasmap.get(x+","+y).getName().equals(CodigoButtonEnum.POSICAO.getDescricao()) || !coordenadasmap.get(x+","+(y+1)).getName().equals(CodigoButtonEnum.POSICAO.getDescricao())||
 						!coordenadasmap.get(x+","+(y+2)).getName().equals(CodigoButtonEnum.POSICAO.getDescricao())|| !coordenadasmap.get(x+","+(y+3)).getName().equals(CodigoButtonEnum.POSICAO.getDescricao()) || !coordenadasmap.get(x+","+(y+4)).getName().equals(CodigoButtonEnum.POSICAO.getDescricao())) {
 					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio n�o eh possivel inserilo nesta Posi��o");
 					return;
 				}else {
-					coordenadasmap.get(x+","+y).setName(TipoEmbarcacaoUtil.PORTAAVIAO.getValor()+";"+(EmbarcacoesUtil.getPortaAvPosicionados()+1)+";P1");
+					coordenadasmap.get(x+","+y).setName(TipoEmbarcacaoEnum.PORTAAVIAO.getValor()+";"+(EmbarcacoesUtil.getPortaAvPosicionados()+1)+";P1");
 					coordenadasmap.get(x+","+y).setBackground(Color.red);
 
-					coordenadasmap.get(x+","+(y+1)).setName(TipoEmbarcacaoUtil.PORTAAVIAO.getValor()+";"+(EmbarcacoesUtil.getPortaAvPosicionados()+1)+";P2");
+					coordenadasmap.get(x+","+(y+1)).setName(TipoEmbarcacaoEnum.PORTAAVIAO.getValor()+";"+(EmbarcacoesUtil.getPortaAvPosicionados()+1)+";P2");
 					coordenadasmap.get(x+","+(y+1)).setBackground(Color.red);
 
-					coordenadasmap.get(x+","+(y+2)).setName(TipoEmbarcacaoUtil.PORTAAVIAO.getValor()+";"+(EmbarcacoesUtil.getPortaAvPosicionados()+1)+";P3");
+					coordenadasmap.get(x+","+(y+2)).setName(TipoEmbarcacaoEnum.PORTAAVIAO.getValor()+";"+(EmbarcacoesUtil.getPortaAvPosicionados()+1)+";P3");
 					coordenadasmap.get(x+","+(y+2)).setBackground(Color.red);
 
-					coordenadasmap.get(x+","+(y+3)).setName(TipoEmbarcacaoUtil.PORTAAVIAO.getValor()+";"+(EmbarcacoesUtil.getPortaAvPosicionados()+1)+";P4");
+					coordenadasmap.get(x+","+(y+3)).setName(TipoEmbarcacaoEnum.PORTAAVIAO.getValor()+";"+(EmbarcacoesUtil.getPortaAvPosicionados()+1)+";P4");
 					coordenadasmap.get(x+","+(y+3)).setBackground(Color.red);
 
-					coordenadasmap.get(x+","+(y+4)).setName(TipoEmbarcacaoUtil.PORTAAVIAO.getValor()+";"+(EmbarcacoesUtil.getPortaAvPosicionados()+1)+";P5");
+					coordenadasmap.get(x+","+(y+4)).setName(TipoEmbarcacaoEnum.PORTAAVIAO.getValor()+";"+(EmbarcacoesUtil.getPortaAvPosicionados()+1)+";P5");
 					coordenadasmap.get(x+","+(y+4)).setBackground(Color.red);
 
 					EmbarcacoesUtil.setPortaAvPosicionados(EmbarcacoesUtil.getPortaAvPosicionados()+1);
@@ -619,15 +619,15 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					}
 				}
 			}
-			else if(navio.equals(TipoEmbarcacaoUtil.CRUZADORES.getValor())) {//se possivel transformar num enum esse nome.
+			else if(navio.equals(TipoEmbarcacaoEnum.CRUZADORES.getValor())) {//se possivel transformar num enum esse nome.
 				if(!coordenadasmap.get(x+","+y).getName().equals(CodigoButtonEnum.POSICAO.getDescricao()) || !coordenadasmap.get(x+","+(y+1)).getName().equals(CodigoButtonEnum.POSICAO.getDescricao())) {
 					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio n�o eh possivel inserilo nesta Posi��o");
 					return;
 				}else {
-					coordenadasmap.get(x+","+y).setName(TipoEmbarcacaoUtil.CRUZADORES.getValor()+";"+(EmbarcacoesUtil.getCruzadoresPosicionados()+1)+";P1");
+					coordenadasmap.get(x+","+y).setName(TipoEmbarcacaoEnum.CRUZADORES.getValor()+";"+(EmbarcacoesUtil.getCruzadoresPosicionados()+1)+";P1");
 					coordenadasmap.get(x+","+y).setBackground(Color.yellow);
 
-					coordenadasmap.get(x+","+(y+1)).setName(TipoEmbarcacaoUtil.CRUZADORES.getValor()+";"+(EmbarcacoesUtil.getCruzadoresPosicionados()+1)+";P2");
+					coordenadasmap.get(x+","+(y+1)).setName(TipoEmbarcacaoEnum.CRUZADORES.getValor()+";"+(EmbarcacoesUtil.getCruzadoresPosicionados()+1)+";P2");
 					coordenadasmap.get(x+","+(y+1)).setBackground(Color.yellow);
 
 					EmbarcacoesUtil.setCruzadoresPosicionados(EmbarcacoesUtil.getCruzadoresPosicionados()+1);
@@ -638,18 +638,18 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					}
 				}
 			}
-			if(navio.equals(TipoEmbarcacaoUtil.HIDROAVIAO.getValor())) {//se possivel transformar num enum esse nome.
+			if(navio.equals(TipoEmbarcacaoEnum.HIDROAVIAO.getValor())) {//se possivel transformar num enum esse nome.
 				if(!coordenadasmap.get(x+","+y).getName().equals(CodigoButtonEnum.POSICAO.getDescricao()) || !coordenadasmap.get((x+1)+","+(y-1)).getName().equals(CodigoButtonEnum.POSICAO.getDescricao()) ||  !coordenadasmap.get((x+1)+","+(y+1)).getName().equals(CodigoButtonEnum.POSICAO.getDescricao())) {
 					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio n�o eh possivel inserilo nesta Posi��o");
 					return;
 				}else {
-					coordenadasmap.get(x+","+y).setName(TipoEmbarcacaoUtil.HIDROAVIAO.getValor()+";"+(EmbarcacoesUtil.getHidroAvPosicionados()+1)+";P1");
+					coordenadasmap.get(x+","+y).setName(TipoEmbarcacaoEnum.HIDROAVIAO.getValor()+";"+(EmbarcacoesUtil.getHidroAvPosicionados()+1)+";P1");
 					coordenadasmap.get(x+","+y).setBackground(Color.GREEN);
 
-					coordenadasmap.get((x+1)+","+(y-1)).setName(TipoEmbarcacaoUtil.HIDROAVIAO.getValor()+";"+(EmbarcacoesUtil.getHidroAvPosicionados()+1)+";P2");
+					coordenadasmap.get((x+1)+","+(y-1)).setName(TipoEmbarcacaoEnum.HIDROAVIAO.getValor()+";"+(EmbarcacoesUtil.getHidroAvPosicionados()+1)+";P2");
 					coordenadasmap.get((x+1)+","+(y-1)).setBackground(Color.GREEN);
 					
-					coordenadasmap.get((x+1)+","+(y+1)).setName(TipoEmbarcacaoUtil.HIDROAVIAO.getValor()+";"+(EmbarcacoesUtil.getHidroAvPosicionados()+1)+";P3");
+					coordenadasmap.get((x+1)+","+(y+1)).setName(TipoEmbarcacaoEnum.HIDROAVIAO.getValor()+";"+(EmbarcacoesUtil.getHidroAvPosicionados()+1)+";P3");
 					coordenadasmap.get((x+1)+","+(y+1)).setBackground(Color.GREEN);
 
 					EmbarcacoesUtil.setHidroAvPosicionados(EmbarcacoesUtil.getHidroAvPosicionados()+1);
@@ -660,13 +660,13 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 					}
 				}
 			}
-			else if(navio.equals(TipoEmbarcacaoUtil.SUBMARINO.getValor())) {//se possivel transformar num enum esse nome.
+			else if(navio.equals(TipoEmbarcacaoEnum.SUBMARINO.getValor())) {//se possivel transformar num enum esse nome.
 				if(!coordenadasmap.get(x+","+y).getName().equals(CodigoButtonEnum.POSICAO.getDescricao())) {
 					JOptionPane.showMessageDialog(null, "Pelo Tamanho do navio n�o eh possivel inserilo nesta Posi��o");
 					return;
 				}
 				else {
-					coordenadasmap.get(x+","+y).setName(TipoEmbarcacaoUtil.SUBMARINO.getValor()+";"+(EmbarcacoesUtil.getSubimarinosPosicionados()+1)+";P1");
+					coordenadasmap.get(x+","+y).setName(TipoEmbarcacaoEnum.SUBMARINO.getValor()+";"+(EmbarcacoesUtil.getSubimarinosPosicionados()+1)+";P1");
 					coordenadasmap.get(x+","+y).setBackground(Color.DARK_GRAY);
 					
 					EmbarcacoesUtil.setSubimarinosPosicionados(EmbarcacoesUtil.getSubimarinosPosicionados()+1);
@@ -681,6 +681,13 @@ public class TelaCriarMapa extends JFrame implements ActionListener{//Vou coloca
 			e1.printStackTrace();
 			JOptionPane.showMessageDialog(null, "N�o eh possivel inserir navio!");
 		}
+	}
+	public void resetarLabelsNavios() {
+		this.quantSubLabel.setText(EmbarcacoesUtil.NUMSUBMARINO-EmbarcacoesUtil.getSubimarinosPosicionados()+"");
+		this.quantCruzLabel.setText(EmbarcacoesUtil.NUMCRUZADORES-EmbarcacoesUtil.getCruzadoresPosicionados()+"");
+		this.quantencouracadoLabel.setText(EmbarcacoesUtil.NUMEMCOURACADO-EmbarcacoesUtil.getEncouracadosPosicionados()+"");
+		this.quantHidroLabel.setText(EmbarcacoesUtil.NUMHIDROAV-EmbarcacoesUtil.getHidroAvPosicionados()+"");
+		this.quantPortaAvLabel.setText(EmbarcacoesUtil.NUMPORTAAV-EmbarcacoesUtil.getPortaAvPosicionados()+"");
 	}
 	
 }

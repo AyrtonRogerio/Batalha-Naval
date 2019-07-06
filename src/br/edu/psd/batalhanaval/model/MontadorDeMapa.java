@@ -6,8 +6,9 @@ import java.util.Random;
 
 import javax.swing.JButton;
 
+import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
 import br.edu.psd.batalhanaval.Util.Enum.CodigoButtonEnum;
-import br.edu.psd.batalhanaval.Util.Enum.TipoEmbarcacaoUtil;
+import br.edu.psd.batalhanaval.Util.Enum.TipoEmbarcacaoEnum;
 
 public class MontadorDeMapa {
 
@@ -37,7 +38,7 @@ public class MontadorDeMapa {
 			try {
 				Random r = new Random();
 				String point = (r.nextInt(15)+1)+","+(r.nextInt(15)+1);//Linha/coluna
-				posicionarNaviosComputador(coordenadasMeuJogoAtual,point, TipoEmbarcacaoUtil.ENCOURACADO.getValor(), numEmbarcacoes);
+				posicionarNaviosComputador(coordenadasMeuJogoAtual,point, TipoEmbarcacaoEnum.ENCOURACADO.getValor(), numEmbarcacoes);
 				System.err.println("NUM EM:"+numEmbarcacoes);
 				numEmbarcacoes ++;
 				System.err.println("ENC "+(numEmbarcacoes-1)+" "+point);
@@ -50,7 +51,7 @@ public class MontadorDeMapa {
 			try {
 				Random r = new Random();
 				String point = (r.nextInt(15)+1)+","+(r.nextInt(15)+1);//Linha/coluna
-				posicionarNaviosComputador(coordenadasMeuJogoAtual,point, TipoEmbarcacaoUtil.PORTAAVIAO.getValor(), numEmbarcacoes);
+				posicionarNaviosComputador(coordenadasMeuJogoAtual,point, TipoEmbarcacaoEnum.PORTAAVIAO.getValor(), numEmbarcacoes);
 				System.err.println("NUM EM:"+numEmbarcacoes);
 				numEmbarcacoes ++;
 				System.err.println("PA "+(numEmbarcacoes-1)+" "+point);
@@ -63,7 +64,7 @@ public class MontadorDeMapa {
 			try {
 				Random r = new Random();
 				String point = (r.nextInt(15)+1)+","+(r.nextInt(15)+1);//Linha/coluna
-				posicionarNaviosComputador(coordenadasMeuJogoAtual,point, TipoEmbarcacaoUtil.HIDROAVIAO.getValor(), numEmbarcacoes);
+				posicionarNaviosComputador(coordenadasMeuJogoAtual,point, TipoEmbarcacaoEnum.HIDROAVIAO.getValor(), numEmbarcacoes);
 				System.err.println("NUM EM:"+numEmbarcacoes);
 				numEmbarcacoes ++;
 				System.err.println("HA "+(numEmbarcacoes-1)+" "+point);
@@ -76,7 +77,7 @@ public class MontadorDeMapa {
 			try {
 				Random r = new Random();
 				String point = (r.nextInt(15)+1)+","+(r.nextInt(15)+1);//Linha/coluna
-				posicionarNaviosComputador(coordenadasMeuJogoAtual,point, TipoEmbarcacaoUtil.CRUZADORES.getValor(), numEmbarcacoes);
+				posicionarNaviosComputador(coordenadasMeuJogoAtual,point, TipoEmbarcacaoEnum.CRUZADORES.getValor(), numEmbarcacoes);
 				System.err.println("NUM EM:"+numEmbarcacoes);
 				numEmbarcacoes ++;
 				System.err.println("CRUZADOR "+(numEmbarcacoes-1)+""+point);
@@ -89,7 +90,7 @@ public class MontadorDeMapa {
 			try {
 				Random r = new Random();
 				String point = (r.nextInt(15)+1)+","+(r.nextInt(15)+1);//Linha/coluna
-				posicionarNaviosComputador(coordenadasMeuJogoAtual,point, TipoEmbarcacaoUtil.SUBMARINO.getValor(), numEmbarcacoes);
+				posicionarNaviosComputador(coordenadasMeuJogoAtual,point, TipoEmbarcacaoEnum.SUBMARINO.getValor(), numEmbarcacoes);
 				System.err.println("NUM EM:"+numEmbarcacoes);
 				numEmbarcacoes ++;
 				System.err.println("SUB"+(numEmbarcacoes-1)+" "+point);
@@ -113,63 +114,64 @@ public class MontadorDeMapa {
 		int x = Integer.parseInt(s[0]);
 		int y = Integer.parseInt(s[1]);
 		try {
-			if(navio.equals(TipoEmbarcacaoUtil.ENCOURACADO.getValor())) {
+			if(navio.equals(TipoEmbarcacaoEnum.ENCOURACADO.getValor())) {
 				if(!coordenadasmap.get(x+","+y).equals(CodigoButtonEnum.POSICAO.getDescricao()) || !coordenadasmap.get(x+","+(y+1)).equals(CodigoButtonEnum.POSICAO.getDescricao())||
 						!coordenadasmap.get(x+","+(y+2)).equals(CodigoButtonEnum.POSICAO.getDescricao())|| !coordenadasmap.get(x+","+(y+3)).equals(CodigoButtonEnum.POSICAO.getDescricao())) {
 					throw new Exception("Pelo tamnaho do navio nao foi possivel inserilo!");
 				}else {
-					coordenadasmap.replace((x+","+y),(TipoEmbarcacaoUtil.ENCOURACADO.getValor()+";"+(numEmbarcacao)+";P1"));
+					
+					coordenadasmap.replace((x+","+y),(TipoEmbarcacaoEnum.ENCOURACADO.getValor()+";"+(numEmbarcacao)+";P1"));
 
-					coordenadasmap.replace(x+","+(y+1),TipoEmbarcacaoUtil.ENCOURACADO.getValor()+";"+(numEmbarcacao)+";P2");
+					coordenadasmap.replace(x+","+(y+1),TipoEmbarcacaoEnum.ENCOURACADO.getValor()+";"+(numEmbarcacao)+";P2");
 
-					coordenadasmap.replace(x+","+(y+2),TipoEmbarcacaoUtil.ENCOURACADO.getValor()+";"+(numEmbarcacao)+";P3");
+					coordenadasmap.replace(x+","+(y+2),TipoEmbarcacaoEnum.ENCOURACADO.getValor()+";"+(numEmbarcacao)+";P3");
 
-					coordenadasmap.replace(x+","+(y+3),TipoEmbarcacaoUtil.ENCOURACADO.getValor()+";"+(numEmbarcacao)+";P4");				
+					coordenadasmap.replace(x+","+(y+3),TipoEmbarcacaoEnum.ENCOURACADO.getValor()+";"+(numEmbarcacao)+";P4");				
 				}
 			}
-			else if(navio.equals(TipoEmbarcacaoUtil.PORTAAVIAO.getValor())) {//se possivel transformar num enum esse nome.
+			else if(navio.equals(TipoEmbarcacaoEnum.PORTAAVIAO.getValor())) {//se possivel transformar num enum esse nome.
 				if(!coordenadasmap.get(x+","+y).equals(CodigoButtonEnum.POSICAO.getDescricao()) || !coordenadasmap.get(x+","+(y+1)).equals(CodigoButtonEnum.POSICAO.getDescricao())||
 						!coordenadasmap.get(x+","+(y+2)).equals(CodigoButtonEnum.POSICAO.getDescricao())|| !coordenadasmap.get(x+","+(y+3)).equals(CodigoButtonEnum.POSICAO.getDescricao()) || !coordenadasmap.get(x+","+(y+4)).equals(CodigoButtonEnum.POSICAO.getDescricao())) {
 					throw new Exception("Pelo tamanho do navio nao foi possivel inserilo!");
 				}else {
 
-					coordenadasmap.replace(x+","+y,TipoEmbarcacaoUtil.PORTAAVIAO.getValor()+";"+(numEmbarcacao)+";P1");
+					coordenadasmap.replace(x+","+y,TipoEmbarcacaoEnum.PORTAAVIAO.getValor()+";"+(numEmbarcacao)+";P1");
 
-					coordenadasmap.replace(x+","+(y+1),TipoEmbarcacaoUtil.PORTAAVIAO.getValor()+";"+(numEmbarcacao)+";P2");
+					coordenadasmap.replace(x+","+(y+1),TipoEmbarcacaoEnum.PORTAAVIAO.getValor()+";"+(numEmbarcacao)+";P2");
 
-					coordenadasmap.replace(x+","+(y+2),TipoEmbarcacaoUtil.PORTAAVIAO.getValor()+";"+(numEmbarcacao)+";P3");
+					coordenadasmap.replace(x+","+(y+2),TipoEmbarcacaoEnum.PORTAAVIAO.getValor()+";"+(numEmbarcacao)+";P3");
 
-					coordenadasmap.replace(x+","+(y+3), TipoEmbarcacaoUtil.PORTAAVIAO.getValor()+";"+(numEmbarcacao)+";P4");
+					coordenadasmap.replace(x+","+(y+3), TipoEmbarcacaoEnum.PORTAAVIAO.getValor()+";"+(numEmbarcacao)+";P4");
 
-					coordenadasmap.replace(x+","+(y+4), TipoEmbarcacaoUtil.PORTAAVIAO.getValor()+";"+(numEmbarcacao)+";P5");
+					coordenadasmap.replace(x+","+(y+4), TipoEmbarcacaoEnum.PORTAAVIAO.getValor()+";"+(numEmbarcacao)+";P5");
 				}
 			}
-			else if(navio.equals(TipoEmbarcacaoUtil.CRUZADORES.getValor())) {//se possivel transformar num enum esse nome.
+			else if(navio.equals(TipoEmbarcacaoEnum.CRUZADORES.getValor())) {//se possivel transformar num enum esse nome.
 				if(!coordenadasmap.get(x+","+y).equals(CodigoButtonEnum.POSICAO.getDescricao()) || !coordenadasmap.get(x+","+(y+1)).equals(CodigoButtonEnum.POSICAO.getDescricao())) {
 					throw new Exception("Pelo tamanho do navio nao foi possivel inserilo!");
 				}else {
-					coordenadasmap.replace(x+","+y,TipoEmbarcacaoUtil.CRUZADORES.getValor()+";"+numEmbarcacao+";P1");
+					coordenadasmap.replace(x+","+y,TipoEmbarcacaoEnum.CRUZADORES.getValor()+";"+numEmbarcacao+";P1");
 
-					coordenadasmap.replace(x+","+(y+1),TipoEmbarcacaoUtil.CRUZADORES.getValor()+";"+numEmbarcacao+";P2");
+					coordenadasmap.replace(x+","+(y+1),TipoEmbarcacaoEnum.CRUZADORES.getValor()+";"+numEmbarcacao+";P2");
 				}
 			}
-			else if(navio.equals(TipoEmbarcacaoUtil.HIDROAVIAO.getValor())) {//se possivel transformar num enum esse nome.
+			else if(navio.equals(TipoEmbarcacaoEnum.HIDROAVIAO.getValor())) {
 				if(!coordenadasmap.get(x+","+y).equals(CodigoButtonEnum.POSICAO.getDescricao()) || !coordenadasmap.get((x+1)+","+(y-1)).equals(CodigoButtonEnum.POSICAO.getDescricao()) ||  !coordenadasmap.get((x+1)+","+(y+1)).equals(CodigoButtonEnum.POSICAO.getDescricao())) {
 					throw new Exception("Pelo tamanho do navio nao foi possivel inserilo!");
 				}else {
-					coordenadasmap.replace(x+","+y,TipoEmbarcacaoUtil.HIDROAVIAO.getValor()+";"+numEmbarcacao+";P1");
+					coordenadasmap.replace(x+","+y,TipoEmbarcacaoEnum.HIDROAVIAO.getValor()+";"+numEmbarcacao+";P1");
 
-					coordenadasmap.replace((x+1)+","+(y-1), TipoEmbarcacaoUtil.HIDROAVIAO.getValor()+";"+numEmbarcacao+";P2");
+					coordenadasmap.replace((x+1)+","+(y-1), TipoEmbarcacaoEnum.HIDROAVIAO.getValor()+";"+numEmbarcacao+";P2");
 
-					coordenadasmap.replace((x+1)+","+(y+1),TipoEmbarcacaoUtil.HIDROAVIAO.getValor()+";"+numEmbarcacao+";P3");
+					coordenadasmap.replace((x+1)+","+(y+1),TipoEmbarcacaoEnum.HIDROAVIAO.getValor()+";"+numEmbarcacao+";P3");
 				}
 			}
-			else if(navio.equals(TipoEmbarcacaoUtil.SUBMARINO.getValor())) {//se possivel transformar num enum esse nome.
+			else if(navio.equals(TipoEmbarcacaoEnum.SUBMARINO.getValor())) {//se possivel transformar num enum esse nome.
 				if(!coordenadasmap.get(x+","+y).equals(CodigoButtonEnum.POSICAO.getDescricao())) {
 					throw new Exception("Pelo tamnaho do navio nao foi possivel inserilo!");
 				}
 				else {
-					coordenadasmap.replace(x+","+y, TipoEmbarcacaoUtil.SUBMARINO.getValor()+";"+numEmbarcacao+";P1");
+					coordenadasmap.replace(x+","+y, TipoEmbarcacaoEnum.SUBMARINO.getValor()+";"+numEmbarcacao+";P1");
 				}
 			}
 		}catch(Exception e1) {
@@ -195,6 +197,9 @@ public class MontadorDeMapa {
 						coordenadasMeuJogoAtual.put(i + "," + j,CodigoButtonEnum.POSICAO.getDescricao());
 					}
 				}
-			} 
+		} 
+	}
+	public static void resetarTelaMapa() {
+		
 	}
 }

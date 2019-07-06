@@ -1,5 +1,8 @@
 package br.edu.psd.batalhanaval.Util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class EmbarcacoesUtil {
 	public static int NUMEMCOURACADO = 2;
 	public static int NUMCRUZADORES = 3;
@@ -12,6 +15,7 @@ public class EmbarcacoesUtil {
 	private static int portaAvPosicionados = 0;
 	private static int hidroAvPosicionados = 0;
 	private static int subimarinosPosicionados = 0;
+	
 	public static int getEncouracadosPosicionados() {
 		return encouracadosPosicionados;
 	}
@@ -45,6 +49,13 @@ public class EmbarcacoesUtil {
 	}
 	public static void setSubimarinosPosicionados(int subimarinosPosicionados) {
 		EmbarcacoesUtil.subimarinosPosicionados = subimarinosPosicionados;
+	}
+	public static void limparPosicionamentos() {
+		encouracadosPosicionados = 0;
+		cruzadoresPosicionados = 0;
+		portaAvPosicionados = 0;
+		hidroAvPosicionados = 0;
+	    subimarinosPosicionados = 0;
 	}
 	
 }
