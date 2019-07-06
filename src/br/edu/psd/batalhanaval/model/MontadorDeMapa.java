@@ -6,7 +6,6 @@ import java.util.Random;
 
 import javax.swing.JButton;
 
-import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
 import br.edu.psd.batalhanaval.Util.Enum.CodigoButtonEnum;
 import br.edu.psd.batalhanaval.Util.Enum.TipoEmbarcacaoEnum;
 

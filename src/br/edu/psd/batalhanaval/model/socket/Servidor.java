@@ -5,7 +5,10 @@ package br.edu.psd.batalhanaval.model.socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -29,9 +32,11 @@ public class Servidor extends Thread{
 	private int porta;
 	public String nomeServidor;
 	private String resp;
-	private ArrayList<Cliente> clientes;
+	private ArrayList<ClienteServer> clientes;
 	private TelaServidor telaServidor;
-
+	private InputStream inputStream;
+	private ObjectInputStream ois;
+	private ObjectOutputStream oos;
 	/**
 	 * @param serverSocket
 	 * @param porta
@@ -43,7 +48,7 @@ public class Servidor extends Thread{
 		this.serverSocket = new ServerSocket(porta);
 		this.porta = porta;
 		this.nomeServidor = nomeServidor;
-		clientes = new ArrayList<Cliente>();
+		clientes = new ArrayList<ClienteServer>();
 		telaServidor = servidor;
 		
 	}
@@ -65,6 +70,7 @@ public class Servidor extends Thread{
 		try {
 			while((socket = ouvirPorta()) != null) {
 				System.out.println("rrrrrrrr");
+				
 				criarCanalComunicacaoCliente(socket);
 				System.out.println("dps do canal de comu do serv");
 			}
@@ -79,16 +85,19 @@ public class Servidor extends Thread{
 	public void criarCanalComunicacaoCliente(Socket socket) {//Canal de comunica��o entre o cliente e o server.
 		new Thread(() -> {
 			try {
-				
-				System.out.println("canal serv");
+				clientes.add(new ClienteServer(socket));
+			
+				System.out.println(clientes.size());
 				resp="";
-				BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				System.out.println("dps do buff read do serv");
-				PrintWriter saida = new PrintWriter(socket.getOutputStream(), true);
+				inputStream = socket.getInputStream();
+				ois = new ObjectInputStream(inputStream);
+			
+				System.out.println((String) ois.readObject());
+			//	PrintWriter saida = new PrintWriter(socket.getOutputStream(), true);
 				System.out.println("dps do print read serv");
-				System.out.println( entrada.readLine());
-				System.out.println(" to string entrada " + entrada.toString());
-				while ((resp = entrada.readLine()) != null ) {
+			//	System.out.println( entrada.readLine());
+				//System.out.println(" to string entrada " + entrada.toString());
+				while ((resp = (String) ois.readObject()) != null ) {
 					
 //					String protocolo = resp.substring(0, 3);
 //					String mensagem = resp.substring(3);
@@ -97,40 +106,40 @@ public class Servidor extends Thread{
 		
 					if(resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {
 						System.out.println("Entrou switch");
-						for(Cliente cli: clientes) {
-							saida.println(ProtocoloUtil.LISTA_USER_ONLINE + cli.getNome());
+						for(ClienteServer cli: clientes) {
+						//	saida.println(ProtocoloUtil.LISTA_USER_ONLINE + cli.getNome());
 						}
 						break;
 					}else if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
 						enviarParaDestino(resp);
 						break;
 					}else if(resp.contains(ProtocoloUtil.USER_WIN)) {
-						saida.println(ProtocoloUtil.USER_WIN);
+					//	saida.println(ProtocoloUtil.USER_WIN);
 						break;
 					}else if(resp.contains(ProtocoloUtil.USER_LOSE)) {
-						saida.println(ProtocoloUtil.USER_LOSE);
+					//	saida.println(ProtocoloUtil.USER_LOSE);
 						break;					
 
 					}else if(resp.contains(ProtocoloUtil.TIRO_ACERTO)) {
-						saida.println(ProtocoloUtil.TIRO_ACERTO);
+					//	saida.println(ProtocoloUtil.TIRO_ACERTO);
 						break;
 					}else if(resp.contains(ProtocoloUtil.TIRO_ERRO)) {
-						saida.println(ProtocoloUtil.TIRO_ERRO);
+					//	saida.println(ProtocoloUtil.TIRO_ERRO);
 						break;
 					}else if(resp.contains(ProtocoloUtil.USER_SAIU)) {
-						saida.println(ProtocoloUtil.USER_SAIU);
+					//	saida.println(ProtocoloUtil.USER_SAIU);
 						break;
 					}else if(resp.contains(ProtocoloUtil.CONECTADO)){
-						saida.println(ProtocoloUtil.CONECTADO);
+					//	saida.println(ProtocoloUtil.CONECTADO);
 						break;
 					}else {
-						clientes.add(new Cliente(socket));
+						
 						clientes.get(clientes.size()-1).setNome(resp);
 						int cont = 0;
-						for(Cliente c:clientes) {
+						for(ClienteServer c:clientes) {
 							
 							if(cont!=(clientes.size()-1)) {
-								c.getEscritorDeBuffer().println(resp.getBytes());
+								c.getOos().writeObject(resp);
 							}
 							cont++;
 						}
@@ -146,9 +155,9 @@ public class Servidor extends Thread{
 	}
 	//enviar msg para a pessoa que quer desafiar
 	public void enviarParaDestino(String msg) throws IOException {
-		for(Cliente c: clientes) {
+		for(ClienteServer c: clientes) {
 			if(c.getNome().equals(clientes.get(ProtocoloUtil.splitDestino(msg)).getNome())) {
-				c.getEscritorDeBuffer().println(msg.getBytes());
+				c.getOos().writeObject(msg);
 			}
 		}
 	}

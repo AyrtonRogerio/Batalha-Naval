@@ -117,7 +117,7 @@ public class ControllerTelaCriarMapa implements ActionListener{
 				this.telaJogo.setVisible(true);
 			}else {
 				try {
-					cliente.getEscritorDeBuffer().println(SocketUtil.informar.getBytes());
+					cliente.getOos().writeObject(SocketUtil.informar.getBytes());
 					while(cliente.getStatusDeJogo().equals(ProtocoloUtil.ESPERARANDO)) {
 						if(cliente.getStatusDeJogo().equals(ProtocoloUtil.INICIAR)) {
 							

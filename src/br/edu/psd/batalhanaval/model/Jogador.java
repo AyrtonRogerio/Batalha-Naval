@@ -3,15 +3,10 @@
  */
 package br.edu.psd.batalhanaval.model;
 
-import java.awt.Component;
-import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JButton;
-
 import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
-import br.edu.psd.batalhanaval.Util.Enum.CodigoButtonEnum;
 import br.edu.psd.batalhanaval.Util.Enum.TipoEmbarcacaoEnum;
 
 /**

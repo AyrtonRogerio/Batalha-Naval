@@ -5,7 +5,11 @@ package br.edu.psd.batalhanaval.model.socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -34,7 +38,7 @@ public class Cliente implements Runnable{
 
 	private Socket socket;
 	private BufferedReader bufferDeEntrada;//Caixa de entrada!
-	private PrintWriter escritorDeBuffer;//Escreve na caixa de entrada
+	//private PrintWriter escritorDeBuffer;//Escreve na caixa de entrada
 //	private ArrayList<ServerSocket>servidores=new ArrayList<>();//p-2-p
 	private int portaServerExterno = 9000;
 	private String ipServerExterno = "localhost";
@@ -45,7 +49,11 @@ public class Cliente implements Runnable{
 	private String status;//para verificar se o usuario ja esta em uma partida
 	private String statusDeJogo;// para saber se o jogador terminou de montar o mapa
 	private TableModel jogadores;
-
+	private InputStream inputStream;
+	private ObjectInputStream ois;
+	private ObjectOutputStream oos;
+	
+	private OutputStream outputStream;
 	public Cliente() throws UnknownHostException, IOException {
 		this.socket = new Socket(this.ipServerExterno,this.portaServerExterno);
 		this.jogador = new Jogador();
@@ -69,7 +77,7 @@ public class Cliente implements Runnable{
 		this.ipServerExterno = socket.getInetAddress().getHostName();//ipdoserver
 		this.portaServerExterno = socket.getPort();
 		this.jogador = new Jogador();
-		//this.iniciarBufferPrint();
+		
 	}
 	public Cliente(String nome) {
 		this.nome = nome;
@@ -78,10 +86,10 @@ public class Cliente implements Runnable{
 
 	private void iniciarBufferPrint() {
 		try {
-			
-			this.escritorDeBuffer = new PrintWriter(this.socket.getOutputStream(), true);
-			this.escritorDeBuffer.println(this.nome.getBytes());
-		} catch (IOException e) {
+			outputStream = this.socket.getOutputStream();
+			oos = new ObjectOutputStream(outputStream);
+			oos.writeObject(this.nome);
+			} catch (IOException e) {
 		
 			e.printStackTrace();
 			System.out.println("N�o iniciou o Buffer!");
@@ -94,26 +102,31 @@ public class Cliente implements Runnable{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
 	
-	public void criarCanalComunicacaoServer () throws IOException{//Canal de comunica��o entre o cliente e o server.
+	public void criarCanalComunicacaoServer () throws IOException, ClassNotFoundException{//Canal de comunica��o entre o cliente e o server.
+		inputStream = socket.getInputStream();
+		ois = new ObjectInputStream(inputStream);
 		System.out.println("opa");
-		this.bufferDeEntrada = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-		BufferedReader entrada;
+		//this.bufferDeEntrada = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+		//BufferedReader entrada;
 		try {
-			entrada = this.bufferDeEntrada;
+		//	entrada = this.bufferDeEntrada;
 			resp = "";
-			while ((resp = entrada.readLine()) != null ) {
+			while ((resp = (String)ois.readObject()) != null ) {
 				System.out.println(resp);
 				if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
 					// se aceitar
-					if(JOptionPane.showConfirmDialog(null, "jogador "+this.escritorDeBuffer.getClass().getName()+" esta lhe desafiando aceita?")==0) {
-						escritorDeBuffer.println(ProtocoloUtil.ACEITAR.getBytes() );
-					}else {//se n�o
-						escritorDeBuffer.println(ProtocoloUtil.RECUSAR.getBytes());
-					}
+//					if(JOptionPane.showConfirmDialog(null, "jogador "+this.escritorDeBuffer.getClass().getName()+" esta lhe desafiando aceita?")==0) {
+//			//			escritorDeBuffer.println(ProtocoloUtil.ACEITAR.getBytes() );
+//					}else {//se n�o
+//	//					escritorDeBuffer.println(ProtocoloUtil.RECUSAR.getBytes());
+//					}
 
 				}else if(resp.contains(ProtocoloUtil.ACEITAR)) {
 					this.setStatus(ClienteUtil.JOGANDO);
@@ -139,13 +152,13 @@ public class Cliente implements Runnable{
 	
 	public void enviaMensagem(String mensagem) {
 		this.msg = mensagem;
-		escritorDeBuffer.println(this.msg);
+//		escritorDeBuffer.println(this.msg);
 	}
 	
 	
 	public void sair() throws IOException {
 		bufferDeEntrada.close();
-		escritorDeBuffer.close();
+		//escritorDeBuffer.close();
 		socket.close();
 		
 	}
@@ -188,13 +201,7 @@ public class Cliente implements Runnable{
 		this.bufferDeEntrada = bufferDeEntrada;
 	}
 
-	public PrintWriter getEscritorDeBuffer() {
-		return escritorDeBuffer;
-	}
-
-	public void setEscritorDeBuffer(PrintWriter escritorDeBuffer) {
-		this.escritorDeBuffer = escritorDeBuffer;
-	}
+	
 	public String getNome() {
 		return nome;
 	}
@@ -245,6 +252,14 @@ public class Cliente implements Runnable{
 
 	public void setStatusDeJogo(String statusDeJogo) {
 		this.statusDeJogo = statusDeJogo;
+	}
+
+	public ObjectInputStream getOis() {
+		return ois;
+	}
+
+	public ObjectOutputStream getOos() {
+		return oos;
 	}
 
 	
