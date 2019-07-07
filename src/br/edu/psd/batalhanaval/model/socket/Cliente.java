@@ -52,8 +52,8 @@ public class Cliente implements Runnable{
 	private InputStream inputStream;
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
-	
 	private OutputStream outputStream;
+	
 	public Cliente() throws UnknownHostException, IOException {
 		this.socket = new Socket(this.ipServerExterno,this.portaServerExterno);
 		this.jogador = new Jogador();
@@ -77,7 +77,7 @@ public class Cliente implements Runnable{
 		this.ipServerExterno = socket.getInetAddress().getHostName();//ipdoserver
 		this.portaServerExterno = socket.getPort();
 		this.jogador = new Jogador();
-		
+		this.iniciarBufferPrint();
 	}
 	public Cliente(String nome) {
 		this.nome = nome;
@@ -88,7 +88,7 @@ public class Cliente implements Runnable{
 		try {
 			outputStream = this.socket.getOutputStream();
 			oos = new ObjectOutputStream(outputStream);
-			oos.writeObject(this.nome);
+			
 			} catch (IOException e) {
 		
 			e.printStackTrace();
@@ -98,6 +98,7 @@ public class Cliente implements Runnable{
 	}
 	public void run() {
 		try {
+			System.out.println("Cliente iniciar");
 			this.criarCanalComunicacaoServer();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -113,13 +114,15 @@ public class Cliente implements Runnable{
 		inputStream = socket.getInputStream();
 		ois = new ObjectInputStream(inputStream);
 		System.out.println("opa");
+		//oos.writeObject(this.nome);
 		//this.bufferDeEntrada = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 		//BufferedReader entrada;
 		try {
 		//	entrada = this.bufferDeEntrada;
 			resp = "";
 			while ((resp = (String)ois.readObject()) != null ) {
-				System.out.println(resp);
+				//System.out.println(resp);
+				System.out.println("Cliente recebeu:"+resp);
 				if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
 					// se aceitar
 //					if(JOptionPane.showConfirmDialog(null, "jogador "+this.escritorDeBuffer.getClass().getName()+" esta lhe desafiando aceita?")==0) {
@@ -127,7 +130,6 @@ public class Cliente implements Runnable{
 //					}else {//se n�o
 //	//					escritorDeBuffer.println(ProtocoloUtil.RECUSAR.getBytes());
 //					}
-
 				}else if(resp.contains(ProtocoloUtil.ACEITAR)) {
 					this.setStatus(ClienteUtil.JOGANDO);
 				}else if(resp.contains(ProtocoloUtil.RECUSAR)) {
@@ -135,15 +137,27 @@ public class Cliente implements Runnable{
 				}else if(resp.contains(ProtocoloUtil.INICIAR)) {
 					this.setStatusDeJogo(ProtocoloUtil.INICIAR);
 					//falta passar as cordenadas
+				}else if (resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {
+					//String s[] = resp.replace(ProtocoloUtil.LISTA_USER_ONLINE,"").split(";");
+					//System.out.println(resp);
+//					Cliente c = new Cliente(resp);
+//					for(ClienteServer cli: clientes) {
+//						//	saida.println(ProtocoloUtil.LISTA_USER_ONLINE + cli.getNome());
+//							if(cli.getNome().equalsIgnoreCase(s[1])) {
+//								continue;
+//							}
+//								
+//					}
+//					c.setStatus(ClienteUtil.DISPONIVEL);
+//					jogadores.addValor(c);
 				}else {
-					Cliente c = new Cliente(resp);
-					c.setStatus(ClienteUtil.DISPONIVEL);
-					jogadores.addValor(c);
+					//System.out.println(resp);
 				}
 				
 				
 			}
-		} catch (IOException e) {
+			System.out.println("Sai cliente");
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}			
@@ -152,7 +166,14 @@ public class Cliente implements Runnable{
 	
 	public void enviaMensagem(String mensagem) {
 		this.msg = mensagem;
-//		escritorDeBuffer.println(this.msg);
+		try {
+			System.out.println("MSG ENVIADA PARA O SERVER:"+msg);
+			this.oos.writeObject(this.msg);
+			//this.oos.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	

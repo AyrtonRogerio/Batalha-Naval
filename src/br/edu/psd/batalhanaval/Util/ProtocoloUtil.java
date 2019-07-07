@@ -26,6 +26,7 @@ public class ProtocoloUtil {
 	public static final String RECUSAR = "<NÃO>";// RECUSAR REQUISIÇÃO PRA JOGAR 
 	public static final String ESPERARANDO = "<ESPERANDO>";
 	public static final String INICIAR = "<INICIAR>";
+	public static final String NOME = "<MEUNOME>";
 	
 	public static int splitDestino(String destino) {
 		String id = destino.replace(QUER_JOGAR, "");

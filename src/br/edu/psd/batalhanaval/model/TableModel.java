@@ -16,7 +16,6 @@ public class TableModel extends AbstractTableModel{
 	public TableModel() {
 		this.usuarios = new ArrayList<>();
 	}
-	
 	public void addAll(List<Cliente> list)
 	{
 		if(list != null)

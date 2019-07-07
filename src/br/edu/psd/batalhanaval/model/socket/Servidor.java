@@ -3,21 +3,15 @@
  */
 package br.edu.psd.batalhanaval.model.socket;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
-import br.edu.psd.batalhanaval.model.TableModel;
-import br.edu.psd.batalhanaval.view.TelaEscolherOponente;
 import br.edu.psd.batalhanaval.view.TelaServidor;
 
 
@@ -34,9 +28,6 @@ public class Servidor extends Thread{
 	private String resp;
 	private ArrayList<ClienteServer> clientes;
 	private TelaServidor telaServidor;
-	private InputStream inputStream;
-	private ObjectInputStream ois;
-	private ObjectOutputStream oos;
 	/**
 	 * @param serverSocket
 	 * @param porta
@@ -52,7 +43,6 @@ public class Servidor extends Thread{
 		telaServidor = servidor;
 		
 	}
-	
 	public Socket ouvirPorta() throws IOException {
 		 Socket socket = serverSocket.accept();
 		 telaServidor.getTextArea().append("<Ouve uma requisi��o> \r\n");
@@ -60,7 +50,6 @@ public class Servidor extends Thread{
 		 telaServidor.getTextArea().requestFocusInWindow();
 		 return socket;
 	}
-	
 	@Override
 	/**
 	 * Recebe os clientes.
@@ -70,7 +59,6 @@ public class Servidor extends Thread{
 		try {
 			while((socket = ouvirPorta()) != null) {
 				System.out.println("rrrrrrrr");
-				
 				criarCanalComunicacaoCliente(socket);
 				System.out.println("dps do canal de comu do serv");
 			}
@@ -85,37 +73,44 @@ public class Servidor extends Thread{
 	public void criarCanalComunicacaoCliente(Socket socket) {//Canal de comunica��o entre o cliente e o server.
 		new Thread(() -> {
 			try {
-				clientes.add(new ClienteServer(socket));
-			
+				String resp = "";
+				ClienteServer cl = new ClienteServer(socket);
+				clientes.add(cl);
 				System.out.println(clientes.size());
 				resp="";
-				inputStream = socket.getInputStream();
-				ois = new ObjectInputStream(inputStream);
-			
-				System.out.println((String) ois.readObject());
+				//InputStream inputStream = socket.getInputStream();
+				ObjectInputStream ois = cl.getOis();
+				ObjectOutputStream ous = cl.getOos();
+			//System.out.println((String) ois.readObject());
 			//	PrintWriter saida = new PrintWriter(socket.getOutputStream(), true);
 				System.out.println("dps do print read serv");
 			//	System.out.println( entrada.readLine());
 				//System.out.println(" to string entrada " + entrada.toString());
 				while ((resp = (String) ois.readObject()) != null ) {
-					
 //					String protocolo = resp.substring(0, 3);
 //					String mensagem = resp.substring(3);
-					
-					System.out.println("Ah");
-		
-					if(resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {
-						System.out.println("Entrou switch");
-						for(ClienteServer cli: clientes) {
-						//	saida.println(ProtocoloUtil.LISTA_USER_ONLINE + cli.getNome());
-						}
-						break;
+					//System.out.println("Ah bb");
+					System.out.println("Server recebeu:"+resp);
+					//ous.writeObject("Server disse: Ola");
+					if(resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {//depois fazer a logica de enviar os clientes com ip e porta e nome!
+						ous.writeObject("Server disse: RECEBI ESSA SOLICITACAO"+ProtocoloUtil.LISTA_USER_ONLINE);
+						//break;O brak estava pausando o while
 					}else if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
 						enviarParaDestino(resp);
-						break;
-					}else if(resp.contains(ProtocoloUtil.USER_WIN)) {
+						//break;O brak estava pausando o while
+					}
+					else if(resp.contains(ProtocoloUtil.NOME)) {
+						//enviarParaDestino(resp);
+						String s[] = resp.split(";");
+						cl.setNome(s[1]);
+						ous.writeObject("Server disse: RECEBI ESSA SOLICITACAO "+ProtocoloUtil.NOME);
+						ous.flush();
+						//System.out.println("");
+						//break;O brak sai do while
+					}
+					else if(resp.contains(ProtocoloUtil.USER_WIN)) {
 					//	saida.println(ProtocoloUtil.USER_WIN);
-						break;
+						//break;
 					}else if(resp.contains(ProtocoloUtil.USER_LOSE)) {
 					//	saida.println(ProtocoloUtil.USER_LOSE);
 						break;					
@@ -132,20 +127,20 @@ public class Servidor extends Thread{
 					}else if(resp.contains(ProtocoloUtil.CONECTADO)){
 					//	saida.println(ProtocoloUtil.CONECTADO);
 						break;
-					}else {
-						
-						clientes.get(clientes.size()-1).setNome(resp);
-						int cont = 0;
-						for(ClienteServer c:clientes) {
-							
-							if(cont!=(clientes.size()-1)) {
-								c.getOos().writeObject(resp);
-							}
-							cont++;
-						}
+					}else {//?
+						System.out.println(resp+" Server recebeu");
+//						clientes.get(clientes.size()-1).setNome(resp);
+//						int cont = 0;
+//						for(ClienteServer c:clientes) {
+//							if(cont!=(clientes.size()-1)) {
+//								c.getOos().writeObject(resp);
+//								ous.flush();
+//							}
+//							cont++;
+//						}
 					}
 				}
-				
+				System.out.println("Serve acabou!");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -16,19 +16,14 @@ public class ClienteServer {
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	
-	
-
 	public ClienteServer(Socket socket) throws IOException, ClassNotFoundException  {
 		this.socket = socket;
 		InputStream is = this.socket.getInputStream();
 		this.ois = new ObjectInputStream(is);
-
-
 		OutputStream os = this.socket.getOutputStream();
 		this.oos = new ObjectOutputStream(os);
-
-		Object object = this.ois.readObject();
-
+	//	this.nome = nome;
+	    //Object object = this.ois.readObject();
 	}
 
 	public String getNome() {

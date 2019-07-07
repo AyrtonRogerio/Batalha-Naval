@@ -73,8 +73,9 @@ public class ControllerTelaCliente implements ActionListener {
 						this.telaCliente.getTxtFieldIpServidor().getText().trim(), this.telaCliente.getTxtFieldNome().getText().trim(),telaEscolherOponente);
 						SocketUtil.setClienteCorrente(c);
 						telaEscolhaClienteOrServer.setVisible(false);
-						c.enviaMensagem(ProtocoloUtil.LISTA_USER_ONLINE);
 						new Thread(c).start();
+						c.enviaMensagem(ProtocoloUtil.NOME+";"+c.getNome());
+						c.enviaMensagem(ProtocoloUtil.LISTA_USER_ONLINE+";"+c.getNome());
 						telaEscolherOponente.setVisible(true);
 						telaCriarMapa.setVisible(false);
 					} else {

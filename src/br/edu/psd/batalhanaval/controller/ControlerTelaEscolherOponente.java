@@ -12,9 +12,8 @@ public class ControlerTelaEscolherOponente implements ActionListener{
 	Cliente c;
 	TelaCriarMapa telaCriarMapa;
 	public ControlerTelaEscolherOponente() {
-		
-	}
 
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		c.setStatus(ClienteUtil.AGUARDANDO);
