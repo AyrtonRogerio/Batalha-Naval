@@ -6,25 +6,25 @@ package br.edu.psd.batalhanaval.model.socket;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
 import br.edu.psd.batalhanaval.Util.ClienteUtil;
+import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
 import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
+import br.edu.psd.batalhanaval.Util.SocketUtil;
+import br.edu.psd.batalhanaval.model.CordenadasJogador;
 import br.edu.psd.batalhanaval.model.Jogador;
+import br.edu.psd.batalhanaval.model.MontadorDeMapa;
 import br.edu.psd.batalhanaval.model.TableModel;
+import br.edu.psd.batalhanaval.view.TelaCriarMapa;
 import br.edu.psd.batalhanaval.view.TelaEscolherOponente;
+import br.edu.psd.batalhanaval.view.TelaJogo;
 
 /**
  * @author ayrton
@@ -53,6 +53,13 @@ public class Cliente implements Runnable{
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	private OutputStream outputStream;
+	private TelaEscolherOponente telaEscolherOponente;
+	private TelaCriarMapa telaCriarMapa;
+	private String desafiado;//guardar o nome do jogador que vc desafiou e ele aceitou
+	private String desafiador;//guardar o nome do jogador 
+	private boolean concluido,concluidoAdversario;//identificar quem terminou de montar o mapa primeiro
+	private TelaJogo telajogo;
+	
 	
 	public Cliente() throws UnknownHostException, IOException {
 		this.socket = new Socket(this.ipServerExterno,this.portaServerExterno);
@@ -114,44 +121,73 @@ public class Cliente implements Runnable{
 		inputStream = socket.getInputStream();
 		ois = new ObjectInputStream(inputStream);
 		System.out.println("opa");
-		//oos.writeObject(this.nome);
-		//this.bufferDeEntrada = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-		//BufferedReader entrada;
+
 		try {
-		//	entrada = this.bufferDeEntrada;
+			Object o = null;
 			resp = "";
-			while ((resp = (String)ois.readObject()) != null ) {
-				//System.out.println(resp);
-				System.out.println("Cliente recebeu:"+resp);
-				if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
-					// se aceitar
-//					if(JOptionPane.showConfirmDialog(null, "jogador "+this.escritorDeBuffer.getClass().getName()+" esta lhe desafiando aceita?")==0) {
-//			//			escritorDeBuffer.println(ProtocoloUtil.ACEITAR.getBytes() );
-//					}else {//se n�o
-//	//					escritorDeBuffer.println(ProtocoloUtil.RECUSAR.getBytes());
-//					}
-				}else if(resp.contains(ProtocoloUtil.ACEITAR)) {
-					this.setStatus(ClienteUtil.JOGANDO);
-				}else if(resp.contains(ProtocoloUtil.RECUSAR)) {
-					this.setStatus(ClienteUtil.DISPONIVEL);
-				}else if(resp.contains(ProtocoloUtil.INICIAR)) {
-					this.setStatusDeJogo(ProtocoloUtil.INICIAR);
-					//falta passar as cordenadas
-				}else if (resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {
-					//String s[] = resp.replace(ProtocoloUtil.LISTA_USER_ONLINE,"").split(";");
-					//System.out.println(resp);
-//					Cliente c = new Cliente(resp);
-//					for(ClienteServer cli: clientes) {
-//						//	saida.println(ProtocoloUtil.LISTA_USER_ONLINE + cli.getNome());
-//							if(cli.getNome().equalsIgnoreCase(s[1])) {
-//								continue;
-//							}
-//								
-//					}
-//					c.setStatus(ClienteUtil.DISPONIVEL);
-//					jogadores.addValor(c);
+			while ((o=ois.readObject()) != null ) {
+				
+				if(o instanceof String) {
+					resp = (String)o;
+					System.out.println("Cliente recebeu:"+resp);
+					if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
+						String []temp = resp.split(" ");
+						// se aceitar
+						String s = "jogador "+temp[1]+" esta lhe desafiando aceita?";
+						if(JOptionPane.showConfirmDialog(null,s)==0) {
+							oos.writeObject(ProtocoloUtil.ACEITAR+" "+ProtocoloUtil.splitDestino(resp));
+							oos.flush();
+							setDesafiador(temp[1]);
+							telaEscolherOponente.setVisible(false);
+							telaCriarMapa.setTitle(this.nome);
+							telaCriarMapa.setVisible(true);
+							SocketUtil.getClienteCorrente().getJogador().setEmJogo(true);
+						}else {//se n�o
+							oos.writeObject(ProtocoloUtil.RECUSAR);
+							oos.flush();
+						}
+					}else if(resp.contains(ProtocoloUtil.ACEITAR)) {
+						setDesafiado(resp.replace(ProtocoloUtil.ACEITAR,""));
+						setStatus(ClienteUtil.JOGANDO);
+						telaEscolherOponente.setVisible(false);
+						telaCriarMapa.setTitle(this.nome);
+						telaCriarMapa.setVisible(true);
+					}else if(resp.contains(ProtocoloUtil.RECUSAR)) {
+						setStatus(ClienteUtil.DISPONIVEL);
+					}else if(resp.contains(ProtocoloUtil.INICIAR)) {
+						setStatusDeJogo(ProtocoloUtil.INICIAR);
+						telaCriarMapa.setVisible(false);
+						telajogo.limparTela();
+						telajogo.setVisible(true);
+					}else if(resp.contains(ProtocoloUtil.ESPERARANDO)) {
+						String []s = resp.split(" ");
+						setConcluidoAdversario(true);
+						JOptionPane.showConfirmDialog(null,"O jogador "+s[0].replace(ProtocoloUtil.ESPERARANDO, "")+"esta esperando");
+					}
+					else if (resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {
+	
+					}else if(resp.contains(ProtocoloUtil.NOME)){
+						String s[] = resp.split(" ");
+						Cliente c = new Cliente(s[1]);
+						jogadores.addValor(c);
+					}
 				}else {
-					//System.out.println(resp);
+					CordenadasJogador cJogador = (CordenadasJogador)o;
+					MontadorDeMapa.montarMapaAdversarioOnline(cJogador.getCoordenadas());
+					EmbarcacoesUtil.limparPosicionamentos();
+					if(concluido&&concluidoAdversario) {
+						telaCriarMapa.setVisible(false);
+						telajogo.limparTela();
+						telajogo.setVisible(true);
+						SocketUtil.getClienteCorrente().getJogador().setEmJogo(true);
+						if(desafiado!=null) {
+							oos.writeObject(ProtocoloUtil.INICIAR+desafiado);
+						}else {
+							oos.writeObject(ProtocoloUtil.INICIAR+desafiador);
+						}
+					
+					}
+					
 				}
 				
 				
@@ -164,6 +200,14 @@ public class Cliente implements Runnable{
 	}
 
 	
+	public TelaJogo getTelajogo() {
+		return telajogo;
+	}
+
+	public void setTelajogo(TelaJogo telajogo) {
+		this.telajogo = telajogo;
+	}
+
 	public void enviaMensagem(String mensagem) {
 		this.msg = mensagem;
 		try {
@@ -283,5 +327,58 @@ public class Cliente implements Runnable{
 		return oos;
 	}
 
+	public TableModel getJogadores() {
+		return jogadores;
+	}
+
+	public TelaEscolherOponente getTelaEscolherOponente() {
+		return telaEscolherOponente;
+	}
+
+	public void setTelaEscolherOponente(TelaEscolherOponente telaEscolherOponente) {
+		this.telaEscolherOponente = telaEscolherOponente;
+	}
+
+	public TelaCriarMapa getTelaCriarMapa() {
+		return telaCriarMapa;
+	}
+
+	public void setTelaCriarMapa(TelaCriarMapa telaCriarMapa) {
+		this.telaCriarMapa = telaCriarMapa;
+	}
+
+	public String getDesafiado() {
+		return desafiado;
+	}
+
+	public void setDesafiado(String desafiado) {
+		this.desafiado = desafiado;
+	}
+
+	public boolean isConcluido() {
+		return concluido;
+	}
+
+	public void setConcluido(boolean concluido) {
+		this.concluido = concluido;
+	}
+
+	public boolean isConcluidoAdversario() {
+		return concluidoAdversario;
+	}
+
+	public void setConcluidoAdversario(boolean concluidoAdversario) {
+		this.concluidoAdversario = concluidoAdversario;
+	}
+
+	public String getDesafiador() {
+		return desafiador;
+	}
+
+	public void setDesafiador(String desafiador) {
+		this.desafiador = desafiador;
+	}
+
+	
 	
 }

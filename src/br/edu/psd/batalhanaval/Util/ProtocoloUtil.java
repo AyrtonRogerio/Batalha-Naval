@@ -21,16 +21,27 @@ public class ProtocoloUtil {
 	public static final String USER_LOSE = "ULG"; // usu√°rio q perdeu o jogo
 	public static final String TIRO_ERRO = "TER"; // tiro errado
 	public static final String TIRO_ACERTO = "TAC"; //tiro certo
-	public static final String QUER_JOGAR ="<QUER JOGAR>";//PERGUNTA SE O OUTRO JOGADOR QUER JOGAR
+	public static final String QUER_JOGAR ="<QUER_JOGAR>";//PERGUNTA SE O OUTRO JOGADOR QUER JOGAR
 	public static final String ACEITAR = "<OK>";// ACEITAR REQUISI«√O PRA JOGAR 
 	public static final String RECUSAR = "<N√O>";// RECUSAR REQUISI«√O PRA JOGAR 
 	public static final String ESPERARANDO = "<ESPERANDO>";
 	public static final String INICIAR = "<INICIAR>";
 	public static final String NOME = "<MEUNOME>";
 	
-	public static int splitDestino(String destino) {
-		String id = destino.replace(QUER_JOGAR, "");
-		return Integer.parseInt(id);
+	public static String splitDestino(String destino) {
+		if(destino.contains(QUER_JOGAR)) {
+			String id = destino.replace(QUER_JOGAR, "");
+			return id;
+		}else {
+			String s = destino.replace(ESPERARANDO, "");
+			return s;
+		}
+		
+	}
+	
+	public static String splitNome(String nome) {
+		String n = nome.replace(NOME, "");
+		return n;
 	}
 	
 }

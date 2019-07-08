@@ -3,6 +3,7 @@
  */
 package br.edu.psd.batalhanaval.app;
 
+import br.edu.psd.batalhanaval.controller.ControlerTelaEscolherOponente;
 import br.edu.psd.batalhanaval.controller.Controller;
 import br.edu.psd.batalhanaval.controller.ControllerTelaCliente;
 import br.edu.psd.batalhanaval.controller.ControllerTelaCriarMapa;
@@ -32,6 +33,7 @@ public class App {
 	
 		Controller controller = new Controller(tela.getTelaEscolha(), tela);
 		ControllerTelaCliente cTelaCliente = new ControllerTelaCliente(tela.getTelaEscolha().getTelaCliente(), tela, telaCriarMapa, telaEscolherOponente);
+		
 		ControllerTelaCriarMapa cTelaCriarMapa = new ControllerTelaCriarMapa(telaCriarMapa, telaJogo);
 		new ControllerTelaJogo(telaJogo );
 

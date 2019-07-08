@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
 import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
 import br.edu.psd.batalhanaval.Util.SocketUtil;
+import br.edu.psd.batalhanaval.model.CordenadasJogador;
 import br.edu.psd.batalhanaval.model.Jogador;
 import br.edu.psd.batalhanaval.model.MontadorDeMapa;
 import br.edu.psd.batalhanaval.model.socket.Cliente;
@@ -102,6 +103,7 @@ public class ControllerTelaCriarMapa implements ActionListener{
 			JOptionPane.showMessageDialog(null,"Existem Embarcacoes que ainda precisam ser posicionadas!!!");
 		else {
 			Cliente cliente = SocketUtil.getClienteCorrente();
+			cliente.setTelajogo(telaJogo);
 			MontadorDeMapa.montarMapaMeuJogoAtual(telaCMapa.getCoordenadasmap(),cliente.getJogador().getCoordenadasMeuJogoAtual());
 			//Precisa verificar se o jogo ï¿½ offiline.
 			if(SocketUtil.offiline) {
@@ -117,18 +119,36 @@ public class ControllerTelaCriarMapa implements ActionListener{
 				this.telaJogo.setVisible(true);
 			}else {
 				try {
-					cliente.getOos().writeObject(SocketUtil.informar.getBytes());
-					while(cliente.getStatusDeJogo().equals(ProtocoloUtil.ESPERARANDO)) {
-						if(cliente.getStatusDeJogo().equals(ProtocoloUtil.INICIAR)) {
-							
-							this.telaJogo.setVisible(true);
+					if(!cliente.isConcluidoAdversario()) {//ver quem montou primeiro o mapa
+						cliente.setConcluido(true);
+						cliente.getOos().writeObject(ProtocoloUtil.ESPERARANDO+cliente.getDesafiado()+" ");
+						//definir pra quem enviar
+						if(cliente.getDesafiado()!=null) {// o jogador que desafio joga primeiro
+							SocketUtil.getClienteCorrente().getJogador().setSuaVez(true);
+							cliente.getOos().writeObject(new CordenadasJogador(cliente.getJogador().getCoordenadasMeuJogoAtual(),cliente.getDesafiado()));
+						}else {
+							SocketUtil.getClienteCorrente().getJogador().setSuaVez(false);
+							cliente.getOos().writeObject(new CordenadasJogador(cliente.getJogador().getCoordenadasMeuJogoAtual(),cliente.getDesafiador()));
+						}
+					}else {//se não
+						cliente.setConcluido(true);
+						//definir pra quem enviar
+						if(cliente.getDesafiado()!=null) {// o jogador que desafio joga primeiro
+							SocketUtil.getClienteCorrente().getJogador().setSuaVez(true);
+							cliente.getOos().writeObject(new CordenadasJogador(cliente.getJogador().getCoordenadasMeuJogoAtual(),cliente.getDesafiado()));
+						}else {
+							SocketUtil.getClienteCorrente().getJogador().setSuaVez(false);
+							cliente.getOos().writeObject(new CordenadasJogador(cliente.getJogador().getCoordenadasMeuJogoAtual(),cliente.getDesafiador()));
 						}
 					}
-				} catch (Exception e) {
+					
+					
+					
+					
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				//Montar mapa adiversario online!
 			}	
 		}
 	}

@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
+import br.edu.psd.batalhanaval.model.CordenadasJogador;
 import br.edu.psd.batalhanaval.view.TelaServidor;
 
 
@@ -26,7 +27,7 @@ public class Servidor extends Thread{
 	private int porta;
 	public String nomeServidor;
 	private String resp;
-	private ArrayList<ClienteServer> clientes;
+	public static ArrayList<ClienteServer> clientes;
 	private TelaServidor telaServidor;
 	/**
 	 * @param serverSocket
@@ -78,67 +79,89 @@ public class Servidor extends Thread{
 				clientes.add(cl);
 				System.out.println(clientes.size());
 				resp="";
-				//InputStream inputStream = socket.getInputStream();
+				Object o = null;
+		
 				ObjectInputStream ois = cl.getOis();
 				ObjectOutputStream ous = cl.getOos();
-			//System.out.println((String) ois.readObject());
-			//	PrintWriter saida = new PrintWriter(socket.getOutputStream(), true);
+	
 				System.out.println("dps do print read serv");
-			//	System.out.println( entrada.readLine());
-				//System.out.println(" to string entrada " + entrada.toString());
-				while ((resp = (String) ois.readObject()) != null ) {
-//					String protocolo = resp.substring(0, 3);
-//					String mensagem = resp.substring(3);
-					//System.out.println("Ah bb");
-					System.out.println("Server recebeu:"+resp);
-					//ous.writeObject("Server disse: Ola");
-					if(resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {//depois fazer a logica de enviar os clientes com ip e porta e nome!
-						ous.writeObject("Server disse: RECEBI ESSA SOLICITACAO"+ProtocoloUtil.LISTA_USER_ONLINE);
-						//break;O brak estava pausando o while
-					}else if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
-						enviarParaDestino(resp);
-						//break;O brak estava pausando o while
-					}
-					else if(resp.contains(ProtocoloUtil.NOME)) {
-						//enviarParaDestino(resp);
-						String s[] = resp.split(";");
-						cl.setNome(s[1]);
-						ous.writeObject("Server disse: RECEBI ESSA SOLICITACAO "+ProtocoloUtil.NOME);
-						ous.flush();
-						//System.out.println("");
-						//break;O brak sai do while
-					}
-					else if(resp.contains(ProtocoloUtil.USER_WIN)) {
-					//	saida.println(ProtocoloUtil.USER_WIN);
-						//break;
-					}else if(resp.contains(ProtocoloUtil.USER_LOSE)) {
-					//	saida.println(ProtocoloUtil.USER_LOSE);
-						break;					
+		
+				while ((o=ois.readObject()) != null ) {
+					if(o instanceof String) {
+						resp = (String)o;
+						System.out.println("Server recebeu:"+resp);
+						if(resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {//depois fazer a logica de enviar os clientes com ip e porta e nome!
+							//ous.writeObject("Server disse: RECEBI ESSA SOLICITACAO"+ProtocoloUtil.LISTA_USER_ONLINE);
+							//break;O brak estava pausando o while
+						}else if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
+							enviarParaDestino(resp);
+							//break;O brak estava pausando o while
+						}
+						else if(resp.contains(ProtocoloUtil.NOME)) {
+							//enviarParaDestino(resp);
+							String s[] = resp.split(";");
+							clientes.get(clientes.size()-1).setNome(s[1]);
+							int cont = 0;
+							for(ClienteServer c:clientes) {
+								System.out.println(c.getNome());
+								if(cont!=(clientes.size()-1)) {
+									c.getOos().writeObject(ProtocoloUtil.NOME+" "+clientes.get(clientes.size()-1).getNome());
+									ous.flush();
+								}
+								cont++;
+							}
+							if(clientes.size()>1) {
+								for(ClienteServer c:clientes) {
+									if(!c.getNome().equals(clientes.get(clientes.size()-1).getNome())) {
+										clientes.get(clientes.size()-1).getOos().writeObject(ProtocoloUtil.NOME+" "+c.getNome());
+									}
+								}
+							}
 
-					}else if(resp.contains(ProtocoloUtil.TIRO_ACERTO)) {
-					//	saida.println(ProtocoloUtil.TIRO_ACERTO);
-						break;
-					}else if(resp.contains(ProtocoloUtil.TIRO_ERRO)) {
-					//	saida.println(ProtocoloUtil.TIRO_ERRO);
-						break;
-					}else if(resp.contains(ProtocoloUtil.USER_SAIU)) {
-					//	saida.println(ProtocoloUtil.USER_SAIU);
-						break;
-					}else if(resp.contains(ProtocoloUtil.CONECTADO)){
-					//	saida.println(ProtocoloUtil.CONECTADO);
-						break;
-					}else {//?
-						System.out.println(resp+" Server recebeu");
-//						clientes.get(clientes.size()-1).setNome(resp);
-//						int cont = 0;
-//						for(ClienteServer c:clientes) {
-//							if(cont!=(clientes.size()-1)) {
-//								c.getOos().writeObject(resp);
-//								ous.flush();
-//							}
-//							cont++;
-//						}
+						}else if(resp.contains(ProtocoloUtil.USER_WIN)) {
+							//	saida.println(ProtocoloUtil.USER_WIN);
+							//break;
+						}else if(resp.contains(ProtocoloUtil.USER_LOSE)) {
+						//	saida.println(ProtocoloUtil.USER_LOSE);
+						////	break;					
+
+						}else if(resp.contains(ProtocoloUtil.TIRO_ACERTO)) {
+						//	saida.println(ProtocoloUtil.TIRO_ACERTO);
+						//	break;
+						}else if(resp.contains(ProtocoloUtil.TIRO_ERRO)) {
+						//	saida.println(ProtocoloUtil.TIRO_ERRO);
+						//	break;
+						}else if(resp.contains(ProtocoloUtil.USER_SAIU)) {
+						//	saida.println(ProtocoloUtil.USER_SAIU);
+						//	break;
+						}else if(resp.contains(ProtocoloUtil.CONECTADO)){
+						//	saida.println(ProtocoloUtil.CONECTADO);
+						//	break;
+						}else if(resp.contains(ProtocoloUtil.ACEITAR)) {
+							aceitarDesafio(resp);
+						}else if(resp.contains(ProtocoloUtil.ESPERARANDO)) {
+							enviarParaDestino(resp);
+						}else if(resp.contains(ProtocoloUtil.INICIAR)) {
+							for(ClienteServer c:clientes) {
+								if(c.getNome().equals(resp.replace(ProtocoloUtil.INICIAR, ""))) {
+									c.getOos().writeObject(ProtocoloUtil.INICIAR);
+								}
+							}
+						}
+
+					}else {
+						CordenadasJogador cJogador = (CordenadasJogador)o;
+						for(ClienteServer c: clientes) {
+							if(c.getNome().equals(cJogador.getNome())) {//falta dizer pra quem vai enviar as codernadas
+								System.out.println(c.getNome());
+								c.getOos().writeObject(o);
+								c.getOos().flush();
+								break;
+							}
+						}
 					}
+					
+					
 				}
 				System.out.println("Serve acabou!");
 			} catch (Exception e) {
@@ -150,9 +173,28 @@ public class Servidor extends Thread{
 	}
 	//enviar msg para a pessoa que quer desafiar
 	public void enviarParaDestino(String msg) throws IOException {
+		String []temp = msg.split(" ");
 		for(ClienteServer c: clientes) {
-			if(c.getNome().equals(clientes.get(ProtocoloUtil.splitDestino(msg)).getNome())) {
+			if(c.getNome().equals(ProtocoloUtil.splitDestino(temp[0]))) {
+				System.out.println(c.getNome());
 				c.getOos().writeObject(msg);
+				c.getOos().flush();
+				break;
+			}
+		}
+	}
+	
+	public void aceitarDesafio(String msg) throws IOException {
+		String []temp = msg.split(" ");
+		System.out.println(temp[1]);
+		System.out.println(temp[2]);
+		System.out.println(clientes.get(1).getNome());
+		for(ClienteServer c: clientes) {
+			if(temp[2].equals(c.getNome())) {
+				System.out.println(c.getNome());
+				c.getOos().writeObject(ProtocoloUtil.ACEITAR+temp[1]);
+				c.getOos().flush();
+				break;
 			}
 		}
 	}

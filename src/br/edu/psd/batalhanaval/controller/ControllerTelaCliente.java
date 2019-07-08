@@ -15,10 +15,11 @@ import br.edu.psd.batalhanaval.view.TelaCriarMapa;
 import br.edu.psd.batalhanaval.view.TelaEscolherOponente;
 
 public class ControllerTelaCliente implements ActionListener {
-	PanelCliente telaCliente;
-	TelaCriarMapa telaCriarMapa;
-	TelaEscolherOponente telaEscolherOponente;
-	Tela telaEscolhaClienteOrServer;
+	private PanelCliente telaCliente;
+	private TelaCriarMapa telaCriarMapa;
+	private TelaEscolherOponente telaEscolherOponente;
+	private Tela telaEscolhaClienteOrServer;
+	private Cliente c;
 
 	public ControllerTelaCliente(PanelCliente cliente, Tela t, TelaCriarMapa telaCriarMapa, 
 			TelaEscolherOponente telaEscolherOponente) {
@@ -69,15 +70,16 @@ public class ControllerTelaCliente implements ActionListener {
 							|| this.telaCliente.getTxtFieldNome().getText().trim().isEmpty()
 							|| this.telaCliente.getTxtFieldPorta().getText().trim().isEmpty())) {
 
-						Cliente c = new Cliente(Integer.parseInt(this.telaCliente.getTxtFieldPorta().getText().trim()),
+						c = new Cliente(Integer.parseInt(this.telaCliente.getTxtFieldPorta().getText().trim()),
 						this.telaCliente.getTxtFieldIpServidor().getText().trim(), this.telaCliente.getTxtFieldNome().getText().trim(),telaEscolherOponente);
 						SocketUtil.setClienteCorrente(c);
 						telaEscolhaClienteOrServer.setVisible(false);
 						new Thread(c).start();
 						c.enviaMensagem(ProtocoloUtil.NOME+";"+c.getNome());
-						c.enviaMensagem(ProtocoloUtil.LISTA_USER_ONLINE+";"+c.getNome());
+						//c.enviaMensagem(ProtocoloUtil.LISTA_USER_ONLINE+";"+c.getNome());
 						telaEscolherOponente.setVisible(true);
 						telaCriarMapa.setVisible(false);
+						ControlerTelaEscolherOponente controlerTelaEscolherOponente = new ControlerTelaEscolherOponente(getC(),getTelaEscolherOponente(),telaCriarMapa);
 					} else {
 						JOptionPane.showMessageDialog(null, "Pro favor, preencha os campos para poder jogar Online.",
 								"ATENÇÃO!", JOptionPane.INFORMATION_MESSAGE);
@@ -114,4 +116,14 @@ public class ControllerTelaCliente implements ActionListener {
 		}
 
 	}
+
+	public Cliente getC() {
+		return c;
+	}
+
+	public TelaEscolherOponente getTelaEscolherOponente() {
+		return telaEscolherOponente;
+	}
+	
+	
 }
