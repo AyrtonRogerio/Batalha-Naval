@@ -121,24 +121,32 @@ public class ControllerTelaCriarMapa implements ActionListener{
 				try {
 					if(!cliente.isConcluidoAdversario()) {//ver quem montou primeiro o mapa
 						cliente.setConcluido(true);
-						cliente.getOos().writeObject(ProtocoloUtil.ESPERARANDO+cliente.getDesafiado()+" ");
+						
 						//definir pra quem enviar
 						if(cliente.getDesafiado()!=null) {// o jogador que desafio joga primeiro
 							SocketUtil.getClienteCorrente().getJogador().setSuaVez(true);
-							cliente.getOos().writeObject(new CordenadasJogador(cliente.getJogador().getCoordenadasMeuJogoAtual(),cliente.getDesafiado()));
+							cliente.getOos().writeObject(ProtocoloUtil.ESPERARANDO+cliente.getDesafiado()+" ");
+							
 						}else {
 							SocketUtil.getClienteCorrente().getJogador().setSuaVez(false);
-							cliente.getOos().writeObject(new CordenadasJogador(cliente.getJogador().getCoordenadasMeuJogoAtual(),cliente.getDesafiador()));
+							cliente.getOos().writeObject(ProtocoloUtil.ESPERARANDO+cliente.getDesafiador()+" ");
+						
 						}
 					}else {//se não
+						EmbarcacoesUtil.limparPosicionamentos();
+						this.telaCMapa.setVisible(false);
+						this.telaJogo.limparTela();
+						this.telaJogo.setVisible(true);
 						cliente.setConcluido(true);
 						//definir pra quem enviar
 						if(cliente.getDesafiado()!=null) {// o jogador que desafio joga primeiro
 							SocketUtil.getClienteCorrente().getJogador().setSuaVez(true);
-							cliente.getOos().writeObject(new CordenadasJogador(cliente.getJogador().getCoordenadasMeuJogoAtual(),cliente.getDesafiado()));
+							cliente.getOos().writeObject(ProtocoloUtil.TERMINEI+ProtocoloUtil.SEPARADOR+cliente.getDesafiado());
+							
 						}else {
 							SocketUtil.getClienteCorrente().getJogador().setSuaVez(false);
-							cliente.getOos().writeObject(new CordenadasJogador(cliente.getJogador().getCoordenadasMeuJogoAtual(),cliente.getDesafiador()));
+							cliente.getOos().writeObject(ProtocoloUtil.TERMINEI+ProtocoloUtil.SEPARADOR+cliente.getDesafiador());
+							//cliente.getOos().writeObject(new CordenadasJogador(cliente.getJogador().getCoordenadasMeuJogoAtual(),cliente.getDesafiador()));
 						}
 					}
 					

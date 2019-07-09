@@ -126,67 +126,72 @@ public class Cliente implements Runnable{
 			Object o = null;
 			resp = "";
 			while ((o=ois.readObject()) != null ) {
-				
 				if(o instanceof String) {
 					resp = (String)o;
 					System.out.println("Cliente recebeu:"+resp);
-					if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
+					if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {//jogador recebe requisição pra aceitar partida
 						String []temp = resp.split(" ");
 						// se aceitar
 						String s = "jogador "+temp[1]+" esta lhe desafiando aceita?";
-						if(JOptionPane.showConfirmDialog(null,s)==0) {
+						if(JOptionPane.showConfirmDialog(null,s)==0) {//se o jogador aceitar jogar
 							oos.writeObject(ProtocoloUtil.ACEITAR+" "+ProtocoloUtil.splitDestino(resp));
 							oos.flush();
 							setDesafiador(temp[1]);
+							System.out.println(temp[1]);
 							telaEscolherOponente.setVisible(false);
 							telaCriarMapa.setTitle(this.nome);
 							telaCriarMapa.setVisible(true);
 							SocketUtil.getClienteCorrente().getJogador().setEmJogo(true);
-						}else {//se nï¿½o
+						}else {//se não
 							oos.writeObject(ProtocoloUtil.RECUSAR);
 							oos.flush();
 						}
-					}else if(resp.contains(ProtocoloUtil.ACEITAR)) {
+					}else if(resp.contains(ProtocoloUtil.ACEITAR)) {//jogador aceita jogar partida e atualiza as telas
 						setDesafiado(resp.replace(ProtocoloUtil.ACEITAR,""));
 						setStatus(ClienteUtil.JOGANDO);
 						telaEscolherOponente.setVisible(false);
 						telaCriarMapa.setTitle(this.nome);
 						telaCriarMapa.setVisible(true);
-					}else if(resp.contains(ProtocoloUtil.RECUSAR)) {
+					}else if(resp.contains(ProtocoloUtil.RECUSAR)) {//jogador recusa jogar partida
 						setStatus(ClienteUtil.DISPONIVEL);
-					}else if(resp.contains(ProtocoloUtil.INICIAR)) {
-						setStatusDeJogo(ProtocoloUtil.INICIAR);
-						telaCriarMapa.setVisible(false);
-						telajogo.limparTela();
-						telajogo.setVisible(true);
-					}else if(resp.contains(ProtocoloUtil.ESPERARANDO)) {
+					}else if(resp.contains(ProtocoloUtil.INICIAR)) {//avisar ao jogador que terminou de montar o mapa primeiro pra atualizar a tela
+						//setStatusDeJogo(ProtocoloUtil.INICIAR);
+						
+//						telaCriarMapa.setVisible(false);
+//						telajogo.limparTela();
+//						telajogo.setVisible(true);
+					}else if(resp.contains(ProtocoloUtil.ESPERARANDO)) {//avisa que o adversario ja terminou de montar o mapa 
 						String []s = resp.split(" ");
 						setConcluidoAdversario(true);
-						JOptionPane.showConfirmDialog(null,"O jogador "+s[0].replace(ProtocoloUtil.ESPERARANDO, "")+"esta esperando");
+						JOptionPane.showMessageDialog(null,"O jogador "+s[0].replace(ProtocoloUtil.ESPERARANDO, "")+" esta esperando");
+					}else if(resp.contains(ProtocoloUtil.TERMINEI)) {//Avisa que o outro jogador terminou de montar o mapa e atualiza as telas
+						//JOptionPane.showMessageDialog(null, "Adversario ja concluiu!");
+						setConcluidoAdversario(true);
+						EmbarcacoesUtil.limparPosicionamentos();
+						if(concluido && concluidoAdversario) {//se o adversario ja terminou e ele tbm
+							telaCriarMapa.setVisible(false);
+							telajogo.limparTela();
+							telajogo.setVisible(true);
+							SocketUtil.getClienteCorrente().getJogador().setEmJogo(true);
+//							if(desafiado!=null) {
+//								oos.writeObject(ProtocoloUtil.INICIAR+desafiado);
+//							}else {
+//								oos.writeObject(ProtocoloUtil.INICIAR+desafiador);
+//							}
+						
+						}
 					}
 					else if (resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {
 	
-					}else if(resp.contains(ProtocoloUtil.NOME)){
+					}else if(resp.contains(ProtocoloUtil.NOME)){//adcionar jogadores
 						String s[] = resp.split(" ");
 						Cliente c = new Cliente(s[1]);
 						jogadores.addValor(c);
 					}
 				}else {
 					CordenadasJogador cJogador = (CordenadasJogador)o;
-					MontadorDeMapa.montarMapaAdversarioOnline(cJogador.getCoordenadas());
-					EmbarcacoesUtil.limparPosicionamentos();
-					if(concluido&&concluidoAdversario) {
-						telaCriarMapa.setVisible(false);
-						telajogo.limparTela();
-						telajogo.setVisible(true);
-						SocketUtil.getClienteCorrente().getJogador().setEmJogo(true);
-						if(desafiado!=null) {
-							oos.writeObject(ProtocoloUtil.INICIAR+desafiado);
-						}else {
-							oos.writeObject(ProtocoloUtil.INICIAR+desafiador);
-						}
+					//MontadorDeMapa.montarMapaAdversarioOnline(cJogador.getCoordenadas());
 					
-					}
 					
 				}
 				

@@ -93,11 +93,11 @@ public class Servidor extends Thread{
 						if(resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {//depois fazer a logica de enviar os clientes com ip e porta e nome!
 							//ous.writeObject("Server disse: RECEBI ESSA SOLICITACAO"+ProtocoloUtil.LISTA_USER_ONLINE);
 							//break;O brak estava pausando o while
-						}else if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {
+						}else if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {//enviar requisição para jogar partida
 							enviarParaDestino(resp);
 							//break;O brak estava pausando o while
 						}
-						else if(resp.contains(ProtocoloUtil.NOME)) {
+						else if(resp.contains(ProtocoloUtil.NOME)) {//enviar o nome do jogador para os outros
 							//enviarParaDestino(resp);
 							String s[] = resp.split(";");
 							clientes.get(clientes.size()-1).setNome(s[1]);
@@ -110,7 +110,7 @@ public class Servidor extends Thread{
 								}
 								cont++;
 							}
-							if(clientes.size()>1) {
+							if(clientes.size()>1) {//para atualizar a lista de jogadores online do ultimo que entrou no jogo
 								for(ClienteServer c:clientes) {
 									if(!c.getNome().equals(clientes.get(clientes.size()-1).getNome())) {
 										clientes.get(clientes.size()-1).getOos().writeObject(ProtocoloUtil.NOME+" "+c.getNome());
@@ -137,22 +137,34 @@ public class Servidor extends Thread{
 						}else if(resp.contains(ProtocoloUtil.CONECTADO)){
 						//	saida.println(ProtocoloUtil.CONECTADO);
 						//	break;
-						}else if(resp.contains(ProtocoloUtil.ACEITAR)) {
-							aceitarDesafio(resp);
-						}else if(resp.contains(ProtocoloUtil.ESPERARANDO)) {
-							enviarParaDestino(resp);
-						}else if(resp.contains(ProtocoloUtil.INICIAR)) {
+						}else if(resp.contains(ProtocoloUtil.TERMINEI)) {//quando o ultimo jogador terminar de montar o mapa a requisição vem pra ca
+							String []s=resp.split(ProtocoloUtil.SEPARADOR);
+							
 							for(ClienteServer c:clientes) {
-								if(c.getNome().equals(resp.replace(ProtocoloUtil.INICIAR, ""))) {
-									c.getOos().writeObject(ProtocoloUtil.INICIAR);
+								if(c.getNome().equals(s[1])) {
+									c.getOos().writeObject(resp);
+									break;
 								}
 							}
 						}
+						else if(resp.contains(ProtocoloUtil.ACEITAR)) {//aceito jogar a partida
+							aceitarDesafio(resp);
+						}else if(resp.contains(ProtocoloUtil.ESPERARANDO)) {//jogador avisa pro outro q ja terminou de montar seu mapa
+							enviarParaDestino(resp);
+						}
+//						else if(resp.contains(ProtocoloUtil.INICIAR)) {
+//							for(ClienteServer c:clientes) {
+//								if(c.getNome().equals(resp.replace(ProtocoloUtil.INICIAR, ""))) {
+//									c.getOos().writeObject(ProtocoloUtil.INICIAR);
+//								}
+//							}
+//						}
 
-					}else {
+					}else {//recebe as coordenadas e repassa pro adiversario.
 						CordenadasJogador cJogador = (CordenadasJogador)o;
+//						CordenadasJogador cJogador = (CordenadasJogador)o;
 						for(ClienteServer c: clientes) {
-							if(c.getNome().equals(cJogador.getNome())) {//falta dizer pra quem vai enviar as codernadas
+							if(c.getNome().equals(cJogador.getNome())) {
 								System.out.println(c.getNome());
 								c.getOos().writeObject(o);
 								c.getOos().flush();
