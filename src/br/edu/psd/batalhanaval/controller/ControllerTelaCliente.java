@@ -1,7 +1,10 @@
 package br.edu.psd.batalhanaval.controller;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.IOException;
 
 import javax.swing.JOptionPane;
@@ -14,7 +17,7 @@ import br.edu.psd.batalhanaval.view.Tela;
 import br.edu.psd.batalhanaval.view.TelaCriarMapa;
 import br.edu.psd.batalhanaval.view.TelaEscolherOponente;
 
-public class ControllerTelaCliente implements ActionListener {
+public class ControllerTelaCliente implements ActionListener,FocusListener {
 	private PanelCliente telaCliente;
 	private TelaCriarMapa telaCriarMapa;
 	private TelaEscolherOponente telaEscolherOponente;
@@ -31,6 +34,9 @@ public class ControllerTelaCliente implements ActionListener {
 		this.telaCliente.getBtnVoltar().addActionListener(this);
 		this.telaCliente.getRdBtnJogarOff().addActionListener(this);
 		this.telaCliente.getRdBtnJogarOn().addActionListener(this);
+		this.telaCliente.getTxtFieldNome().addFocusListener(this);
+		this.telaCliente.getTxtFieldIpServidor().addFocusListener(this);
+		this.telaCliente.getTxtFieldPorta().addFocusListener(this);
 	}
 
 	@Override
@@ -66,9 +72,10 @@ public class ControllerTelaCliente implements ActionListener {
 
 				if (this.telaCliente.getRdBtnJogarOn().isSelected()) {
 					SocketUtil.offiline = false;
-					if (!(this.telaCliente.getTxtFieldIpServidor().getText().trim().isEmpty()
-							|| this.telaCliente.getTxtFieldNome().getText().trim().isEmpty()
-							|| this.telaCliente.getTxtFieldPorta().getText().trim().isEmpty())) {
+//					!(this.telaCliente.getTxtFieldIpServidor().getText().trim().isEmpty()
+//							|| this.telaCliente.getTxtFieldNome().getText().trim().isEmpty()
+//							|| this.telaCliente.getTxtFieldPorta().getText().trim().isEmpty())
+					if (verificar()) {
 
 						c = new Cliente(Integer.parseInt(this.telaCliente.getTxtFieldPorta().getText().trim()),
 						this.telaCliente.getTxtFieldIpServidor().getText().trim(), this.telaCliente.getTxtFieldNome().getText().trim(),telaEscolherOponente);
@@ -123,6 +130,60 @@ public class ControllerTelaCliente implements ActionListener {
 
 	public TelaEscolherOponente getTelaEscolherOponente() {
 		return telaEscolherOponente;
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		if(this.telaCliente.getTxtFieldNome()==e.getSource()) {
+			if(this.telaCliente.getTxtFieldNome().getText().equals("Nome")) {
+				this.telaCliente.getTxtFieldNome().setText("");
+				this.telaCliente.getTxtFieldNome().setForeground(Color.black);
+			}
+		}else if(this.telaCliente.getTxtFieldIpServidor()==e.getSource()) {
+			if(this.telaCliente.getTxtFieldIpServidor().getText().equals("IP do servidor")) {
+				this.telaCliente.getTxtFieldIpServidor().setText("");
+				this.telaCliente.getTxtFieldIpServidor().setForeground(Color.black);
+			}
+		}else if(this.telaCliente.getTxtFieldPorta()==e.getSource()) {
+			if(this.telaCliente.getTxtFieldPorta().getText().equals("Porta")) {
+				this.telaCliente.getTxtFieldPorta().setText("");
+				this.telaCliente.getTxtFieldPorta().setForeground(Color.black);
+			}
+		}
+		
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		if(this.telaCliente.getTxtFieldNome()==e.getSource()) {
+			if(this.telaCliente.getTxtFieldNome().getText().trim().isEmpty()) {
+				this.telaCliente.getTxtFieldNome().setText("Nome");
+				this.telaCliente.getTxtFieldNome().setForeground(Color.LIGHT_GRAY);
+			}
+		
+		}else if(this.telaCliente.getTxtFieldIpServidor()==e.getSource()) {
+			if(this.telaCliente.getTxtFieldIpServidor().getText().trim().isEmpty()) {
+				this.telaCliente.getTxtFieldIpServidor().setText("IP do servidor");
+				this.telaCliente.getTxtFieldIpServidor().setForeground(Color.LIGHT_GRAY);
+			}
+		}else if(this.telaCliente.getTxtFieldPorta()==e.getSource()) {
+			if(this.telaCliente.getTxtFieldPorta().getText().trim().isEmpty()) {
+				this.telaCliente.getTxtFieldPorta().setText("Porta");
+				this.telaCliente.getTxtFieldPorta().setForeground(Color.LIGHT_GRAY);
+			}
+			
+		}
+		
+	}
+	
+	public boolean verificar() {
+		if(this.telaCliente.getTxtFieldIpServidor().getText().equals("Nome")
+		   ||this.telaCliente.getTxtFieldIpServidor().getText().equals("IP do servidor")
+		   ||this.telaCliente.getTxtFieldPorta().getText().equals("Porta")) {
+			
+			return false;
+		}
+		return true;
 	}
 	
 	

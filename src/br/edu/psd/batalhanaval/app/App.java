@@ -3,6 +3,10 @@
  */
 package br.edu.psd.batalhanaval.app;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
 import br.edu.psd.batalhanaval.controller.ControlerTelaEscolherOponente;
 import br.edu.psd.batalhanaval.controller.Controller;
 import br.edu.psd.batalhanaval.controller.ControllerTelaCliente;
@@ -24,7 +28,9 @@ public class App {
 	 */
 	public static void main(String[] args) {
 		//Teste tela de inser��o de Navio.
-
+		try {
+			UIManager.setLookAndFeel(new NimbusLookAndFeel());
+		} catch (UnsupportedLookAndFeelException e1) {}
 		System.out.println();
 		Tela tela = new Tela();
 		TelaCriarMapa telaCriarMapa = new TelaCriarMapa();

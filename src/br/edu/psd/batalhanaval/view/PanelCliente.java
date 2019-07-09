@@ -13,6 +13,9 @@ import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
+import java.awt.Color;
+import javax.swing.JSeparator;
+import java.awt.SystemColor;
 
 /**
  * @author ayrton
@@ -30,60 +33,52 @@ public class PanelCliente extends JPanel {
 	 * Create the panel.
 	 */
 	public PanelCliente() {
-		
-		JLabel lblNome = new JLabel("Nome:");
-		lblNome.setBounds(-57, 23, 243, 27);
-		lblNome.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNome.setFont(new Font("Dialog", Font.BOLD, 15));
-		
-		JLabel lblIpDoServidor = new JLabel("IP do servidor:");
-		lblIpDoServidor.setBounds(10, 61, 243, 33);
-		lblIpDoServidor.setFont(new Font("Dialog", Font.BOLD, 15));
-		
-		JLabel lblPorta = new JLabel("Porta:");
-		lblPorta.setBounds(115, 105, 71, 33);
-		lblPorta.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblPorta.setFont(new Font("Dialog", Font.BOLD, 15));
+		setBackground(Color.WHITE);
 		
 		txtFieldNome = new JTextField();
-		txtFieldNome.setBounds(189, 21, 216, 35);
+		txtFieldNome.setForeground(Color.LIGHT_GRAY);
+		txtFieldNome.setText("Nome");
+		txtFieldNome.setBounds(121, 60, 216, 35);
 		txtFieldNome.setToolTipText("Insira seu nome ou apelido para jogar");
-		txtFieldNome.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtFieldNome.setFont(new Font("Dialog", Font.PLAIN, 15));
 		txtFieldNome.setColumns(10);
 		
 		txtFieldIpServidor = new JTextField();
-		txtFieldIpServidor.setBounds(189, 61, 216, 39);
+		txtFieldIpServidor.setForeground(Color.LIGHT_GRAY);
+		txtFieldIpServidor.setText("IP do servidor");
+		txtFieldIpServidor.setBounds(121, 106, 216, 39);
 		txtFieldIpServidor.setToolTipText("Insira o IP do servidor para conexão");
-		txtFieldIpServidor.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtFieldIpServidor.setFont(new Font("Dialog", Font.PLAIN, 15));
 		txtFieldIpServidor.setColumns(10);
 		
 		txtFieldPorta = new JTextField();
-		txtFieldPorta.setBounds(189, 105, 215, 37);
-		txtFieldPorta.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtFieldPorta.setForeground(Color.LIGHT_GRAY);
+		txtFieldPorta.setText("Porta");
+		txtFieldPorta.setBounds(122, 156, 215, 37);
+		txtFieldPorta.setFont(new Font("Dialog", Font.PLAIN, 15));
 		txtFieldPorta.setColumns(10);
 		
 		btnVoltar = new JButton("Voltar");
-		btnVoltar.setBounds(115, 189, 88, 33);
+		btnVoltar.setBackground(Color.RED);
+		btnVoltar.setBounds(121, 238, 88, 33);
 		btnVoltar.setToolTipText("Voltar ao modo de escolha");
 		btnVoltar.setFont(new Font("Dialog", Font.BOLD, 15));
 		
 		btnJogar = new JButton("Jogar");
-		btnJogar.setBounds(239, 189, 121, 33);
+		btnJogar.setBackground(SystemColor.textHighlight);
+		btnJogar.setBounds(231, 238, 121, 33);
 		btnJogar.setToolTipText("Iniciar o jogo");
 		btnJogar.setFont(new Font("Dialog", Font.BOLD, 15));
 		
 		rdBtnJogarOff = new JRadioButton("Jogar offline");
-		rdBtnJogarOff.setBounds(159, 149, 131, 33);
+		rdBtnJogarOff.setBounds(93, 198, 131, 33);
 		rdBtnJogarOff.setFont(new Font("Dialog", Font.BOLD, 15));
 		
 		rdBtnJogarOn = new JRadioButton("Jogar online");
-		rdBtnJogarOn.setBounds(289, 149, 155, 29);
+		rdBtnJogarOn.setBounds(257, 202, 155, 29);
 		rdBtnJogarOn.setSelected(true);
 		rdBtnJogarOn.setFont(new Font("Dialog", Font.BOLD, 15));
 		setLayout(null);
-		add(lblNome);
-		add(lblIpDoServidor);
-		add(lblPorta);
 		add(txtFieldNome);
 		add(txtFieldPorta);
 		add(txtFieldIpServidor);
@@ -91,6 +86,23 @@ public class PanelCliente extends JPanel {
 		add(rdBtnJogarOff);
 		add(rdBtnJogarOn);
 		add(btnJogar);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(10, 38, 430, 10);
+		add(separator);
+		
+		JGradientePanel panel = new JGradientePanel(SystemColor.textHighlight, Color.white);
+		//panel.setBackground(SystemColor.textHighlight);
+		panel.setBounds(0, 0, 480, 36);
+		add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblJogador = new JLabel("Jogador");
+		lblJogador.setBounds(0, 0, 450, 35);
+		panel.add(lblJogador);
+		lblJogador.setBackground(SystemColor.text);
+		lblJogador.setFont(new Font("Franklin Gothic Medium Cond", Font.BOLD, 30));
+		lblJogador.setHorizontalAlignment(SwingConstants.CENTER);
 
 	}
 	public JTextField getTxtFieldNome() {
@@ -156,6 +168,4 @@ public class PanelCliente extends JPanel {
 	public void setBtnVoltar(JButton btnVoltar) {
 		this.btnVoltar = btnVoltar;
 	}
-	
-	
 }

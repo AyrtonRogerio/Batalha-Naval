@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.SystemColor;
 
 public class TelaEscolherOponente extends JFrame {
 
@@ -77,7 +78,9 @@ public class TelaEscolherOponente extends JFrame {
 		panel_1.setLayout(null);
 		
 		btnDesafiar = new JButton("Desafiar");
-		btnDesafiar.setBounds(335, 11, 89, 23);
+		btnDesafiar.setFont(new Font("Tahoma", Font.BOLD, 12));
+		btnDesafiar.setBackground(SystemColor.textHighlight);
+		btnDesafiar.setBounds(335, 5, 89, 30);
 		panel_1.add(btnDesafiar);
 	
 	}

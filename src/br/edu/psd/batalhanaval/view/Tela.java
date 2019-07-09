@@ -1,6 +1,7 @@
 package br.edu.psd.batalhanaval.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 
@@ -21,9 +22,9 @@ public class Tela extends JFrame {
 	 * Create the frame.
 	 */
 	public Tela() {
-		telaEscolha=new PanelEscolha();
+		telaEscolha=new PanelEscolha(Color.BLUE,Color.black);
 		
-		setSize(480, 300);
+		setSize(480, 330);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();

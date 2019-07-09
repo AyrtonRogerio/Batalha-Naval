@@ -15,17 +15,19 @@ import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Font;
+import javax.swing.SwingConstants;
 
 /**
  * @author ayrton
  *
  */
-public class PanelEscolha extends JPanel {
+public class PanelEscolha extends JGradientePanel {
 	private JButton btnServidor;
 	private JButton btnJogador;
 	private TelaServidor telaServidor;
@@ -33,14 +35,23 @@ public class PanelEscolha extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PanelEscolha() {
-		
+	public PanelEscolha(Color initialColor, Color finalColor) {
+		super(initialColor,finalColor);
 		JLabel lblEscolhaComoVoc = new JLabel("Escolha como voc\u00EA deseja iniciar a aplica\u00E7\u00E3o!");
-		lblEscolhaComoVoc.setFont(new Font("Dialog", Font.BOLD, 15));
-		
+		lblEscolhaComoVoc.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEscolhaComoVoc.setBounds(0, 82, 470, 52);
+		lblEscolhaComoVoc.setFont(new Font("Dialog", Font.BOLD, 19));
+		lblEscolhaComoVoc.setForeground(Color.WHITE);
 		btnServidor = new JButton("Servidor");
+		btnServidor.setBounds(126, 152, 85, 35);
+		btnServidor.setBackground(Color.WHITE);
+		btnServidor.setFont(new Font("Dialog", Font.BOLD, 12));
 		
 		btnJogador = new JButton("Jogador");
+		btnJogador.setBounds(226, 152, 109, 35);
+		btnJogador.setBackground(Color.WHITE);
+		btnJogador.setFont(new Font("Dialog", Font.BOLD, 12));
+		
 		telaCliente = new PanelCliente();
 		telaCliente.setVisible(false);
 		telaServidor = new TelaServidor();
@@ -49,32 +60,10 @@ public class PanelEscolha extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(315, Short.MAX_VALUE)
-					.addComponent(btnServidor)
-					.addGap(27)
-					.addComponent(btnJogador, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-					.addGap(115))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblEscolhaComoVoc)
-					.addContainerGap(77, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(82)
-					.addComponent(lblEscolhaComoVoc, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnJogador)
-						.addComponent(btnServidor))
-					.addContainerGap(125, Short.MAX_VALUE))
-		);
-		setLayout(groupLayout);
+		setLayout(null);
+		add(btnServidor);
+		add(btnJogador);
+		add(lblEscolhaComoVoc);
 
 	}
 	public JButton getBtnServidor() {
