@@ -30,6 +30,9 @@ public class ProtocoloUtil {
 	public static final String NOME = "<MEUNOME>";
 	public static final String TERMINEI = "<TERMINEI>";
 	public static final String SEPARADOR = "< >";
+	public static final String JOGADOR_EXISTE="<EXISTE>";
+	public static final String JOGADOR_NAO_EXISTE="<NAO_EXISTE>";
+	public static final String JOGADOR_JOGANDO="<JOGANDO>";
 	public static String splitDestino(String destino) {
 		if(destino.contains(QUER_JOGAR)) {
 			String id = destino.replace(QUER_JOGAR, "");

@@ -63,7 +63,8 @@ public class ControllerTelaJogo extends KeyAdapter{
 						if((r1+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
 							SocketUtil.getClienteCorrente().getJogador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r1.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
 						    afundar+= r1+"\n";
-						}else if((r2+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
+						}
+						if((r2+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
 							SocketUtil.getClienteCorrente().getJogador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r2.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
 							afundar+= r2+"\n";
 						}else if((r3+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
@@ -132,7 +133,8 @@ public class ControllerTelaJogo extends KeyAdapter{
 					String afundar = "";
 					if((r1+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
 						SocketUtil.getComputador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r1.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
-					}else if((r2+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
+					}
+					if((r2+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
 						SocketUtil.getComputador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r2.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
 					}else if((r3+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
 						SocketUtil.getComputador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r3.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");

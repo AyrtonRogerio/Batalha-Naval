@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import br.edu.psd.batalhanaval.Util.ClienteUtil;
 import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
 import br.edu.psd.batalhanaval.model.socket.Cliente;
@@ -27,16 +29,14 @@ public class ControlerTelaEscolherOponente implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		
 		try {
-			c.setStatus(ClienteUtil.AGUARDANDO);
-			c.getOos().writeObject(ProtocoloUtil.QUER_JOGAR+c.getJogadores().getValorAt(escolherOponente.getTable().getSelectedRow()).getNome()+" "+c.getNome());
-//			do {
-//				if(c.getStatus().equals(ClienteUtil.JOGANDO)) {
-//					escolherOponente.setVisible(false);
-//					telaCriarMapa.setVisible(true);
-//					break;
-//				}
-//				
-//			}while(true); 		
+			if(!c.getJogadores().getValorAt(escolherOponente.getTable().getSelectedRow()).getStatus().equals(ClienteUtil.JOGANDO)) {//verifica se o jogador ja esta em uma partida
+				c.setStatus(ClienteUtil.AGUARDANDO);
+				c.getOos().writeObject(ProtocoloUtil.QUER_JOGAR+c.getJogadores().getValorAt(escolherOponente.getTable().getSelectedRow()).getNome()+" "+c.getNome());
+			}else {
+				JOptionPane.showMessageDialog(null,"O jogador ja esta jogando. desafie outro!!");
+			}
+			
+	
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

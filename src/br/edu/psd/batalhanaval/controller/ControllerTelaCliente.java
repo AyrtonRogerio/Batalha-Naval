@@ -26,10 +26,14 @@ public class ControllerTelaCliente implements ActionListener,FocusListener {
 
 	public ControllerTelaCliente(PanelCliente cliente, Tela t, TelaCriarMapa telaCriarMapa, 
 			TelaEscolherOponente telaEscolherOponente) {
+		
+		
 		this.telaCliente = cliente;
 		this.telaEscolhaClienteOrServer = t;
 		this.telaCriarMapa = telaCriarMapa;
+		
 		this.telaEscolherOponente = telaEscolherOponente;
+		
 		this.telaCliente.getBtnJogar().addActionListener(this);
 		this.telaCliente.getBtnVoltar().addActionListener(this);
 		this.telaCliente.getRdBtnJogarOff().addActionListener(this);
@@ -79,14 +83,17 @@ public class ControllerTelaCliente implements ActionListener,FocusListener {
 
 						c = new Cliente(Integer.parseInt(this.telaCliente.getTxtFieldPorta().getText().trim()),
 						this.telaCliente.getTxtFieldIpServidor().getText().trim(), this.telaCliente.getTxtFieldNome().getText().trim(), telaEscolherOponente);
+						c.setTelaCriarMapa(this.telaCriarMapa);
+						c.setTelaEscolherOponente(this.telaEscolherOponente);
+						c.setTelaEscolhaClienteOrServer(this.telaEscolhaClienteOrServer);
 						SocketUtil.setClienteCorrente(c);
 						telaEscolhaClienteOrServer.setVisible(false);
 						new Thread(c).start();
 						c.enviaMensagem(ProtocoloUtil.NOME+ProtocoloUtil.SEPARADOR+c.getNome());
 						c.enviaMensagem(ProtocoloUtil.LISTA_USER_ONLINE+ProtocoloUtil.SEPARADOR+c.getNome());
-						telaEscolherOponente.setTitle("SEU NICK: "+c.getNome());
-						telaEscolherOponente.setVisible(true);
-						telaCriarMapa.setVisible(false);
+//						telaEscolherOponente.setTitle("SEU NICK: "+c.getNome());
+//						telaEscolherOponente.setVisible(true);
+//						telaCriarMapa.setVisible(false);
 						ControlerTelaEscolherOponente controlerTelaEscolherOponente = new ControlerTelaEscolherOponente(getC(),getTelaEscolherOponente(),telaCriarMapa);
 					} else {
 						JOptionPane.showMessageDialog(null, "Pro favor, preencha os campos para poder jogar Online.",

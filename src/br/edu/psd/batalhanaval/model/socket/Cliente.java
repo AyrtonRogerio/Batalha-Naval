@@ -29,6 +29,7 @@ import br.edu.psd.batalhanaval.model.CordenadasJogador;
 import br.edu.psd.batalhanaval.model.CordenadasRetorno;
 import br.edu.psd.batalhanaval.model.Jogador;
 import br.edu.psd.batalhanaval.model.TableModel;
+import br.edu.psd.batalhanaval.view.Tela;
 import br.edu.psd.batalhanaval.view.TelaCriarMapa;
 import br.edu.psd.batalhanaval.view.TelaEscolherOponente;
 import br.edu.psd.batalhanaval.view.TelaJogo;
@@ -61,6 +62,7 @@ public class Cliente implements Runnable{
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	private OutputStream outputStream;
+	private Tela telaEscolhaClienteOrServer;
 	private TelaEscolherOponente telaEscolherOponente;
 	private TelaCriarMapa telaCriarMapa;
 	private String desafiado;//guardar o nome do jogador que vc desafiou e ele aceitou
@@ -96,6 +98,7 @@ public class Cliente implements Runnable{
 	public Cliente(String nome) {
 		this.nome = nome;
 		this.jogador = new Jogador();
+		this.jogador.setNome(nome);
 	}
 
 	private void iniciarBufferPrint() {
@@ -141,6 +144,7 @@ public class Cliente implements Runnable{
 						// se aceitar
 						String s = "jogador "+temp[1]+" esta lhe desafiando aceita?";
 						if(JOptionPane.showConfirmDialog(null,s)==0) {//se o jogador aceitar jogar
+							oos.writeObject(ProtocoloUtil.JOGADOR_JOGANDO+temp[0].replace(ProtocoloUtil.QUER_JOGAR,""));//quando eu aceito a partida eu avisoaos demais
 							oos.writeObject(ProtocoloUtil.ACEITAR+" "+ProtocoloUtil.splitDestino(resp));
 							//SocketUtil.setAdversarioOnline(new ClienteServer(temp[1]));
 							setStatus(ClienteUtil.JOGANDO);
@@ -151,6 +155,8 @@ public class Cliente implements Runnable{
 							telaCriarMapa.setTitle(this.nome);
 							telaCriarMapa.setVisible(true);
 							SocketUtil.getClienteCorrente().getJogador().setEmJogo(true);
+							
+							
 						}else {//se nï¿½o
 							oos.writeObject(ProtocoloUtil.RECUSAR);
 							setStatus(ClienteUtil.DISPONIVEL);
@@ -163,6 +169,8 @@ public class Cliente implements Runnable{
 						telaEscolherOponente.setVisible(false);
 						telaCriarMapa.setTitle(this.nome);
 						telaCriarMapa.setVisible(true);
+						oos.writeObject(ProtocoloUtil.JOGADOR_JOGANDO+this.nome);//quando eu aceito a partida eu avisoaos demais
+						oos.flush();
 					}else if(resp.contains(ProtocoloUtil.RECUSAR)) {//jogador recusa jogar partida
 						setStatus(ClienteUtil.DISPONIVEL);
 						SocketUtil.getClienteCorrente().getJogador().setEmJogo(false);
@@ -188,6 +196,7 @@ public class Cliente implements Runnable{
 					else if (resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {//recebe jogadores online
 						String s[] = resp.split(ProtocoloUtil.SEPARADOR);
 						Cliente c = new Cliente(s[1]);
+						c.setStatus("online");
 						jogadores.addValor(c);
 					}else if(resp.contains(ProtocoloUtil.NOME)){
 
@@ -197,6 +206,20 @@ public class Cliente implements Runnable{
 						String []s=resp.split(ProtocoloUtil.SEPARADOR);
 						JOptionPane.showMessageDialog(null, "Seu Adversario:"+s[2]+" Ganhou a partida!");
 						System.exit(0);
+					}else if(resp.contains(ProtocoloUtil.JOGADOR_EXISTE)) {//significa que o nome de jogador que queria se conetar ja esta conectado e por tanto não é permitido 
+						telaEscolhaClienteOrServer.setVisible(true);
+						telaEscolherOponente.setVisible(false);
+						telaCriarMapa.setVisible(false);
+						JOptionPane.showMessageDialog(null,"Jogador ja existe");
+					}else if(resp.contains(ProtocoloUtil.JOGADOR_NAO_EXISTE)) {//atualiza a tela
+						telaEscolherOponente.setTitle("SEU NICK: "+getNome());
+						telaEscolhaClienteOrServer.setVisible(false);
+						telaEscolherOponente.setVisible(true);
+						telaCriarMapa.setVisible(false);
+					}else if(resp.contains(ProtocoloUtil.JOGADOR_JOGANDO)) {
+						String []s=resp.split(ProtocoloUtil.SEPARADOR);
+						System.out.println(s[1]);
+						jogadores.setValorAt(s[1],ClienteUtil.JOGANDO);
 					}
 				}else {
 					if(o instanceof CordenadasJogador) {//Um jogador envia para o outro, para ele consultar em seu mapa se arcetou ou nï¿½o alguma embarcacao!
@@ -469,4 +492,13 @@ public class Cliente implements Runnable{
 	public void setDesafiador(String desafiador) {
 		this.desafiador = desafiador;
 	}
+
+	public Tela getTelaEscolhaClienteOrServer() {
+		return telaEscolhaClienteOrServer;
+	}
+
+	public void setTelaEscolhaClienteOrServer(Tela telaEscolhaClienteOrServer) {
+		this.telaEscolhaClienteOrServer = telaEscolhaClienteOrServer;
+	}
+	
 }

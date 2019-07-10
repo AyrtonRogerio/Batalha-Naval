@@ -106,7 +106,7 @@ public class Jogador {
 		return 0;
 	}
 	public boolean verificarSeGanhei() {
-		if(acertos.split(";").length-1>=EmbarcacoesUtil.NUMCRUZADORES+EmbarcacoesUtil.NUMEMCOURACADO+EmbarcacoesUtil.NUMHIDROAV+
+		if(acertos.split(";").length>=EmbarcacoesUtil.NUMCRUZADORES+EmbarcacoesUtil.NUMEMCOURACADO+EmbarcacoesUtil.NUMHIDROAV+
 			EmbarcacoesUtil.NUMPORTAAV+EmbarcacoesUtil.NUMSUBMARINO)
 			return true;
 		return false;

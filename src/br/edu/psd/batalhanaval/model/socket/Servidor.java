@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import javax.net.ssl.SSLServerSocketFactory;
+import javax.swing.JOptionPane;
 
 import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
 import br.edu.psd.batalhanaval.model.CordenadasJogador;
@@ -33,6 +34,7 @@ public class Servidor extends Thread{
 	public static ArrayList<ClienteServer> clientes;
 	private TelaServidor telaServidor;
 	private ClienteServer cl;
+	private boolean temp;//Respónsavel por determinar se o jogador existe ou não
 	/**
 	 * @param serverSocket
 	 * @param porta
@@ -79,6 +81,7 @@ public class Servidor extends Thread{
 			try {
 				String resp = "";
 				 cl = new ClienteServer(socket);
+				
 				clientes.add(cl);
 				System.out.println(clientes.size());
 				resp="";
@@ -88,24 +91,43 @@ public class Servidor extends Thread{
 				ObjectOutputStream ous = cl.getOos();
 
 				System.out.println("dps do print read serv");
-
+//				if(!verificarSeJogadorExiste()) {
+//					
+//				}
 				while ((o=ois.readObject()) != null ) {
 					if(o instanceof String) {
 						resp = (String)o;
 						System.out.println("Server recebeu:"+resp);
 						if(resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {//
-							System.out.println("Cl:"+cl.getNome());
-							for(ClienteServer c:clientes) {//retorna pra mim os outros que jï¿½ estavam online
-								if(!c.getNome().equals(cl.getNome())) {
-									cl.getOos().writeObject(ProtocoloUtil.LISTA_USER_ONLINE+ProtocoloUtil.SEPARADOR+c.getNome());
+							if(!temp) {//se temp for falso significa que o jogador não exite o nome dele e setado e ele avisa aos demais
+								
+								System.out.println("Cl:"+cl.getNome());
+								for(ClienteServer c:clientes) {//retorna pra mim os outros que jï¿½ estavam online
+									if(!c.getNome().equals(cl.getNome())) {
+										cl.getOos().writeObject(ProtocoloUtil.LISTA_USER_ONLINE+ProtocoloUtil.SEPARADOR+c.getNome());
+									}
 								}
+								for(ClienteServer c:clientes) {//retorna pros outros que eu fiquei online!
+									if(!c.getNome().equals(cl.getNome())) {
+										c.getOos().writeObject(ProtocoloUtil.LISTA_USER_ONLINE+ProtocoloUtil.SEPARADOR+cl.getNome());
+										ous.flush();
+									}	
+								}
+								cl.getOos().writeObject(ProtocoloUtil.JOGADOR_NAO_EXISTE);//avisa que ele ja esta conectado pra atualizar sua tela
+							}else {//se não é removido do array
+								cl.getOos().writeObject(ProtocoloUtil.JOGADOR_EXISTE);
+								int i=0;
+								for(ClienteServer c:clientes) {
+									if(c.getNome()==null) {
+										clientes.remove(i);
+										break;
+									}
+									i++;
+								}
+								
 							}
-							for(ClienteServer c:clientes) {//retorna pros outros que eu fiquei online!
-								if(!c.getNome().equals(cl.getNome())) {
-									c.getOos().writeObject(ProtocoloUtil.LISTA_USER_ONLINE+ProtocoloUtil.SEPARADOR+cl.getNome());
-									ous.flush();
-								}	
-							}
+							temp=false;
+							
 						}else if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {//enviar requisiï¿½ï¿½o para jogar partida
 							enviarParaDestino(resp);
 							//break;O brak estava pausando o while
@@ -113,7 +135,15 @@ public class Servidor extends Thread{
 						else if(resp.contains(ProtocoloUtil.NOME)) {//Registra o nome do jogador no server
 							//enviarParaDestino(resp);
 							String s[] = resp.split(ProtocoloUtil.SEPARADOR);
-							clientes.get(clientes.size()-1).setNome(s[1]);
+							
+							if(!verificarSeJogadorExiste(s[1])) {
+								clientes.get(clientes.size()-1).setNome(s[1]);
+								temp=false;
+							}else {
+								temp=true; 
+							}	
+							
+							
 						}else if(resp.contains(ProtocoloUtil.USER_WIN)) {
 							String []s=resp.split(ProtocoloUtil.SEPARADOR);
 							for(ClienteServer c:clientes) {
@@ -148,6 +178,15 @@ public class Servidor extends Thread{
 									c.getOos().writeObject(resp);
 									break;
 								}
+							}
+						}else if(resp.contains(ProtocoloUtil.JOGADOR_JOGANDO)){
+							for(ClienteServer c:clientes) {//retorna pros outros que eu estou em uma partida!
+								if(!c.getNome().equals(resp.replace(ProtocoloUtil.JOGADOR_JOGANDO,""))) {
+									c.getOos().writeObject(ProtocoloUtil.JOGADOR_JOGANDO+ProtocoloUtil.SEPARADOR+resp.replace(ProtocoloUtil.JOGADOR_JOGANDO,""));
+									ous.flush();
+									System.out.println("oklllllllll");
+									
+								}	
 							}
 						}
 						else if(resp.contains(ProtocoloUtil.ACEITAR)) {//aceito jogar a partida
@@ -226,6 +265,18 @@ public class Servidor extends Thread{
 				break;
 			}
 		}
+	}
+	
+	public boolean verificarSeJogadorExiste(String nome) {
+		for(ClienteServer c:clientes) {
+			if(c.getNome()==null) {
+				continue;
+			}
+			if(c.getNome().equals(nome)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

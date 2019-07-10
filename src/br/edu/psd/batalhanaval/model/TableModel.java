@@ -53,6 +53,15 @@ public class TableModel extends AbstractTableModel{
 	@Override
 	public int getRowCount() {return usuarios.size();}
 
+	public void setValorAt(String nome,String status) {
+		for(Cliente c:usuarios) {
+			if(c.getNome().equals(nome)) {
+				c.setStatus(status);
+				break;
+			}
+		}
+		fireTableDataChanged();
+	}
 	@Override
 	public Object getValueAt(int linha, int coluna) {
 
