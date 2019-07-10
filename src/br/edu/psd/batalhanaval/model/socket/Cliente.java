@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Map;
 
+import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -42,6 +43,7 @@ import br.edu.psd.batalhanaval.view.TelaJogo;
  */
 public class Cliente implements Runnable{
 
+	private SSLSocketFactory sslSocketFactory;
 	private Socket socket;
 	private BufferedReader bufferDeEntrada;//Caixa de entrada!
 	//private PrintWriter escritorDeBuffer;//Escreve na caixa de entrada
@@ -134,7 +136,7 @@ public class Cliente implements Runnable{
 				if(o instanceof String) {
 					String resp = (String)o;
 					System.out.println("Cliente recebeu:"+resp);
-					if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {//jogador recebe requisição pra aceitar partida
+					if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {//jogador recebe requisiï¿½ï¿½o pra aceitar partida
 						String []temp = resp.split(" ");
 						// se aceitar
 						String s = "jogador "+temp[1]+" esta lhe desafiando aceita?";
@@ -149,7 +151,7 @@ public class Cliente implements Runnable{
 							telaCriarMapa.setTitle(this.nome);
 							telaCriarMapa.setVisible(true);
 							SocketUtil.getClienteCorrente().getJogador().setEmJogo(true);
-						}else {//se não
+						}else {//se nï¿½o
 							oos.writeObject(ProtocoloUtil.RECUSAR);
 							setStatus(ClienteUtil.DISPONIVEL);
 							oos.flush();
@@ -191,13 +193,13 @@ public class Cliente implements Runnable{
 
 					}
 					else if(resp.contains(ProtocoloUtil.USER_WIN)){
-						//então o adiversario deste cliente ganhou!
+						//entï¿½o o adiversario deste cliente ganhou!
 						String []s=resp.split(ProtocoloUtil.SEPARADOR);
 						JOptionPane.showMessageDialog(null, "Seu Adversario:"+s[2]+" Ganhou a partida!");
 						System.exit(0);
 					}
 				}else {
-					if(o instanceof CordenadasJogador) {//Um jogador envia para o outro, para ele consultar em seu mapa se arcetou ou não alguma embarcacao!
+					if(o instanceof CordenadasJogador) {//Um jogador envia para o outro, para ele consultar em seu mapa se arcetou ou nï¿½o alguma embarcacao!
 						
 						CordenadasJogador cJogador = (CordenadasJogador)o;
 						String r1 = null;//resultado tiro 1;
@@ -234,8 +236,8 @@ public class Cliente implements Runnable{
 						ControllerTelaJogo.verificaLocalDaEmbarcacao(cJogador.getAcertoC2(), cJogador.getCord2(), telajogo.getCoordenadasmapAdversario());
 						ControllerTelaJogo.verificaLocalDaEmbarcacao(cJogador.getAcertoC3(), cJogador.getCord3(), telajogo.getCoordenadasmapAdversario());
 						
-						//Verifica afundamento de embarcação!
-						//quando afundada a primeira posição da embarcacao fica disable, para compelmentar a logica do metodo verificar se já afundou!
+						//Verifica afundamento de embarcaï¿½ï¿½o!
+						//quando afundada a primeira posiï¿½ï¿½o da embarcacao fica disable, para compelmentar a logica do metodo verificar se jï¿½ afundou!
 						if((cJogador.getAcertoC1()+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {//olha se afundou alguma
 							SocketUtil.getClienteCorrente().getJogador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+cJogador.getAcertoC1().replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
 							ControllerTelaJogo.verificaLocalDaEmbarcacao(cJogador.getAcertoC1().replace(CodigoButtonEnum.AFUNDAR.getDescricao(),""), cJogador.getCord1(), telajogo.getCoordenadasmapAdversario());

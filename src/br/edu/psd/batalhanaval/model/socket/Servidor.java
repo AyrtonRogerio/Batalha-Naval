@@ -10,6 +10,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import javax.net.ssl.SSLServerSocketFactory;
+
 import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
 import br.edu.psd.batalhanaval.model.CordenadasJogador;
 import br.edu.psd.batalhanaval.model.CordenadasRetorno;
@@ -23,12 +25,14 @@ import br.edu.psd.batalhanaval.view.TelaServidor;
  */
 public class Servidor extends Thread{
 
+	private SSLServerSocketFactory serverSocketFactory;
 	private ServerSocket serverSocket;
 	private int porta;
 	public String nomeServidor;
 	private String resp;
 	public static ArrayList<ClienteServer> clientes;
 	private TelaServidor telaServidor;
+	private ClienteServer cl;
 	/**
 	 * @param serverSocket
 	 * @param porta
@@ -46,7 +50,7 @@ public class Servidor extends Thread{
 	}
 	public Socket ouvirPorta() throws IOException {
 		Socket socket = serverSocket.accept();
-		telaServidor.getTextArea().append("<Ouve uma requisiï¿½ï¿½o> \r\n");
+		telaServidor.getTextArea().append("<Houve uma requisiï¿½ï¿½o> \r\n");
 		telaServidor.getTextArea().append("Dados do socket: "+ socket.toString() + "\r\n\n");
 		telaServidor.getTextArea().requestFocusInWindow();
 		return socket;
@@ -74,7 +78,7 @@ public class Servidor extends Thread{
 		new Thread(() -> {
 			try {
 				String resp = "";
-				ClienteServer cl = new ClienteServer(socket);
+				 cl = new ClienteServer(socket);
 				clientes.add(cl);
 				System.out.println(clientes.size());
 				resp="";
@@ -91,7 +95,7 @@ public class Servidor extends Thread{
 						System.out.println("Server recebeu:"+resp);
 						if(resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {//
 							System.out.println("Cl:"+cl.getNome());
-							for(ClienteServer c:clientes) {//retorna pra mim os outros que já estavam online
+							for(ClienteServer c:clientes) {//retorna pra mim os outros que jï¿½ estavam online
 								if(!c.getNome().equals(cl.getNome())) {
 									cl.getOos().writeObject(ProtocoloUtil.LISTA_USER_ONLINE+ProtocoloUtil.SEPARADOR+c.getNome());
 								}
@@ -102,7 +106,7 @@ public class Servidor extends Thread{
 									ous.flush();
 								}	
 							}
-						}else if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {//enviar requisição para jogar partida
+						}else if(resp.contains(ProtocoloUtil.QUER_JOGAR)) {//enviar requisiï¿½ï¿½o para jogar partida
 							enviarParaDestino(resp);
 							//break;O brak estava pausando o while
 						}
@@ -121,10 +125,22 @@ public class Servidor extends Thread{
 						}else if(resp.contains(ProtocoloUtil.USER_SAIU)) {
 							//	saida.println(ProtocoloUtil.USER_SAIU);
 							//	break;
+							System.out.println("Cl:"+cl.getNome());
+							for(ClienteServer c:clientes) {//retorna pra mim os outros que jï¿½ estavam online
+								if(!c.getNome().equals(cl.getNome())) {
+									cl.getOos().writeObject(ProtocoloUtil.USER_SAIU+ProtocoloUtil.SEPARADOR+c.getNome());
+								}
+							}
+							for(ClienteServer c:clientes) {//retorna pros outros que eu fiquei online!
+								if(!c.getNome().equals(cl.getNome())) {
+									c.getOos().writeObject(ProtocoloUtil.USER_SAIU+ProtocoloUtil.SEPARADOR+cl.getNome());
+									ous.flush();
+								}	
+							}
 						}else if(resp.contains(ProtocoloUtil.CONECTADO)){
 							//	saida.println(ProtocoloUtil.CONECTADO);
 							//	break;
-						}else if(resp.contains(ProtocoloUtil.TERMINEI)) {//quando o ultimo jogador terminar de montar o mapa a requisição vem pra ca
+						}else if(resp.contains(ProtocoloUtil.TERMINEI)) {//quando o ultimo jogador terminar de montar o mapa a requisiï¿½ï¿½o vem pra ca
 							String []s=resp.split(ProtocoloUtil.SEPARADOR);
 
 							for(ClienteServer c:clientes) {
@@ -173,6 +189,12 @@ public class Servidor extends Thread{
 				System.out.println("Serve acabou!");
 			} catch (Exception e) {
 				e.printStackTrace();
+				
+				//pegar a exceÃ§Ã£o quando o cliente sair e avisar aos outros
+				if(cl == null) {
+					
+				}
+				
 			}
 
 		}).start();

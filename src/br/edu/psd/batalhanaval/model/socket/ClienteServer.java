@@ -7,12 +7,14 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import javax.net.ssl.SSLSocketFactory;
+
 
 
 public class ClienteServer {
 	private String nome;
 	private Socket socket;
-
+	private SSLSocketFactory sslSocketFactory;
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	
