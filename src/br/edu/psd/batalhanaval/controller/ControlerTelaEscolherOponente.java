@@ -29,7 +29,6 @@ public class ControlerTelaEscolherOponente implements ActionListener{
 		try {
 			c.setStatus(ClienteUtil.AGUARDANDO);
 			c.getOos().writeObject(ProtocoloUtil.QUER_JOGAR+c.getJogadores().getValorAt(escolherOponente.getTable().getSelectedRow()).getNome()+" "+c.getNome());
-			
 //			do {
 //				if(c.getStatus().equals(ClienteUtil.JOGANDO)) {
 //					escolherOponente.setVisible(false);

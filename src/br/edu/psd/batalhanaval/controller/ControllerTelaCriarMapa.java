@@ -102,10 +102,11 @@ public class ControllerTelaCriarMapa implements ActionListener{
 		else if(EmbarcacoesUtil.getSubimarinosPosicionados()<=0)
 			JOptionPane.showMessageDialog(null,"Existem Embarcacoes que ainda precisam ser posicionadas!!!");
 		else {
+			
 			Cliente cliente = SocketUtil.getClienteCorrente();
 			cliente.setTelajogo(telaJogo);
 			MontadorDeMapa.montarMapaMeuJogoAtual(telaCMapa.getCoordenadasmap(),cliente.getJogador().getCoordenadasMeuJogoAtual());
-			//Precisa verificar se o jogo ï¿½ offiline.
+			//Precisa verificar se o jogo eh offiline.
 			if(SocketUtil.offiline) {
 				cliente.getJogador().setEmJogo(true);
 				SocketUtil.setComputador(new Jogador());
@@ -121,38 +122,40 @@ public class ControllerTelaCriarMapa implements ActionListener{
 				try {
 					if(!cliente.isConcluidoAdversario()) {//ver quem montou primeiro o mapa
 						cliente.setConcluido(true);
-						
 						//definir pra quem enviar
-						if(cliente.getDesafiado()!=null) {// o jogador que desafio joga primeiro
+						if(cliente.getDesafiado()!=null) {// o jogador que desafiou joga primeiro
 							SocketUtil.getClienteCorrente().getJogador().setSuaVez(true);
 							cliente.getOos().writeObject(ProtocoloUtil.ESPERARANDO+cliente.getDesafiado()+" ");
-							
-						}else {
+							this.telaJogo.getLblSeuJogo().setText(cliente.getNome());
+							this.telaJogo.getLblSeuJogo().setText(cliente.getNome());
+							this.telaJogo.getLblJogoAdversario().setText(cliente.getDesafiado());
+						}else {//se foi o desafiado que terminou de montar o mapa primeiro!!!
 							SocketUtil.getClienteCorrente().getJogador().setSuaVez(false);
 							cliente.getOos().writeObject(ProtocoloUtil.ESPERARANDO+cliente.getDesafiador()+" ");
-						
+							this.telaJogo.getLblSeuJogo().setText(cliente.getNome());
+							this.telaJogo.getLblJogoAdversario().setText(cliente.getDesafiador());
 						}
-					}else {//se não
+					}else {//Entra aqui o que terminar por ultimo de  montar o mapa!
 						EmbarcacoesUtil.limparPosicionamentos();
 						this.telaCMapa.setVisible(false);
 						this.telaJogo.limparTela();
 						this.telaJogo.setVisible(true);
 						cliente.setConcluido(true);
 						//definir pra quem enviar
-						if(cliente.getDesafiado()!=null) {// o jogador que desafio joga primeiro
+						if(cliente.getDesafiado()!=null) {// o jogador que desafiou joga primeiro
 							SocketUtil.getClienteCorrente().getJogador().setSuaVez(true);
 							cliente.getOos().writeObject(ProtocoloUtil.TERMINEI+ProtocoloUtil.SEPARADOR+cliente.getDesafiado());
-							
-						}else {
+							this.telaJogo.getLblSeuJogo().setText(cliente.getNome());
+							this.telaJogo.getLblJogoAdversario().setText(cliente.getDesafiado());
+						}else {//se foi o desafiado que terminou de montar o mapa primeiro!!!
 							SocketUtil.getClienteCorrente().getJogador().setSuaVez(false);
 							cliente.getOos().writeObject(ProtocoloUtil.TERMINEI+ProtocoloUtil.SEPARADOR+cliente.getDesafiador());
 							//cliente.getOos().writeObject(new CordenadasJogador(cliente.getJogador().getCoordenadasMeuJogoAtual(),cliente.getDesafiador()));
+							this.telaJogo.getLblSeuJogo().setText(cliente.getNome());
+							this.telaJogo.getLblJogoAdversario().setText(cliente.getDesafiador());
 						}
+					
 					}
-					
-					
-					
-					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -326,7 +326,6 @@ public class TelaJogo extends JFrame {
 			JButton b = coordenadasmapCliente.get(key);
 			b.setBackground(Color.cyan);
 			b.setName(CodigoButtonEnum.POSICAO.getDescricao());
-			b.setEnabled(true);
 		}
 		this.txtFieldX1.setText("");
 		this.txtFieldX2.setText("");

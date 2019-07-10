@@ -25,6 +25,11 @@ public class ClienteServer {
 	//	this.nome = nome;
 	    //Object object = this.ois.readObject();
 	}
+	public ClienteServer(String nome) {
+		super();
+		this.nome = nome;
+	}
+
 
 	public String getNome() {
 		return nome;

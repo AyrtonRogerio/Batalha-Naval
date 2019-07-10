@@ -2,6 +2,7 @@ package br.edu.psd.batalhanaval.Util;
 
 import br.edu.psd.batalhanaval.model.Jogador;
 import br.edu.psd.batalhanaval.model.socket.Cliente;
+import br.edu.psd.batalhanaval.model.socket.ClienteServer;
 
 public class SocketUtil {
 	private static Cliente clienteCorrente;
@@ -88,5 +89,6 @@ public class SocketUtil {
 	public static void setComputador(Jogador computador) {
 		SocketUtil.computador = computador;
 	}
+
 	
 }

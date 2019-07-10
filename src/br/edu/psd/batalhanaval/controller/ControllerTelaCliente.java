@@ -78,12 +78,13 @@ public class ControllerTelaCliente implements ActionListener,FocusListener {
 					if (verificar()) {
 
 						c = new Cliente(Integer.parseInt(this.telaCliente.getTxtFieldPorta().getText().trim()),
-						this.telaCliente.getTxtFieldIpServidor().getText().trim(), this.telaCliente.getTxtFieldNome().getText().trim(),telaEscolherOponente);
+						this.telaCliente.getTxtFieldIpServidor().getText().trim(), this.telaCliente.getTxtFieldNome().getText().trim(), telaEscolherOponente);
 						SocketUtil.setClienteCorrente(c);
 						telaEscolhaClienteOrServer.setVisible(false);
 						new Thread(c).start();
-						c.enviaMensagem(ProtocoloUtil.NOME+";"+c.getNome());
-						//c.enviaMensagem(ProtocoloUtil.LISTA_USER_ONLINE+";"+c.getNome());
+						c.enviaMensagem(ProtocoloUtil.NOME+ProtocoloUtil.SEPARADOR+c.getNome());
+						c.enviaMensagem(ProtocoloUtil.LISTA_USER_ONLINE+ProtocoloUtil.SEPARADOR+c.getNome());
+						telaEscolherOponente.setTitle("SEU NICK: "+c.getNome());
 						telaEscolherOponente.setVisible(true);
 						telaCriarMapa.setVisible(false);
 						ControlerTelaEscolherOponente controlerTelaEscolherOponente = new ControlerTelaEscolherOponente(getC(),getTelaEscolherOponente(),telaCriarMapa);

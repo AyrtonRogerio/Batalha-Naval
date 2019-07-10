@@ -9,10 +9,10 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import br.edu.psd.batalhanaval.Util.EmbarcacoesUtil;
 import br.edu.psd.batalhanaval.Util.SocketUtil;
 import br.edu.psd.batalhanaval.Util.Enum.CodigoButtonEnum;
 import br.edu.psd.batalhanaval.Util.Enum.TipoEmbarcacaoEnum;
+import br.edu.psd.batalhanaval.model.CordenadasJogador;
 import br.edu.psd.batalhanaval.view.TelaJogo;
 
 public class ControllerTelaJogo extends KeyAdapter{
@@ -46,17 +46,32 @@ public class ControllerTelaJogo extends KeyAdapter{
 				String col2 = this.telaPartida.getTxtFieldY2().getText();
 				String l3 = SocketUtil.converteLetraemNumero(this.telaPartida.getTxtFieldX3().getText());
 				String col3 = this.telaPartida.getTxtFieldY3().getText();
-
+				
 				if(SocketUtil.offiline) {//Verifica se a partida é com o computador!!!
 					String msg = null;
-					msg+= this.verificarTiro(l1, col1,this.telaPartida.getCoordenadasmapAdversario(), SocketUtil.getComputador().getCoordenadasMeuJogoAtual());
-					msg+= this.verificarTiro(l2, col2,this.telaPartida.getCoordenadasmapAdversario(), SocketUtil.getComputador().getCoordenadasMeuJogoAtual());
-					msg+= this.verificarTiro(l3, col3,this.telaPartida.getCoordenadasmapAdversario(), SocketUtil.getComputador().getCoordenadasMeuJogoAtual());
-					//System.out.println("NAVIOS AFUNDADOS:"+SocketUtil.getClienteCorrente().getJogador().getAcertos());
+					String r1 = "";
+					String r2 = "";
+					String r3 = "";
+					r1 = this.verificarTiro(l1, col1,this.telaPartida.getCoordenadasmapAdversario(), SocketUtil.getComputador().getCoordenadasMeuJogoAtual());
+					r2 = this.verificarTiro(l2, col2,this.telaPartida.getCoordenadasmapAdversario(), SocketUtil.getComputador().getCoordenadasMeuJogoAtual());
+					r3 = this.verificarTiro(l3, col3,this.telaPartida.getCoordenadasmapAdversario(), SocketUtil.getComputador().getCoordenadasMeuJogoAtual());
+					msg+=r1+"\n"+r2+"\n"+r3;
+					System.out.println("NAVIOS AFUNDADOS:"+SocketUtil.getClienteCorrente().getJogador().getAcertos());
 					//System.out.println("QUANT AFUNDADOS:"+(SocketUtil.getClienteCorrente().getJogador().getAcertos().split(";").length-1)+"");
 					if(msg.replace("null","").length()>0) {//depois setar na propia tela por uma label!!!!
-						JOptionPane.showMessageDialog(null,(msg+"\nVoce afundou essas embarcacoes!!").replace("null",""));
-						SocketUtil.getClienteCorrente().getJogador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+msg.replace("null",""));
+						String afundar = "";
+						if((r1+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
+							SocketUtil.getClienteCorrente().getJogador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r1.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
+						    afundar+= r1+"\n";
+						}else if((r2+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
+							SocketUtil.getClienteCorrente().getJogador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r2.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
+							afundar+= r2+"\n";
+						}else if((r3+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
+							SocketUtil.getClienteCorrente().getJogador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r3.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
+							afundar += r1+"\n";
+						}
+						JOptionPane.showMessageDialog(null,"Resultado Disparos:\n"+msg.replace("null",""));
+						//
 					}
 					if(SocketUtil.getClienteCorrente().getJogador().verificarSeGanhei())
 					{
@@ -70,8 +85,21 @@ public class ControllerTelaJogo extends KeyAdapter{
 					SocketUtil.getClienteCorrente().getJogador().setSuaVez(false);
 					this.maquinaJoga();//a vez eh da maquina!!!
 					
+				}else {//o jogo nao eh offiline!
+					CordenadasJogador cj = null;
+					if(SocketUtil.getClienteCorrente().getDesafiado()!=null) {//então ele eh o desafiado!
+						String dsf = SocketUtil.getClienteCorrente().getDesafiado();
+						 cj = new CordenadasJogador(l1+","+col1,l2+","+col2,l3+","+col3,dsf);
+						 cj.setNomeRementente(SocketUtil.getClienteCorrente().getNome());
+					}else {
+						String dsf = SocketUtil.getClienteCorrente().getDesafiador();
+						cj = new CordenadasJogador(l1+","+col1,l2+","+col2,l3+","+col3,dsf);
+						cj.setNomeRementente(SocketUtil.getClienteCorrente().getNome());
+					}
+					SocketUtil.getClienteCorrente().enviarObj(cj);	
+					SocketUtil.getClienteCorrente().getJogador().setSuaVez(false);
+					// A partir da qui,  as coisas irão acontecer no else classe Cliente!
 				}
-				//se não for offiline..
 			}	
 		}else {
 			JOptionPane.showMessageDialog(null,"Aguarde sua vez!!!");
@@ -87,15 +115,30 @@ public class ControllerTelaJogo extends KeyAdapter{
 		String col3 = (r.nextInt(15)+1)+"";
 
 		new Thread(()->{//So pra não ser muito rapido!!!
+			
 			try {
 				String msg = null;
+				String r1 = "";
+				String r2 = "";
+				String r3 = "";
 				Thread.sleep(1000);
-				msg+= this.verificarTiro(l1, col1,this.telaPartida.getCoordenadasmapCliente(), SocketUtil.getClienteCorrente().getJogador().getCoordenadasMeuJogoAtual());
+				r1 = this.verificarTiro(l1, col1,this.telaPartida.getCoordenadasmapCliente(), SocketUtil.getClienteCorrente().getJogador().getCoordenadasMeuJogoAtual());
 				Thread.sleep(1000);
-				msg+=this.verificarTiro(l2, col2,this.telaPartida.getCoordenadasmapCliente(), SocketUtil.getClienteCorrente().getJogador().getCoordenadasMeuJogoAtual());
+				r2 =this.verificarTiro(l2, col2,this.telaPartida.getCoordenadasmapCliente(), SocketUtil.getClienteCorrente().getJogador().getCoordenadasMeuJogoAtual());
 				Thread.sleep(1000);
-				msg+=this.verificarTiro(l3, col3,this.telaPartida.getCoordenadasmapCliente(), SocketUtil.getClienteCorrente().getJogador().getCoordenadasMeuJogoAtual());
-				SocketUtil.getClienteCorrente().getJogador().setSuaVez(true);
+				r3=this.verificarTiro(l3, col3,this.telaPartida.getCoordenadasmapCliente(), SocketUtil.getClienteCorrente().getJogador().getCoordenadasMeuJogoAtual());
+				msg+=r1+r2+r3;
+				if(msg.replace("null","").length()>0) {//depois setar na propia tela por uma label!!!!
+					String afundar = "";
+					if((r1+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
+						SocketUtil.getComputador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r1.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
+					}else if((r2+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
+						SocketUtil.getComputador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r2.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
+					}else if((r3+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
+						SocketUtil.getComputador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r3.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
+					}
+				}
+				System.out.println("Acertos Computador:"+SocketUtil.getComputador().getAcertos());
 				if(SocketUtil.getComputador().verificarSeGanhei())
 				{
 					JOptionPane.showMessageDialog(null,SocketUtil.getComputador()+" Ganhou a partida!");
@@ -105,7 +148,8 @@ public class ControllerTelaJogo extends KeyAdapter{
 					//teria que limpar todas as telas incluusive  tela criar mapa.!!.
 					System.exit(0);
 				}
-				JOptionPane.showMessageDialog(null,msg.replace("null","").length()<=0?"Sua vez de jogar!!!":(msg+"\nO computador afundou essas embarcacoes!!"+" Sua vez de Jogar!").replace("null",""));
+				SocketUtil.getClienteCorrente().getJogador().setSuaVez(true);
+				JOptionPane.showMessageDialog(null,"Sua vez de jogar!!!");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -115,13 +159,13 @@ public class ControllerTelaJogo extends KeyAdapter{
 
 	}
 	/**
-	 * Retorna uma string com nome do navio em caso de afundamento de embarcacao, se nao retorna null.
+	 * Retorna uma string com nome do navio em caso de afundamento de embarcacao.
 	 * */
-	private String verificarTiro(String lin, String col, Map<String,JButton> mapaButton, Map<String, String> jogo){//contra o computador!
+	public static String verificarTiro(String lin, String col, Map<String,JButton> mapaButton, Map<String, String> jogo){//contra o computador!
 		try {
 		if(jogo.get(lin+","+col).equals(CodigoButtonEnum.POSICAO.getDescricao())) {//tiro na agua
 			mapaButton.get(lin+","+col).setBackground(Color.orange);
-			return null;
+			return CodigoButtonEnum.TIROAGUA.getDescricao();
 			//this.telaPartida.getCoordenadasmapAdversario().get(l1+","+col1).setName(CodigoButtonEnum.TIROAGUA.getDescricao());
 		}
 		else if(!jogo.get(lin+","+col).equals(CodigoButtonEnum.POSICAO.getDescricao())) {
@@ -130,27 +174,53 @@ public class ControllerTelaJogo extends KeyAdapter{
 			String nomeEmbarcacao = vetor[0];
 			String numEmbarcacao = vetor[1];
 			String posEmbarcacao = vetor[2];
-			
+			String acertou = null;
 			if(nomeEmbarcacao.equalsIgnoreCase(TipoEmbarcacaoEnum.ENCOURACADO.getValor())) {
 				mapaButton.get(lin+","+col).setBackground(Color.BLACK);
+				acertou  = TipoEmbarcacaoEnum.ENCOURACADO.getValor();
 			}else if(nomeEmbarcacao.equalsIgnoreCase(TipoEmbarcacaoEnum.PORTAAVIAO.getValor())) {
 				mapaButton.get(lin+","+col).setBackground(Color.RED);
+				acertou  = TipoEmbarcacaoEnum.PORTAAVIAO.getValor();
 			}
 			else if(nomeEmbarcacao.equalsIgnoreCase(TipoEmbarcacaoEnum.CRUZADORES.getValor())) {
 				mapaButton.get(lin+","+col).setBackground(Color.yellow);
+				acertou  = TipoEmbarcacaoEnum.CRUZADORES.getValor();
 			}
 			else if(nomeEmbarcacao.equalsIgnoreCase(TipoEmbarcacaoEnum.HIDROAVIAO.getValor())) {
 				mapaButton.get(lin+","+col).setBackground(Color.GREEN);
+				acertou  = TipoEmbarcacaoEnum.HIDROAVIAO.getValor();
 			}
 			else if(nomeEmbarcacao.equalsIgnoreCase(TipoEmbarcacaoEnum.SUBMARINO.getValor())) {
 				mapaButton.get(lin+","+col).setBackground(Color.DARK_GRAY);
+				acertou  = TipoEmbarcacaoEnum.SUBMARINO.getValor();
 			}
-			if(!mapaButton.get(lin+","+this.column1(posEmbarcacao, lin+","+col)).isEnabled()) {
+			
+			if(nomeEmbarcacao.equalsIgnoreCase(TipoEmbarcacaoEnum.HIDROAVIAO.getValor())) {//então eh hidroaviao!!!
+				int x = Integer.parseInt(lin),y = Integer.parseInt(col);
+				if(!posEmbarcacao.equals("P1")) {
+					if(posEmbarcacao.equals("P2")) {
+						y = Integer.parseInt(col)+1;
+						x = Integer.parseInt(lin)-1;
+					}
+					if(posEmbarcacao.equals("P3")) {
+						y = Integer.parseInt(col)-1;
+						x = Integer.parseInt(lin)-1;
+					}
+				}
+				if(!mapaButton.get(x+","+y).isEnabled()) {
+					return null;
+				}else if(verificaSeafundouEnumbarcacao(nomeEmbarcacao, posEmbarcacao, lin+","+col, mapaButton)) {
+					return nomeEmbarcacao+CodigoButtonEnum.AFUNDAR.getDescricao();	
+				}
+			}
+			if(!mapaButton.get(lin+","+column1(posEmbarcacao, lin+","+col)).isEnabled()) {
 				System.out.println("Ja esta afundada!!"+nomeEmbarcacao);
+				//acertou  = TipoEmbarcacaoEnum.ENCOURACADO.getValor();
 			}//verifica se ela já esta afundada!
-			else if(this.verificaSeafundouEnumbarcacao(nomeEmbarcacao, posEmbarcacao, lin+","+col, mapaButton)) {
-				return nomeEmbarcacao+";";
-			}
+			else if(verificaSeafundouEnumbarcacao(nomeEmbarcacao, posEmbarcacao, lin+","+col, mapaButton)) {
+				return nomeEmbarcacao+CodigoButtonEnum.AFUNDAR.getDescricao();
+			}else
+				return acertou;
 			//tiro na agua
 			//this.telaPartida.getCoordenadasmapAdversario().get(l2+","+col2).setName(CodigoButtonEnum.TIROAGUA.getDescricao());
 		}//
@@ -216,11 +286,11 @@ public class ControllerTelaJogo extends KeyAdapter{
 	//	private void eventoClickMeuMapa(JButton b) {
 	//
 	//	}
-	private boolean verificaSeafundouEnumbarcacao(String navio, String numParte,String coord,Map<String,JButton>mapa) {
+	public static boolean verificaSeafundouEnumbarcacao(String navio, String numParte,String coord,Map<String,JButton>mapa) {
 		String s[] = coord.split(",");
 		int x = Integer.parseInt(s[0]);
 		int y = Integer.parseInt(s[1]);
-		y = this.column1(numParte, coord);//busca a primeira posicao do navio!
+		y = column1(numParte, coord);//busca a primeira posicao do navio!
 		if(navio.equalsIgnoreCase(TipoEmbarcacaoEnum.ENCOURACADO.getValor())) {
 			if(mapa.get(x+","+y).getBackground()==Color.BLACK && mapa.get(x+","+(y+1)).getBackground()==Color.BLACK &&
 					mapa.get(x+","+(y+2)).getBackground()==Color.BLACK && mapa.get(x+","+(y+3)).getBackground()==Color.BLACK ) {//Então a embracação foi afundada.
@@ -261,7 +331,7 @@ public class ControllerTelaJogo extends KeyAdapter{
 		}
 		return false;
 	}
-	private int column1(String numParte,String coord) {//Captura a coluna1
+	public static int column1(String numParte,String coord) {//Captura a coluna1
 		String s[] = coord.split(",");
 		int y = Integer.parseInt(s[1]);
 		if(!numParte.equals("P1")) {
@@ -269,5 +339,34 @@ public class ControllerTelaJogo extends KeyAdapter{
 			y = y - (numP - 1);//coluna da primeira posicao da embarcacao;
 		}
 		return y;
+	}
+	/*
+	 * Verifica qual embarcacao foi atingida!
+	 * **/
+	public static void verificaLocalDaEmbarcacao(String acerto, String cord, Map<String, JButton>mapButton) {
+		acerto = acerto==null?"":acerto;
+		if(acerto.equalsIgnoreCase(TipoEmbarcacaoEnum.ENCOURACADO.getValor())) {
+			mapButton.get(cord).setBackground(Color.BLACK);
+			//acertou  = TipoEmbarcacaoEnum.ENCOURACADO.getValor();
+		}else if(acerto.equalsIgnoreCase(TipoEmbarcacaoEnum.PORTAAVIAO.getValor())) {
+			mapButton.get(cord).setBackground(Color.RED);
+			//acertou  = TipoEmbarcacaoEnum.PORTAAVIAO.getValor();
+		}
+		else if(acerto.equalsIgnoreCase(TipoEmbarcacaoEnum.CRUZADORES.getValor())) {
+			mapButton.get(cord).setBackground(Color.yellow);
+			//acertou  = TipoEmbarcacaoEnum.CRUZADORES.getValor();
+		}
+		else if(acerto.equalsIgnoreCase(TipoEmbarcacaoEnum.HIDROAVIAO.getValor())) {
+			mapButton.get(cord).setBackground(Color.GREEN);
+			//acertou  = TipoEmbarcacaoEnum.HIDROAVIAO.getValor();
+		}
+		else if(acerto.equalsIgnoreCase(TipoEmbarcacaoEnum.SUBMARINO.getValor())) {
+			mapButton.get(cord).setBackground(Color.DARK_GRAY);
+			//acertou  = TipoEmbarcacaoEnum.SUBMARINO.getValor();
+		}
+		else if(acerto.equalsIgnoreCase(CodigoButtonEnum.TIROAGUA.getDescricao())) {
+			mapButton.get(cord).setBackground(Color.orange);
+			//acertou  = TipoEmbarcacaoEnum.SUBMARINO.getValor();
+		}
 	}
 }
