@@ -224,7 +224,7 @@ public class Cliente implements Runnable{
 						String []s=resp.split(ProtocoloUtil.SEPARADOR);
 						jogadores.setValorAt(s[1],ClienteUtil.DISPONIVEL);
 						setDesafiado(null);
-						setDesafiador(null);
+						setDesafiador(null);//
 					}
 				}else {
 					if(o instanceof CordenadasJogador) {//Um jogador envia para o outro, para ele consultar em seu mapa se arcetou ou n�o alguma embarcacao!

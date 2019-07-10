@@ -41,7 +41,7 @@ public class TableModel extends AbstractTableModel{
 		return usuarios;
 	}
 	
-	public void  remover(String nome) {
+	public void  remover(String nome) {//remove usuario
 		int i = 0;
 		for(Cliente c:usuarios) {
 			if(c.getNome().equals(nome)) {
