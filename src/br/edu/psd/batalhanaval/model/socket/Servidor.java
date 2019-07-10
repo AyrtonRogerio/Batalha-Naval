@@ -188,6 +188,17 @@ public class Servidor extends Thread{
 									
 								}	
 							}
+						}else if(resp.contains(ProtocoloUtil.JOGADOR_DISPONIVEL)) {
+							for(ClienteServer c:clientes) {
+								for(ClienteServer c:clientes) {//retorna pros outros que eu estou em uma partida!
+									if(!c.getNome().equals(resp.replace(ProtocoloUtil.JOGADOR_DISPONIVEL,""))) {
+										c.getOos().writeObject(ProtocoloUtil.JOGADOR_DISPONIVEL+ProtocoloUtil.SEPARADOR+resp.replace(ProtocoloUtil.JOGADOR_JOGANDO,""));
+										ous.flush();
+										System.out.println("oklllllllll");
+										
+									}	
+								}
+							}
 						}
 						else if(resp.contains(ProtocoloUtil.ACEITAR)) {//aceito jogar a partida
 							aceitarDesafio(resp);

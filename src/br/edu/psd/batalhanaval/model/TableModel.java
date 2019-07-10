@@ -40,6 +40,17 @@ public class TableModel extends AbstractTableModel{
 	public List<Cliente> getUsuarios() {
 		return usuarios;
 	}
+	
+	public void  remover(String nome) {
+		int i = 0;
+		for(Cliente c:usuarios) {
+			if(c.getNome().equals(nome)) {
+				usuarios.remove(i);
+				break;
+			}
+		}
+		fireTableDataChanged();
+	}
 
 	public Cliente getValorAt(int linha)
 	{
