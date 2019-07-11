@@ -206,7 +206,7 @@ public class Cliente implements Runnable{
 						String []s=resp.split(ProtocoloUtil.SEPARADOR);
 						JOptionPane.showMessageDialog(null, "Seu Adversario:"+s[2]+" Ganhou a partida!");
 						System.exit(0);
-					}else if(resp.contains(ProtocoloUtil.JOGADOR_EXISTE)) {//significa que o nome de jogador que queria se conetar ja esta conectado e por tanto não é permitido 
+					}else if(resp.contains(ProtocoloUtil.JOGADOR_EXISTE)) {//significa que o nome de jogador que queria se conetar ja esta conectado e por tanto nï¿½o ï¿½ permitido 
 						telaEscolhaClienteOrServer.setVisible(true);
 						telaEscolherOponente.setVisible(false);
 						telaCriarMapa.setVisible(false);
@@ -225,6 +225,9 @@ public class Cliente implements Runnable{
 						jogadores.setValorAt(s[1],ClienteUtil.DISPONIVEL);
 						setDesafiado(null);
 						setDesafiador(null);//
+					}else if(resp.contains(ProtocoloUtil.USER_SAIU)) {
+						String []s=resp.split(ProtocoloUtil.SEPARADOR);
+						jogadores.remover(s[1]);
 					}
 				}else {
 					if(o instanceof CordenadasJogador) {//Um jogador envia para o outro, para ele consultar em seu mapa se arcetou ou nï¿½o alguma embarcacao!

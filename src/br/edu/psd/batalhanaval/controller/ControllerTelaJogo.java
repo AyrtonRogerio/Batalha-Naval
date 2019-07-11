@@ -36,10 +36,10 @@ public class ControllerTelaJogo extends KeyAdapter{
 			((JTextField) evt.getSource()).setText(((JTextField) evt.getSource()).getText().toUpperCase().replaceAll("[^A-Z]", ""));
 		}
 	} 
-	private void dispararEvent() {//butão disparar.
+	private void dispararEvent() {//butï¿½o disparar.
 		
-		if(SocketUtil.getClienteCorrente().getJogador().isSuaVez()) {//olha se está na vez do jogador
-			if(!validacaoCampos()) {//se não encontrou nenhum campo invalido!x1,x2,y1,y2 e etc.
+		if(SocketUtil.getClienteCorrente().getJogador().isSuaVez()) {//olha se estï¿½ na vez do jogador
+			if(!validacaoCampos()) {//se nï¿½o encontrou nenhum campo invalido!x1,x2,y1,y2 e etc.
 				String l1 = SocketUtil.converteLetraemNumero(this.telaPartida.getTxtFieldX1().getText());
 				String col1 = this.telaPartida.getTxtFieldY1().getText();
 				String l2 = SocketUtil.converteLetraemNumero(this.telaPartida.getTxtFieldX2().getText());
@@ -47,7 +47,7 @@ public class ControllerTelaJogo extends KeyAdapter{
 				String l3 = SocketUtil.converteLetraemNumero(this.telaPartida.getTxtFieldX3().getText());
 				String col3 = this.telaPartida.getTxtFieldY3().getText();
 				
-				if(SocketUtil.offiline) {//Verifica se a partida é com o computador!!!
+				if(SocketUtil.offiline) {//Verifica se a partida ï¿½ com o computador!!!
 					String msg = null;
 					String r1 = "";
 					String r2 = "";
@@ -67,7 +67,8 @@ public class ControllerTelaJogo extends KeyAdapter{
 						if((r2+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
 							SocketUtil.getClienteCorrente().getJogador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r2.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
 							afundar+= r2+"\n";
-						}else if((r3+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
+						}
+						if((r3+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
 							SocketUtil.getClienteCorrente().getJogador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r3.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
 							afundar += r1+"\n";
 						}
@@ -88,7 +89,7 @@ public class ControllerTelaJogo extends KeyAdapter{
 					
 				}else {//o jogo nao eh offiline!
 					CordenadasJogador cj = null;
-					if(SocketUtil.getClienteCorrente().getDesafiado()!=null) {//então ele eh o desafiado!
+					if(SocketUtil.getClienteCorrente().getDesafiado()!=null) {//entï¿½o ele eh o desafiado!
 						String dsf = SocketUtil.getClienteCorrente().getDesafiado();
 						 cj = new CordenadasJogador(l1+","+col1,l2+","+col2,l3+","+col3,dsf);
 						 cj.setNomeRementente(SocketUtil.getClienteCorrente().getNome());
@@ -99,7 +100,7 @@ public class ControllerTelaJogo extends KeyAdapter{
 					}
 					SocketUtil.getClienteCorrente().enviarObj(cj);	
 					SocketUtil.getClienteCorrente().getJogador().setSuaVez(false);
-					// A partir da qui,  as coisas irão acontecer no else classe Cliente!
+					// A partir da qui,  as coisas irï¿½o acontecer no else classe Cliente!
 				}
 			}	
 		}else {
@@ -115,7 +116,7 @@ public class ControllerTelaJogo extends KeyAdapter{
 		String l3 = (r.nextInt(15)+1)+"";
 		String col3 = (r.nextInt(15)+1)+"";
 
-		new Thread(()->{//So pra não ser muito rapido!!!
+		new Thread(()->{//So pra nï¿½o ser muito rapido!!!
 			
 			try {
 				String msg = null;
@@ -136,7 +137,8 @@ public class ControllerTelaJogo extends KeyAdapter{
 					}
 					if((r2+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
 						SocketUtil.getComputador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r2.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
-					}else if((r3+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
+					}
+					if((r3+"").contains(CodigoButtonEnum.AFUNDAR.getDescricao())) {
 						SocketUtil.getComputador().setAcertos(SocketUtil.getClienteCorrente().getJogador().getAcertos()+r3.replace(CodigoButtonEnum.AFUNDAR.getDescricao(),"")+";");
 					}
 				}
@@ -171,7 +173,7 @@ public class ControllerTelaJogo extends KeyAdapter{
 			//this.telaPartida.getCoordenadasmapAdversario().get(l1+","+col1).setName(CodigoButtonEnum.TIROAGUA.getDescricao());
 		}
 		else if(!jogo.get(lin+","+col).equals(CodigoButtonEnum.POSICAO.getDescricao())) {
-			//atingiu alguma embarcação!!!
+			//atingiu alguma embarcaï¿½ï¿½o!!!
 			String vetor [] = jogo.get(lin+","+col).split(";");
 			String nomeEmbarcacao = vetor[0];
 			String numEmbarcacao = vetor[1];
@@ -197,7 +199,7 @@ public class ControllerTelaJogo extends KeyAdapter{
 				acertou  = TipoEmbarcacaoEnum.SUBMARINO.getValor();
 			}
 			
-			if(nomeEmbarcacao.equalsIgnoreCase(TipoEmbarcacaoEnum.HIDROAVIAO.getValor())) {//então eh hidroaviao!!!
+			if(nomeEmbarcacao.equalsIgnoreCase(TipoEmbarcacaoEnum.HIDROAVIAO.getValor())) {//entï¿½o eh hidroaviao!!!
 				int x = Integer.parseInt(lin),y = Integer.parseInt(col);
 				if(!posEmbarcacao.equals("P1")) {
 					if(posEmbarcacao.equals("P2")) {
@@ -218,7 +220,7 @@ public class ControllerTelaJogo extends KeyAdapter{
 			if(!mapaButton.get(lin+","+column1(posEmbarcacao, lin+","+col)).isEnabled()) {
 				System.out.println("Ja esta afundada!!"+nomeEmbarcacao);
 				//acertou  = TipoEmbarcacaoEnum.ENCOURACADO.getValor();
-			}//verifica se ela já esta afundada!
+			}//verifica se ela jï¿½ esta afundada!
 			else if(verificaSeafundouEnumbarcacao(nomeEmbarcacao, posEmbarcacao, lin+","+col, mapaButton)) {
 				return nomeEmbarcacao+CodigoButtonEnum.AFUNDAR.getDescricao();
 			}else
@@ -295,7 +297,7 @@ public class ControllerTelaJogo extends KeyAdapter{
 		y = column1(numParte, coord);//busca a primeira posicao do navio!
 		if(navio.equalsIgnoreCase(TipoEmbarcacaoEnum.ENCOURACADO.getValor())) {
 			if(mapa.get(x+","+y).getBackground()==Color.BLACK && mapa.get(x+","+(y+1)).getBackground()==Color.BLACK &&
-					mapa.get(x+","+(y+2)).getBackground()==Color.BLACK && mapa.get(x+","+(y+3)).getBackground()==Color.BLACK ) {//Então a embracação foi afundada.
+					mapa.get(x+","+(y+2)).getBackground()==Color.BLACK && mapa.get(x+","+(y+3)).getBackground()==Color.BLACK ) {//Entï¿½o a embracaï¿½ï¿½o foi afundada.
 				mapa.get(x+","+y).setEnabled(false);//Usado para indicar q o navio foi afundado!
 				return true;
 			}

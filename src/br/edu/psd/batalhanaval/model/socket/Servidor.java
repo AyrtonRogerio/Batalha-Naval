@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import br.edu.psd.batalhanaval.Util.ProtocoloUtil;
 import br.edu.psd.batalhanaval.model.CordenadasJogador;
 import br.edu.psd.batalhanaval.model.CordenadasRetorno;
+import br.edu.psd.batalhanaval.model.TableModel;
 import br.edu.psd.batalhanaval.view.TelaServidor;
 
 
@@ -34,7 +35,9 @@ public class Servidor extends Thread{
 	public static ArrayList<ClienteServer> clientes;
 	private TelaServidor telaServidor;
 	private ClienteServer cl;
-	private boolean temp;//Respónsavel por determinar se o jogador existe ou não
+	private ObjectOutputStream ous;
+	
+	private boolean temp;//Respï¿½nsavel por determinar se o jogador existe ou nï¿½o
 	/**
 	 * @param serverSocket
 	 * @param porta
@@ -88,7 +91,7 @@ public class Servidor extends Thread{
 				Object o = null;
 
 				ObjectInputStream ois = cl.getOis();
-				ObjectOutputStream ous = cl.getOos();
+				ous = cl.getOos();
 
 				System.out.println("dps do print read serv");
 //				if(!verificarSeJogadorExiste()) {
@@ -99,7 +102,7 @@ public class Servidor extends Thread{
 						resp = (String)o;
 						System.out.println("Server recebeu:"+resp);
 						if(resp.contains(ProtocoloUtil.LISTA_USER_ONLINE)) {//
-							if(!temp) {//se temp for falso significa que o jogador não exite o nome dele e setado e ele avisa aos demais
+							if(!temp) {//se temp for falso significa que o jogador nï¿½o exite o nome dele e setado e ele avisa aos demais
 								
 								System.out.println("Cl:"+cl.getNome());
 								for(ClienteServer c:clientes) {//retorna pra mim os outros que jï¿½ estavam online
@@ -114,7 +117,7 @@ public class Servidor extends Thread{
 									}	
 								}
 								cl.getOos().writeObject(ProtocoloUtil.JOGADOR_NAO_EXISTE);//avisa que ele ja esta conectado pra atualizar sua tela
-							}else {//se não é removido do array
+							}else {//se nï¿½o ï¿½ removido do array
 								cl.getOos().writeObject(ProtocoloUtil.JOGADOR_EXISTE);
 								int i=0;
 								for(ClienteServer c:clientes) {
@@ -155,16 +158,17 @@ public class Servidor extends Thread{
 						}else if(resp.contains(ProtocoloUtil.USER_SAIU)) {
 							//	saida.println(ProtocoloUtil.USER_SAIU);
 							//	break;
-							System.out.println("Cl:"+cl.getNome());
-							for(ClienteServer c:clientes) {//retorna pra mim os outros que jï¿½ estavam online
-								if(!c.getNome().equals(cl.getNome())) {
-									cl.getOos().writeObject(ProtocoloUtil.USER_SAIU+ProtocoloUtil.SEPARADOR+c.getNome());
-								}
-							}
+//							System.out.println("Cl:"+cl.getNome());
+//							for(ClienteServer c:clientes) {//retorna pra mim os outros que jï¿½ estavam online
+//								if(!c.getNome().equals(cl.getNome())) {
+//									cl.getOos().writeObject(ProtocoloUtil.USER_SAIU+ProtocoloUtil.SEPARADOR+c.getNome());
+//								}
+//							}
+							String[] s = resp.split(ProtocoloUtil.SEPARADOR);
 							for(ClienteServer c:clientes) {//retorna pros outros que eu fiquei online!
 								if(!c.getNome().equals(cl.getNome())) {
-									c.getOos().writeObject(ProtocoloUtil.USER_SAIU+ProtocoloUtil.SEPARADOR+cl.getNome());
-									ous.flush();
+									c.getOos().writeObject(ProtocoloUtil.USER_SAIU+ProtocoloUtil.SEPARADOR+s[1]);
+									c.getOos().flush();
 								}	
 							}
 						}else if(resp.contains(ProtocoloUtil.CONECTADO)){
@@ -239,7 +243,28 @@ public class Servidor extends Thread{
 				e.printStackTrace();
 				
 				//pegar a exceÃ§Ã£o quando o cliente sair e avisar aos outros
-				if(cl == null) {
+				if(cl.getSocket().isClosed()) {
+					
+					int i=0;
+					for(ClienteServer c:clientes) {
+						if(c.getNome()==null) {
+							clientes.remove(i);
+							break;
+						}
+						i++;
+					}
+					
+					for(ClienteServer c:clientes) {
+						if(!c.getNome().equals(cl.getNome())) {
+							try {
+								c.getOos().writeObject(ProtocoloUtil.USER_SAIU+ProtocoloUtil.SEPARADOR+cl.getNome());
+								ous.flush();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}	
+					}
 					
 				}
 				
